@@ -1,0 +1,20 @@
+body {
+  background: #F2EDF3;
+}
+
+.container {
+  display: grid;
+  padding: 8%;
+  grid-template-columns: repeat(auto-fill, 200px);
+  grid-auto-rows: 200px;
+  gap: 100px;
+}
+
+.game {
+  display: flex;
+  background: white;
+  align-items: center;
+  justify-content: center;
+  border-radius: 30px;
+  box-shadow: rgb(0 0 0 / 15%) 0 6px 12px 0;
+}
