@@ -54,29 +54,41 @@
         <div class="tab-content">
           <div class="tab-pane fade in active" id="tab0">메뉴를 선택해주세요.</div>
           <!-- 탭 반복 -->
-          <% for (let i = 1; i <= 3; i++) { %>
+          <% for (let i = 1; i <= 9; i++) { %>
             <div class="tab-pane tab-game fade" id="tab<%= i %>">
               <div class="user-container" id="userContainer<%= i %>">
                 <!-- 유저 반복 -->
-                <% for (let j = 1; j <= 3; j++) { %>
+                <% for (let j = 0; j < 3; j++) { %>
                   <div class="user">
                     <div class="user-line">
                       <i class="fa-solid fa-user"></i>
                       <!-- 입력폼 반복 -->
-                      <% for (let k = 1; k <= 7; k++) { %>
+                      <% for (let k = 0; k < 7; k++) { %>
                         <input type="text" class="form-control item-input">
                       <% } %>
                       <span></span>
                     </div>
                     <div class="user-line">
                       <span></span>
-                      <% for (let k = 1; k <= 7; k++) { %>
+                      <!-- 결과 반복 -->
+                      <% for (let k = 0; k < 7; k++) { %>
                         <span class="item-result"></span>
                       <% } %>
-                      <span class="item-result item-result-total">123</span>
+                      <span class="item-result-total"></span>
                     </div>
                   </div>
                 <% } %>
+              </div>
+              <!-- 정답 div -->
+              <div class="user-container">
+                <div class="user-line" id="ansContainer<%= i %>">
+                  <i class="fa-solid fa-server"></i>
+                  <!-- 입력폼 반복 -->
+                  <% for (let k = 0; k < 7; k++) { %>
+                    <input type="text" class="form-control item-answer" disabled value="?">
+                  <% } %>
+                  <span></span>
+                </div>
               </div>
               <!-- 컨트롤 div -->
               <div class="control">
@@ -86,14 +98,13 @@
                 <span id="userNum<%= i %>">2</span>
                 <button class="btn btn-secondary btn-usernum" id="userPlus<%= i %>" onclick="userPlus(<%= i %>)">+
                 </button>
+                <!-- 우리집: nx=89, ny=91 -->
                 <input type="text" class="form-control" id="nx<%= i %>" placeholder="nx">
                 <input type="text" class="form-control" id="ny<%= i %>" placeholder="ny">
                 <button class="btn btn-success btn-start" id="start<%= i %>" onclick="start(<%= i %>)">시작!</button>
               </div>
             </div>
           <% } %>
-          <div class="tab-pane tab-game fade" id="tab4">Info 4</div>
-          <div class="tab-pane tab-game fade" id="tab5">Info 5</div>
         </div>
       </div>
     </div>

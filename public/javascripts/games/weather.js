@@ -1,22 +1,19 @@
-
 let userNums = [0, 2, 2, 2, 2, 2, 2, 2, 2, 2];
-const user_template =
 
-//  children(3) -> 3th child.
-
-  function swalError(text, callback) {
-    Swal.fire({
-      icon: 'error',
-      title: 'Fail',
-      text: text,
-      customClass: 'swal'
-    }).then(callback);
+function swalError(text, callback) {
+  Swal.fire({
+    icon: 'error',
+    title: 'Fail',
+    text: text,
+    customClass: 'swal'
+  }).then(callback);
 }
 
 function userPlus(i) {
   $(`#userNum${i}`).text(++userNums[i]);
   const new_user = $(`#userContainer${i}`).children('div:first').clone();
   new_user.show();
+  new_user.find('.item-result-total').text('');
   $(`#userContainer${i}`).append(new_user);
   if (userNums[i] === 2) {
     $(`#userMinus${i}`).attr('disabled', false);
@@ -32,22 +29,29 @@ function userMinus(i) {
 
 }
 
-
-
 function start(i) {
-  console.log(i);
   const nx = $(`#nx${i}`).val();
   const ny = $(`#ny${i}`).val();
   const btn_start = $(`#start${i}`);
+
   if (!nx) {
     swalError('nx를 입력해주세요.');
     return;
   }
-  if (!ny) {  // todo 범위 체크
+  if (!ny) {
     swalError('ny를 입력해주세요.');
     return;
   }
+  if (nx < 1 || 149 < nx) {
+    swalError('nx는 1 ~ 149 내의 숫자로 입력해주세요.');
+    return;
+  }
+  if (ny < 1 || 253 < ny) {
+    swalError('ny는 1 ~ 253 내의 숫자로 입력해주세요.');
+    return;
+  }
   btn_start.attr('disabled', true);
+  btn_start.removeClass('btn-success').addClass('btn-warning');
   btn_start.html('<i class="fa-solid fa-hourglass"></i>');
 
   $.ajax({
@@ -84,9 +88,11 @@ function start(i) {
         } else if (total < 0) {
           score.css('color', '#3c73ff');
         }
-        console.log('end');
-      })
-      console.log(data);
+      });
+      const anss = $(`#ansContainer${i}`).find('.item-answer');
+      for (let j = 0; j < 7; j++) {
+        $(anss[j]).val(data[j]);
+      }
 
 
     },
@@ -95,6 +101,7 @@ function start(i) {
     },
     complete: () => {
       btn_start.attr('disabled', false);
+      btn_start.removeClass('btn-warning').addClass('btn-success');
       btn_start.text('시작!');
     }
   });
@@ -110,7 +117,4 @@ $(() => {
   for (let i = 1; i <= 9; i++) {
     $(`#userContainer${i}`).children('div:first').hide();
   }
-  $('.btn').click(function () {
-    console.log(`${$(this).attr('id')} clicked.`);
-  })
 })

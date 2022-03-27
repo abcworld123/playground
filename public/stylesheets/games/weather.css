@@ -32,8 +32,9 @@
   gap: 30px;
 }
 
-.form-control, .item-result {
+.form-control, .item-result, .item-answer, .item-result-total {
   width: 70px;
+  min-height: 35px;
   text-align: center;
 }
 
