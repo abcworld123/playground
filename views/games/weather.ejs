@@ -3,6 +3,9 @@
 <head>
   <title>랜덤</title>
 
+  <!-- JQuery -->
+  <script type="text/javascript" src="/libraries/jquery/jquery.min.js"></script>
+
   <!-- Bootstrap -->
   <link rel='stylesheet' href='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.min.css'/>
   <script type="text/javascript" src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>
@@ -12,9 +15,6 @@
 
   <!--sweetalert2-->
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-
-  <!-- JQuery -->
-  <script type="text/javascript" src="/libraries/jquery/jquery.min.js"></script>
 
   <!-- my -->
   <link rel='stylesheet' href='/stylesheets/games/weather.css'/>
@@ -58,20 +58,20 @@
             <div class="tab-pane tab-game fade" id="tab<%= i %>">
               <div class="user-container" id="userContainer<%= i %>">
                 <!-- 유저 반복 -->
-                <% for (let j = 1; j <= 2; j++) { %>
+                <% for (let j = 1; j <= 3; j++) { %>
                   <div class="user">
                     <div class="user-line">
                       <i class="fa-solid fa-user"></i>
                       <!-- 입력폼 반복 -->
                       <% for (let k = 1; k <= 7; k++) { %>
-                        <input type="text" class="form-control" placeholder="<%= k %>">
+                        <input type="text" class="form-control item-input">
                       <% } %>
                       <span></span>
                     </div>
                     <div class="user-line">
                       <span></span>
                       <% for (let k = 1; k <= 7; k++) { %>
-                        <span class="item-result"><%= k %></span>
+                        <span class="item-result"></span>
                       <% } %>
                       <span class="item-result item-result-total">123</span>
                     </div>
@@ -88,7 +88,7 @@
                 </button>
                 <input type="text" class="form-control" id="nx<%= i %>" placeholder="nx">
                 <input type="text" class="form-control" id="ny<%= i %>" placeholder="ny">
-                <button class="btn btn-success btn-reset" id="start<%= i %>" onclick="start(<%= i %>)">시작!</button>
+                <button class="btn btn-success btn-start" id="start<%= i %>" onclick="start(<%= i %>)">시작!</button>
               </div>
             </div>
           <% } %>

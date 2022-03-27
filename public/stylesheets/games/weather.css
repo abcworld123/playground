@@ -47,6 +47,10 @@
   margin: 70px 0 40px 0;
 }
 
+.btn-start {
+  min-width: 60px;
+}
+
 .swal {
   font-size: 1.2em;
 }
