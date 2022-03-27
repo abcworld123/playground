@@ -1,5 +1,5 @@
-let userNums = [0, 2, 2, 2, 2, 2, 2, 2, 2, 2];
-let regNums = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+let userNums = [0, 2, 2, 2, 2, 2, 2, 2];
+let regNums = [0, 0, 0, 0, 0, 0, 0, 0];
 const regNames = ['서울', '부산', '대구', '인천', '대전', '광주', '울산'];
 
 
@@ -37,7 +37,6 @@ function regSet(i, n) {
 
 }
 
-
 function start(i) {
   let url, formdata;
   const btn_start = $(`#start${i}`);
@@ -72,7 +71,7 @@ function start(i) {
       swalError('지역을 선택해주세요.');
       return;
     }
-    url = '/weather/getWeatherWeek';
+    url = `/weather/getWeather${i <= 6 ? 'Ta' : 'Ml'}`;
     formdata = {
       idx: i,
       reg: regNums[i]
@@ -134,18 +133,9 @@ function start(i) {
   });
 }
 
+// hide clone templates
 $(() => {
-  // todo remove: 디버깅용
-  $('#tab0').removeClass('in');
-  $('#tab0').removeClass('active');
-  $('#tab1').addClass('in');
-  $('#tab1').addClass('active');
-
   for (let i = 1; i <= 9; i++) {
     $(`#userContainer${i}`).children('div:first').hide();
   }
-
-  let x = 20000;
-  // console.log((x / 3))
-  console.log((10800 * parseInt((x + 3600) / 10800) - 3600) % 86400);
 })
