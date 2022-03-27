@@ -1,12 +1,23 @@
 <!DOCTYPE html>
-<html>
 <html lang="ko">
 <head>
   <title>랜덤</title>
+
+  <!-- Bootstrap -->
   <link rel='stylesheet' href='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.min.css'/>
-  <link rel='stylesheet' href='/stylesheets/games/weather.css'/>
-  <script type="text/javascript" src="/libraries/jquery/jquery.min.js"></script>
   <script type="text/javascript" src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>
+
+  <!-- Font Awesome icons (free version)-->
+  <link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css'/>
+
+  <!--sweetalert2-->
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+  <!-- JQuery -->
+  <script type="text/javascript" src="/libraries/jquery/jquery.min.js"></script>
+
+  <!-- my -->
+  <link rel='stylesheet' href='/stylesheets/games/weather.css'/>
   <script type="text/javascript" src="/javascripts/games/weather.js"></script>
 </head>
 <body>
@@ -19,38 +30,74 @@
       <div class="panel-heading">
         <ul class="nav nav-tabs">
           <li class="dropdown">
-            <a href="#" data-toggle="dropdown">현재 날씨 맞히기<span class="caret"></span></a>
+            <a href="#" data-toggle="dropdown">오늘 날씨 맞히기<span class="caret"></span></a>
             <ul class="dropdown-menu" role="menu">
-              <li><a href="#tab1info" data-toggle="tab">숫자 예측 (기온, 습도 등)</a></li>
-              <li><a href="#tab2info" data-toggle="tab">날씨 예측 (구름, 비 등)</a></li>
+              <li><a href="#tab1" data-toggle="tab">기온</a></li>
+              <li><a href="#tab2" data-toggle="tab">습도</a></li>
+              <li><a href="#tab3" data-toggle="tab">풍속</a></li>
+              <li><a href="#tab4" data-toggle="tab">날씨 (구름, 비 등)</a></li>
             </ul>
           </li>
           <li class="dropdown">
             <a href="#" data-toggle="dropdown">주간 날씨 맞히기<span class="caret"></span></a>
             <ul class="dropdown-menu" role="menu">
-              <li><a href="#tab3info" data-toggle="tab">숫자 예측 (기온, 습도 등)</a></li>
-              <li><a href="#tab4info" data-toggle="tab">날씨 예측 (구름, 비 등)</a></li>
+              <li><a href="#tab5" data-toggle="tab">최고 기온</a></li>
+              <li><a href="#tab6" data-toggle="tab">최저 기온</a></li>
+              <li><a href="#tab7" data-toggle="tab">습도</a></li>
+              <li><a href="#tab8" data-toggle="tab">풍속</a></li>
+              <li><a href="#tab9" data-toggle="tab">날씨 (구름, 비 등)</a></li>
             </ul>
           </li>
         </ul>
       </div>
       <div class="panel-body">
         <div class="tab-content">
-          <div class="tab-pane fade in active" id="tab0info">메뉴를 선택해주세요.</div>
-          <div class="tab-pane fade" id="tab1info">
-            <div>
-
+          <div class="tab-pane fade in active" id="tab0">메뉴를 선택해주세요.</div>
+          <!-- 탭 반복 -->
+          <% for (let i = 1; i <= 3; i++) { %>
+            <div class="tab-pane tab-game fade" id="tab<%= i %>">
+              <div class="user-container" id="userContainer<%= i %>">
+                <!-- 유저 반복 -->
+                <% for (let j = 1; j <= 2; j++) { %>
+                  <div class="user">
+                    <div class="user-line">
+                      <i class="fa-solid fa-user"></i>
+                      <!-- 입력폼 반복 -->
+                      <% for (let k = 1; k <= 7; k++) { %>
+                        <input type="text" class="form-control" placeholder="<%= k %>">
+                      <% } %>
+                      <span></span>
+                    </div>
+                    <div class="user-line">
+                      <span></span>
+                      <% for (let k = 1; k <= 7; k++) { %>
+                        <span class="item-result"><%= k %></span>
+                      <% } %>
+                      <span class="item-result item-result-total">123</span>
+                    </div>
+                  </div>
+                <% } %>
+              </div>
+              <!-- 컨트롤 div -->
+              <div class="control">
+                <span><i class="fa-solid fa-user"></i> :</span>
+                <button class="btn btn-secondary btn-usernum" id="userMinus<%= i %>" onclick="userMinus(<%= i %>)">-
+                </button>
+                <span id="userNum<%= i %>">2</span>
+                <button class="btn btn-secondary btn-usernum" id="userPlus<%= i %>" onclick="userPlus(<%= i %>)">+
+                </button>
+                <input type="text" class="form-control" id="nx<%= i %>" placeholder="nx">
+                <input type="text" class="form-control" id="ny<%= i %>" placeholder="ny">
+                <button class="btn btn-success btn-reset" id="start<%= i %>" onclick="start(<%= i %>)">시작!</button>
+              </div>
             </div>
-          </div>
-          <div class="tab-pane fade" id="tab2info">Info 2</div>
-          <div class="tab-pane fade" id="tab3info">Info 3</div>
-          <div class="tab-pane fade" id="tab4info">Info 4</div>
-          <div class="tab-pane fade" id="tab5info">Info 5</div>
+          <% } %>
+          <div class="tab-pane tab-game fade" id="tab4">Info 4</div>
+          <div class="tab-pane tab-game fade" id="tab5">Info 5</div>
         </div>
       </div>
     </div>
   </div>
 </div>
-<br/>
 </body>
 </html>

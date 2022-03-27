@@ -5,4 +5,9 @@ router.get('/', (req, res, next) => {
   res.render('games/weather');
 });
 
+router.post('/getWeather', (req, res, next) => {
+
+  // res.render('games/weather');
+});
+
 module.exports = router;

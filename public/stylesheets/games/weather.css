@@ -1,3 +1,60 @@
+.container {
+  font-size: 1.3em;
+}
+
+.tab-pane {
+  font-size: 1.3em;
+}
+
+.user-container {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  gap: 40px;
+  margin: 50px;
+}
+
+#tab0 {
+  font-size: 1.3em;
+}
+
+.user {
+  display: flex;
+  flex-direction: column;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.user-line {
+  display: grid;
+  grid-template-columns: 1fr 2fr 2fr 2fr 2fr 2fr 2fr 2fr 4fr;
+  align-items: center;
+  gap: 30px;
+}
+
+.form-control, .item-result {
+  width: 70px;
+  text-align: center;
+}
+
+.control {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  gap: 30px;
+  justify-content: center;
+  width: 100%;
+  margin: 70px 0 40px 0;
+}
+
+.swal {
+  font-size: 1.2em;
+}
+
+/********************************************************************/
+/*********************** tab / nav snippet **************************/
+/********************************************************************/
+
 .panel.with-nav-tabs .panel-heading {
   padding: 5px 5px 0 5px;
 }
