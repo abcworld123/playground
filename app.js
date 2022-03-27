@@ -2,10 +2,12 @@ var express = require('express');
 var http = require('http');
 var app = express();
 
+require('dotenv').config();
+
 app.set('views', __dirname + '/Views');
 app.set('view engine', 'ejs');
 
-app.use(express.urlencoded({ extended: false }));
+app.use(express.urlencoded({extended: false}));
 app.use(express.static('public'));
 
 var server = http.createServer(app);
