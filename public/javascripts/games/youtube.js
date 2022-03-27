@@ -282,7 +282,3 @@ function allChecked(){
         clickResultSubmit()
     }
 }
-
-async function openLoading() {
-    document.getElementsByClassName('youtube_loading_modal')[0].style.display = 'flex'
-}
