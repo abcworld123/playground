@@ -99,8 +99,27 @@
                 <button class="btn btn-secondary btn-usernum" id="userPlus<%= i %>" onclick="userPlus(<%= i %>)">+
                 </button>
                 <!-- 우리집: nx=89, ny=91 -->
-                <input type="text" class="form-control" id="nx<%= i %>" placeholder="nx">
-                <input type="text" class="form-control" id="ny<%= i %>" placeholder="ny">
+                <% if (i <= 2) { %>
+                  <input type="text" class="form-control" id="nx<%= i %>" placeholder="nx">
+                  <input type="text" class="form-control" id="ny<%= i %>" placeholder="ny">
+                <% } else { %>
+                  <div class="dropdown">
+                    <button class="btn btn-primary dropdown-toggle" id="btnReg<%= i %>" type="button"
+                            data-toggle="dropdown">
+                      지역
+                      <span class="caret"></span>
+                    </button>
+                    <ul class="dropdown-menu">
+                      <li><a href="#" onclick="regSet(<%= i %>, 1)">서울</a></li>
+                      <li><a href="#" onclick="regSet(<%= i %>, 2)">부산</a></li>
+                      <li><a href="#" onclick="regSet(<%= i %>, 3)">대구</a></li>
+                      <li><a href="#" onclick="regSet(<%= i %>, 4)">인천</a></li>
+                      <li><a href="#" onclick="regSet(<%= i %>, 5)">대전</a></li>
+                      <li><a href="#" onclick="regSet(<%= i %>, 6)">광주</a></li>
+                      <li><a href="#" onclick="regSet(<%= i %>, 7)">울산</a></li>
+                    </ul>
+                  </div>
+                <% } %>
                 <button class="btn btn-success btn-start" id="start<%= i %>" onclick="start(<%= i %>)">시작!</button>
               </div>
             </div>

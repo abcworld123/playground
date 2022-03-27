@@ -1,4 +1,7 @@
 let userNums = [0, 2, 2, 2, 2, 2, 2, 2, 2, 2];
+let regNums = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+const regNames = ['서울', '부산', '대구', '인천', '대전', '광주', '울산'];
+
 
 function swalError(text, callback) {
   Swal.fire({
@@ -26,46 +29,69 @@ function userMinus(i) {
   if (userNums[i] === 1) {
     $(`#userMinus${i}`).attr('disabled', true);
   }
+}
+
+function regSet(i, n) {
+  regNums[i] = n;
+  $(`#btnReg${i}`).html(`${regNames[n - 1]} <span class="caret"></span>`);
 
 }
 
+
 function start(i) {
-  const nx = $(`#nx${i}`).val();
-  const ny = $(`#ny${i}`).val();
+  let url, formdata;
   const btn_start = $(`#start${i}`);
 
-  if (!nx) {
-    swalError('nx를 입력해주세요.');
-    return;
+  if (i <= 4) {
+    const nx = $(`#nx${i}`).val();
+    const ny = $(`#ny${i}`).val();
+    if (!nx) {
+      swalError('nx를 입력해주세요.');
+      return;
+    }
+    if (!ny) {
+      swalError('ny를 입력해주세요.');
+      return;
+    }
+    if (nx < 1 || 149 < nx) {
+      swalError('nx는 1 ~ 149 내의 숫자로 입력해주세요.');
+      return;
+    }
+    if (ny < 1 || 253 < ny) {
+      swalError('ny는 1 ~ 253 내의 숫자로 입력해주세요.');
+      return;
+    }
+    url = '/weather/getWeatherDay';
+    formdata = {
+      idx: i,
+      nx: nx,
+      ny: ny
+    };
+  } else {
+    if (!regNums[i]) {
+      swalError('지역을 선택해주세요.');
+      return;
+    }
+    url = '/weather/getWeatherWeek';
+    formdata = {
+      idx: i,
+      reg: regNums[i]
+    };
   }
-  if (!ny) {
-    swalError('ny를 입력해주세요.');
-    return;
-  }
-  if (nx < 1 || 149 < nx) {
-    swalError('nx는 1 ~ 149 내의 숫자로 입력해주세요.');
-    return;
-  }
-  if (ny < 1 || 253 < ny) {
-    swalError('ny는 1 ~ 253 내의 숫자로 입력해주세요.');
-    return;
-  }
+
   btn_start.attr('disabled', true);
   btn_start.removeClass('btn-success').addClass('btn-warning');
   btn_start.html('<i class="fa-solid fa-hourglass"></i>');
 
   $.ajax({
-    url: '/weather/getWeather',
+    url: url,
     dataType: 'json',
     type: 'POST',
-    data: {
-      idx: i,
-      nx: nx,
-      ny: ny
-    },
+    data: formdata,
     success: (data) => {
+      console.log(data);
       const users = $(`#userContainer${i}`).children();
-      users.each(function (j) {
+      users.each(function () {
         const inputs = $(this).find('.item-input');
         const diffs = $(this).find('.item-result');
         const score = $(this).find('.item-result-total');
@@ -97,6 +123,7 @@ function start(i) {
 
     },
     error: (error) => {
+      console.error('오류인');
       console.error(error);
     },
     complete: () => {
@@ -108,7 +135,7 @@ function start(i) {
 }
 
 $(() => {
-  // 디버깅용
+  // todo remove: 디버깅용
   $('#tab0').removeClass('in');
   $('#tab0').removeClass('active');
   $('#tab1').addClass('in');
@@ -117,4 +144,8 @@ $(() => {
   for (let i = 1; i <= 9; i++) {
     $(`#userContainer${i}`).children('div:first').hide();
   }
+
+  let x = 20000;
+  // console.log((x / 3))
+  console.log((10800 * parseInt((x + 3600) / 10800) - 3600) % 86400);
 })
