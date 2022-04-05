@@ -3,12 +3,12 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "start": "nodemon ./app.js --ignore public/javascripts"
+    "start": "nodemon ./app.js --ignore public"
   },
   "dependencies": {
     "dotenv": "^16.0.0",
-    "ejs": "~2.6.1",
-    "express": "~4.16.1",
+    "ejs": "~3.1.6",
+    "express": "~4.17.3",
     "nodemon": "^2.0.15",
     "request": "^2.88.2"
   }
