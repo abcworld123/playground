@@ -43,7 +43,7 @@ router.post('/getWeatherDay', (req, res, next) => {
 });
 
 
-/* 주간 날씨 맞히기 (강수 확률) */
+/* 주간 날씨 맞히기 (최고, 최저 기온) */
 router.post('/getWeatherTa', (req, res, next) => {
   let sec = (new Date().getTime() + 10800000);
   sec += -sec % 43200000 + 21600000;
@@ -74,7 +74,7 @@ router.post('/getWeatherTa', (req, res, next) => {
 });
 
 
-// 주간 날씨 맞히기 (강수 확률)
+/* 주간 날씨 맞히기 (강수 확률) */
 router.post('/getWeatherMl', (req, res, next) => {
   let sec = (new Date().getTime() + 10800000);
   sec += -sec % 43200000 + 21600000;
