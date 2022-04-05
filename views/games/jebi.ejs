@@ -2,15 +2,14 @@
 <html lang="ko">
 <head>
   <title>제비뽑기</title>
-  <link rel='stylesheet' href='/stylesheets/bootstrap.css'/>
-  <link rel='stylesheet' href='/stylesheets/games/jebi.css'/>
-  <script type="text/javascript" src="/libraries/jquery/jquery.min.js"></script>
+  <link rel="stylesheet" href="/stylesheets/bootstrap.css"/>
+  <link rel="stylesheet" href="/stylesheets/games/jebi.css"/>
   <script type="text/javascript" src="/javascripts/games/jebi.js"></script>
 </head>
 <body>
 <div class="wrapper">
   <!-- 제비 컨테이너 div -->
-  <div class="container-fluid">
+  <div class="container-fluid" id="jebiContainer">
     <img class="jebi-unopened" src="/images/games/jebi/jebi.png" id="1">
     <img class="jebi-unopened" src="/images/games/jebi/jebi.png" id="2">
     <img class="jebi-unopened" src="/images/games/jebi/jebi.png" id="3">
@@ -20,10 +19,10 @@
   <!-- 제비 수 컨트롤 div -->
   <div class="control">
     <label>제비 수:</label>
-    <button class="btn btn-secondary btn-jebinum" id="jebiMinus">-</button>
+    <button class="btn btn-secondary btn-jebinum" id="jebiMinus" onclick="jebiMinus()">-</button>
     <span id="jebiNum">5</span>
-    <button class="btn btn-secondary btn-jebinum" id="jebiPlus">+</button>
-    <button class="btn btn-danger btn-reset" id="jebiReset">초기화</button>
+    <button class="btn btn-secondary btn-jebinum" id="jebiPlus" onclick="jebiPlus()">+</button>
+    <button class="btn btn-danger btn-reset" id="jebiReset" onclick="reset()">초기화</button>
   </div>
 </div>
 </body>

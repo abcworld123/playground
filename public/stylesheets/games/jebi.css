@@ -33,10 +33,10 @@ body {
 .control {
   display: flex;
   flex-direction: row;
+  flex-wrap: wrap;
   gap: 30px;
   align-items: center;
   justify-content: center;
-  margin: 0 20%;
 }
 
 img {
@@ -64,7 +64,6 @@ label {
 #jebiReset {
   min-width: 200px;
   margin-left: 50px;
-
 }
 
 @media (max-width: 1440px) {
