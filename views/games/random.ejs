@@ -4,7 +4,6 @@
   <title>랜덤</title>
   <link rel='stylesheet' href='/stylesheets/bootstrap.css'/>
   <link rel='stylesheet' href='/stylesheets/games/random.css'/>
-  <script type="text/javascript" src="/libraries/jquery/jquery.min.js"></script>
   <script type="text/javascript" src="/javascripts/games/random.js"></script>
 </head>
 <body>
@@ -17,7 +16,7 @@
   <div class="control">
     <label for="range">범위:</label>
     <input type="number" class="form-control" id="range" placeholder="0 ~ N, 기본: 1">
-    <button class="btn btn-primary btn-start" id="start">시작</button>
+    <button class="btn btn-primary btn-start" onclick="start()">시작</button>
   </div>
 </div>
 </body>

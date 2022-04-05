@@ -1,7 +1,6 @@
-let userNums = [0, 2, 2, 2, 2, 2, 2, 2];
-let regNums = [0, 0, 0, 0, 0, 0, 0, 0];
+const userNums = [0, 2, 2, 2, 2, 2, 2, 2];
+const regNums = [0, 0, 0, 0, 0, 0, 0, 0];
 const regNames = ['서울', '부산', '대구', '인천', '대전', '광주', '울산'];
-
 
 function swalError(text, callback) {
   Swal.fire({
@@ -12,48 +11,56 @@ function swalError(text, callback) {
   }).then(callback);
 }
 
+function getTab(i) {
+  return document.getElementById(`tab${i}`);
+}
+
 function userPlus(i) {
-  $(`#userNum${i}`).text(++userNums[i]);
-  const new_user = $(`#userContainer${i}`).children('div:first').clone();
-  new_user.show();
-  new_user.find('.item-result-total').text('');
-  $(`#userContainer${i}`).append(new_user);
+  const tab = getTab(i);
+  const userContainer = tab.getElementsByClassName('user-container')[0];
+  const userList = userContainer.children;
+  const newUser = userList[0].cloneNode(true);
+  newUser.removeAttribute('style');
+  tab.getElementsByClassName('user-num')[0].innerText = ++userNums[i];
+  userContainer.insertBefore(newUser, userList[userNums[i]]);
   if (userNums[i] === 2) {
-    $(`#userMinus${i}`).attr('disabled', false);
+    tab.getElementsByClassName('btn-user-minus')[0].disabled = false;
   }
 }
 
 function userMinus(i) {
-  $(`#userNum${i}`).text(--userNums[i]);
-  $(`#userContainer${i}`).children('div:last').remove();
+  const tab = getTab(i);
+  tab.getElementsByClassName('user-num')[0].innerText = --userNums[i];
+  tab.getElementsByClassName('user-container')[0].children[userNums[i] + 1].remove();
   if (userNums[i] === 1) {
-    $(`#userMinus${i}`).attr('disabled', true);
+    tab.getElementsByClassName('btn-user-minus')[0].disabled = true;
   }
 }
 
 function regSet(i, n) {
   regNums[i] = n;
-  $(`#btnReg${i}`).html(`${regNames[n - 1]} <span class="caret"></span>`);
-
+  const btnText = getTab(i).getElementsByClassName('btn-text')[0];
+  btnText.innerText = regNames[n - 1];
 }
 
 function start(i) {
   let url, formdata;
-  const btn_start = $(`#start${i}`);
+  const tab = getTab(i);
+  const btnStart = tab.getElementsByClassName('btn-start')[0];
 
   if (i <= 4) {
-    const nx = $(`#nx${i}`).val();
-    const ny = $(`#ny${i}`).val();
+    const nx = Math.round(tab.getElementsByClassName('input-nx')[0].value);
+    const ny = Math.round(tab.getElementsByClassName('input-ny')[0].value);
     if (!nx) {
       swalError('nx를 입력해주세요.');
       return;
     }
-    if (!ny) {
-      swalError('ny를 입력해주세요.');
-      return;
-    }
     if (nx < 1 || 149 < nx) {
       swalError('nx는 1 ~ 149 내의 숫자로 입력해주세요.');
+      return;
+    }
+    if (!ny) {
+      swalError('ny를 입력해주세요.');
       return;
     }
     if (ny < 1 || 253 < ny) {
@@ -71,71 +78,74 @@ function start(i) {
       swalError('지역을 선택해주세요.');
       return;
     }
-    url = `/weather/getWeather${i <= 6 ? 'Ta' : 'Ml'}`;
+    url = `/weather/getWeather${i >= 6 ? 'Ta' : 'Ml'}`;
     formdata = {
       idx: i,
       reg: regNums[i]
     };
   }
-
-  btn_start.attr('disabled', true);
-  btn_start.removeClass('btn-success').addClass('btn-warning');
-  btn_start.html('<i class="fa-solid fa-hourglass"></i>');
-
-  $.ajax({
-    url: url,
-    dataType: 'json',
-    type: 'POST',
-    data: formdata,
-    success: (data) => {
-      console.log(data);
-      const users = $(`#userContainer${i}`).children();
-      users.each(function () {
-        const inputs = $(this).find('.item-input');
-        const diffs = $(this).find('.item-result');
-        const score = $(this).find('.item-result-total');
-        let total = 0;
-        for (let k = 0; k < 7; k++) {
-          if ($(inputs[k]).val()) {
-            const diff = parseInt($(inputs[k]).val()) - data[k];
-            $(diffs[k]).text(diff);
-            if (diff > 0) {
-              $(diffs[k]).css('color', '#ff413b');
-            } else if (diff < 0) {
-              $(diffs[k]).css('color', '#3c73ff');
-            }
-            total += diff;
-          }
+  
+  btnStart.disabled = true;
+  btnStart.classList.replace('btn-success', 'btn-warning');
+  btnStart.innerHTML = '<i class="fa-solid fa-hourglass"></i>';
+  
+  fetch(url, {
+    method: 'POST',
+    headers: {'Content-Type': 'application/json'},
+    body: JSON.stringify(formdata),
+  })
+  .then((res) => res.json())
+  .then((data) => {
+    const userContainer = tab.getElementsByClassName('user-container')[0];
+    const anss = userContainer.getElementsByClassName('item-answer');
+    const userList = userContainer.children;
+    const colors = ['#3c73ff', 'black', '#ff413b'];
+    for (let j = 1; j < userList.length - 1; j++) {
+      const inputs = userList[j].getElementsByClassName('item-input');
+      const diffs = userList[j].getElementsByClassName('item-result');
+      const score = userList[j].getElementsByClassName('item-result-total')[0];
+      let total = 0;
+      for (let k = 0; k < 7; k++) {
+        if (inputs[k].value) {
+          const diff = parseInt(inputs[k].value) - data[k];
+          diffs[k].innerText = diff;
+          diffs[k].style.color = colors[(diff > 0) - (diff < 0) + 1];
+          total += diff;
         }
-        score.text(total);
-        if (total > 0) {
-          score.css('color', '#ff413b');
-        } else if (total < 0) {
-          score.css('color', '#3c73ff');
-        }
-      });
-      const anss = $(`#ansContainer${i}`).find('.item-answer');
-      for (let j = 0; j < 7; j++) {
-        $(anss[j]).val(data[j]);
       }
-
-
-    },
-    error: (error) => {
-      console.error('오류인');
-      console.error(error);
-    },
-    complete: () => {
-      btn_start.attr('disabled', false);
-      btn_start.removeClass('btn-warning').addClass('btn-success');
-      btn_start.text('시작!');
+      score.innerText = total;
+      score.style.color = colors[(total > 0) - (total < 0) + 1];
     }
+    for (let j = 0; j < 7; j++) {
+      anss[j].value = data[j];
+    }
+  })
+  .catch((err) => {
+    console.error('오류인');
+    console.error(err);
+  })
+  .finally(() => {
+    btnStart.disabled = false;
+    btnStart.classList.replace('btn-warning', 'btn-success');
+    btnStart.innerText = '시작!';
   });
 }
 
 // hide clone templates
-$(() => {
-  for (let i = 1; i <= 9; i++) {
-    $(`#userContainer${i}`).children('div:first').hide();
-  }
-})
+window.onload = () => {
+  const userContainer = document.getElementsByClassName('user-container');
+  [...userContainer].forEach((container) => {
+    container.children[0].style.display = 'none';
+  });
+
+  // 디버깅용
+  const tab0 = document.getElementById('tab0');
+  const tab1 = document.getElementById('tab1');
+  const userList = userContainer[0].children;
+  tab0.classList.remove('in', 'active');
+  tab1.classList.add('in', 'active');
+  userList[1].children[3].value = 123;
+  userList[2].children[5].value = 4;
+  document.getElementById('nx1').value = 2;
+  document.getElementById('ny1').value = 2;
+};
