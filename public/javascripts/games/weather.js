@@ -137,15 +137,4 @@ window.onload = () => {
   [...userContainer].forEach((container) => {
     container.children[0].style.display = 'none';
   });
-
-  // 디버깅용
-  const tab0 = document.getElementById('tab0');
-  const tab1 = document.getElementById('tab1');
-  const userList = userContainer[0].children;
-  tab0.classList.remove('in', 'active');
-  tab1.classList.add('in', 'active');
-  userList[1].children[3].value = 123;
-  userList[2].children[5].value = 4;
-  document.getElementById('nx1').value = 2;
-  document.getElementById('ny1').value = 2;
 };
