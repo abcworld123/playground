@@ -1,15 +1,16 @@
 var express = require('express');
 var http = require('http');
 var app = express();
+var server = http.createServer(app);
 
 require('dotenv').config();
+require('./sockets/socket')(server);
 
 app.set('view engine', 'ejs');
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static('public'));
 app.use(express.json());
 
-var server = http.createServer(app);
 app.use('/', require('./routes/index'));
 
 app.use((req, res, next) => {

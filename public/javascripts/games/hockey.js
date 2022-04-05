@@ -145,3 +145,6 @@ function changeColor() {
     if(play_ball_g <= 0 || play_ball_g <= 255){play_ball_dg *= -1}
     if(play_ball_b <= 0 || play_ball_b <= 255){play_ball_db *= -1}
 }
+
+// 하는 순간 socket 서버와 연결됨.
+var socket = io();
