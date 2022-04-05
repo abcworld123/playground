@@ -14,8 +14,7 @@ var server = http.createServer(app);
 app.use('/', require('./routes/index'));
 
 app.use((req, res, next) => {
-  res.status(404);
-  res.render('didid');
+  res.status(404).render('cannotAccess');
   console.error(`no exists: ${req.originalUrl}`);
 });
 
