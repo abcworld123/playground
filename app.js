@@ -4,11 +4,10 @@ var app = express();
 
 require('dotenv').config();
 
-app.set('views', __dirname + '/Views');
 app.set('view engine', 'ejs');
-
-app.use(express.urlencoded({extended: false}));
+app.use(express.urlencoded({ extended: true }));
 app.use(express.static('public'));
+app.use(express.json());
 
 var server = http.createServer(app);
 app.use('/', require('./routes/index'));
