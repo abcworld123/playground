@@ -3,20 +3,30 @@ var config = require('../../config/config');
 
 exports.getResult = async function(req, res, callback){
     const dataList = req.body.word
-    let searchUrl
-    let videoId
-    let videoUrl
-    let videoInfo
     let resultData = []
 
-    for(let x = 0; x < dataList.length; x++){
+    dataList.forEach((data) => {
+        resultData.push(getInfo(data))
+    })
+
+    resultData = await Promise.all(resultData)
+    return callback(resultData)
+}
+
+function getInfo(keyword){
+    return new Promise(async function (resolve, reject) {
+        let searchUrl
+        let videoId
+        let videoUrl
+        let videoInfo
+
         searchUrl = {
             uri: "https://www.googleapis.com/youtube/v3/search",
             qs:{
                 part:"snippet",
                 type:"video",
                 maxResults:"1",
-                q:dataList[x],
+                q:keyword,
                 key:config.youtube.key,
             }
         }
@@ -32,11 +42,10 @@ exports.getResult = async function(req, res, callback){
             }
         }
 
-        videoInfo = await getVideoInfo(videoUrl, dataList[x])
-        resultData.push(videoInfo)
-    }
+        videoInfo = await getVideoInfo(videoUrl, keyword)
 
-    return callback(resultData)
+        resolve(videoInfo)
+    });
 }
 
 async function getVideoId(searchUrl) {
