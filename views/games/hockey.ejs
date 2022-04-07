@@ -1,24 +1,69 @@
 <!doctype html>
 <html lang="ko">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport"
-          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+  <title>하키 게임</title>
+  
+  <!--stylesheet-->
+  <link rel="stylesheet" href="/stylesheets/games/hockey.css" />
+  <link rel="stylesheet" href="/stylesheets/bootstrap.css" />
 
-    <!--stylesheet-->
-    <link rel="stylesheet" href="/stylesheets/games/hockey.css"/>
+  <!-- Font Awesome icons (free version) -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css"/>
 
-    <!--javascript-->
-    <script src="/socket.io/socket.io.js"></script>
-    <script language="JavaScript" src="/javascripts/games/hockey.js"></script>
-
-    <!--jquery-->
-    <script src="/libraries/jquery/jquery.min.js"></script>
-
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>하키 게임</title>
+  <!--javascript-->
+  <script src="/socket.io/socket.io.js"></script>
+  <script language="JavaScript" src="/javascripts/games/hockey.js"></script>
+  <script>Swal</script>
 </head>
 <body>
-    <canvas id="canvas" width="600" height="600"></canvas>
+  <div class="room-container" id="roomContainer">
+    <h1>방 목록</h1>
+    <div class="room-tab  high"><span>입장 불가</span></div>
+    <div class="room high">
+      <div class="room-title">김기노잔악</div>
+      <button class="btn btn-secondary btn-start room-enter disabled">
+        <i class="fa-solid fa-arrow-right-to-bracket"></i>
+      </button>
+    </div>
+    <div class="room high">
+      <div class="room-title">방 테스트</div>
+      <button class="btn btn-secondary btn-start room-enter disabled">
+        <i class="fa-solid fa-arrow-right-to-bracket"></i>
+      </button>
+    </div>
+
+    <div class="room-tab medium"><span>게임 중</span></div>
+    <div class="room medium">
+      <div class="room-title">Lorem Ipsum</div>
+      <button class="btn btn-secondary btn-start room-enter disabled">
+        <i class="fa-solid fa-arrow-right-to-bracket"></i>
+      </button>
+    </div>
+
+    <div class="room-tab low"><span>입장 가능</span></div>
+    <div class="room low" id="room0">
+      <div class="room-title"></div>
+      <button class="btn btn-success btn-start room-enter">
+        <i class="fa-solid fa-arrow-right-to-bracket"></i>
+      </button>
+    </div>
+    <div class="room low">
+      <div class="room-title">다람쥐 헌 쳇바퀴</div>
+      <button class="btn btn-success btn-start room-enter">
+        <i class="fa-solid fa-arrow-right-to-bracket"></i>
+      </button>
+    </div>
+    <div class="room low">
+      <span class="room-title">치사한 김덕중의 미궁</span>
+      <button class="btn btn-success btn-start room-enter">
+        <i class="fa-solid fa-arrow-right-to-bracket"></i>
+      </button>
+    </div>
+  </div>
+  
+  <canvas id="canvas" width="600" height="600"></canvas>  
 </body>
 </html>

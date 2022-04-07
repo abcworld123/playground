@@ -34,6 +34,31 @@ const socket = io('/hockey');
 
 //todo 클래스 변경
 window.addEventListener("load", function() {
+
+    const roomContainer = document.getElementById('roomContainer');
+    const room0 = document.getElementById('room0');
+    
+    function addUser(user) {
+        const item = room0.cloneNode(true);
+        item.id = user;
+        item.children[0].innerText = user;
+        roomContainer.appendChild(item);
+    }
+
+    // socket.io
+    socket.onAny((event, msg1, msg2) => {
+        console.log(event, msg1, msg2);
+    });
+    socket.on('userlist', (arr) => {
+        arr.forEach(user => addUser(user));
+    });
+    socket.on('userenter', (user) => {
+        addUser(user);
+    });
+    socket.on('userleave', (user) => {
+        document.getElementById(user).remove();
+    });
+
     window.addEventListener("keypress", togleDirection)
     gameStart()
 })
