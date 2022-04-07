@@ -34,6 +34,7 @@ const socket = io('/hockey');
 const users = {};
 const rooms = {};
 let requestQueue = [];
+let requestSending = false;
 
 
 function alertJoinConfirm() {
@@ -110,6 +111,7 @@ async function joinRoom(room) {
     if (!rooms[room]) { alertNotExist('방이'); return; }
     requestQueue = [room, ...requestQueue];
     socket.emit('join room request', room);
+    requestSending = true;
 
     if (!(await alertJoinWait()).isDismissed) return;
     socket.emit('join room confirm', room, 'cancel');
@@ -149,6 +151,7 @@ async function joinRequest(user) {
 }
 
 function pollQueue() {
+    requestSending = false;
     if (requestQueue.length) {
         joinRequest(requestQueue[0]);
     }
@@ -183,10 +186,8 @@ window.addEventListener("load", function() {
     });
     socket.on('userleave', (user) => {
         document.getElementById(user).remove();
-        if (requestQueue[0] === user) {
-            requestQueue.shift();
-            alertNotExist('방이');
-        }
+        if (requestQueue[0] === user && requestSending) alertNotExist('방이');
+        requestQueue = requestQueue.filter(x => x !== user);
         delete users[user];
         delete rooms[user];
     });
