@@ -183,8 +183,13 @@ window.addEventListener("load", function() {
     });
     socket.on('userleave', (user) => {
         document.getElementById(user).remove();
-        if (requestSending && requestQueue[0] === user) alertNotExist('방이');
-        requestQueue = requestQueue.filter(x => x !== user);
+        if (requestQueue[0] === user) {
+            if (requestSending) alertNotExist('방이');
+            requestQueue = [requestQueue[0], ...requestQueue.slice(1).filter(x => x !== user)];
+        } else {
+            requestQueue = requestQueue.filter(x => x !== user);
+        }
+
         delete users[user];
         delete rooms[user];
     });
