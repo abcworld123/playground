@@ -115,46 +115,43 @@ async function joinRoom(room) {
 
     if (!(await alertJoinWait()).isDismissed) return;
     socket.emit('join room confirm', room, 'cancel');
-    requestQueue.shift();
-    pollQueue();
+    pollQueue(true);
 }
 
 async function joinResponse(user, msg) {
     if (msg === 'accept') {
         // 수락 이후 코드
         await alertJoinAccepted();
-        requestQueue.shift();
-        pollQueue();
+        pollQueue(true);
     } else if (!requestQueue.slice(1).includes(user)) {
         await alertJoinCanceled(msg);
-        requestQueue.shift();
-        pollQueue();
+        pollQueue(true);
     } else {
         requestQueue.splice(requestQueue.slice(1).indexOf(user) + 1, 1);
     }
 }
 
 async function joinRequest(user) {
-    const ok = (await alertJoinRequest(user)).isConfirmed;
-    requestQueue.shift();
-    if (ok) {
+    const accept = (await alertJoinRequest(user)).isConfirmed;
+    if (accept) {
         // 수락 이후 코드
-        if (users[user]) socket.emit('join room confirm', user, 'accept');
-        else {
+        if (users[user]) {
+            requestQueue.shift();
+            socket.emit('join room confirm', user, 'accept');
+        } else {
             await alertNotExist('유저가');
-            pollQueue();
+            pollQueue(true);
         }
     } else {
         socket.emit('join room confirm', user, 'reject');
-        pollQueue();
+        pollQueue(true);
     }
 }
 
-function pollQueue() {
+function pollQueue(shift) {
     requestSending = false;
-    if (requestQueue.length) {
-        joinRequest(requestQueue[0]);
-    }
+    if (shift) requestQueue.shift();
+    if (requestQueue.length) joinRequest(requestQueue[0]);
 }
 
 
@@ -186,14 +183,14 @@ window.addEventListener("load", function() {
     });
     socket.on('userleave', (user) => {
         document.getElementById(user).remove();
-        if (requestQueue[0] === user && requestSending) alertNotExist('방이');
+        if (requestSending && requestQueue[0] === user) alertNotExist('방이');
         requestQueue = requestQueue.filter(x => x !== user);
         delete users[user];
         delete rooms[user];
     });
     socket.on('join room request', (user) => {
         requestQueue.push(user);
-        if (requestQueue.length === 1) pollQueue();
+        if (requestQueue.length === 1) pollQueue(false);
     });
     socket.on('join room confirm', (user, msg) => {
         joinResponse(user, msg);
