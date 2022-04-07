@@ -10,6 +10,14 @@ module.exports = function (nsp) {
     //   console.log(msg);
     // });
 
+    socket.on('join room request', (room) => {
+      nsp.to(room).emit('join room request', socket.id);
+    });
+
+    socket.on('join room confirm', (room, msg) => {
+      nsp.to(room).emit('join room confirm', socket.id, msg);
+    });
+
     // debug
     socket.onAny((event, msg) => {
       console.log(`--------- ${event}:  ${msg} ----------`);

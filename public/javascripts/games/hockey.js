@@ -31,6 +31,129 @@ let play_ball_color_gauge = 50
 
 // socket.io
 const socket = io('/hockey');
+const users = {};
+const rooms = {};
+let requestQueue = [];
+
+
+function alertJoinConfirm() {
+    return Swal.fire({
+        icon: 'question',
+        title: '입장할까요?',
+        showCancelButton: true,
+        confirmButtonText: '확인',
+        cancelButtonText: '취소',
+        confirmButtonColor: '#13a829',
+        cancelButtonColor: '#cc2121',
+    });
+}
+
+function alertJoinWait() {
+    return Swal.fire({
+        title: '요청을 보냈습니다.',
+        text: '수락을 기다리는 중...',
+        imageUrl: 'images/games/hockey/loading.gif',
+        imageWidth: 100,
+        allowOutsideClick: false,
+        showCancelButton: true,
+        showConfirmButton: false,
+        cancelButtonText: '취소',
+        cancelButtonColor: '#66687A',
+    });
+}
+
+function alertJoinRequest(user) {
+    return Swal.fire({
+        icon: 'info',
+        title: '입장 요청',
+        text: `${user}님이 입장을 요청하였습니다.`,
+        allowOutsideClick: false,
+        showCancelButton: true,
+        confirmButtonText: '수락',
+        cancelButtonText: '거절',
+        confirmButtonColor: '#13a829',
+        cancelButtonColor: '#cc2121',
+    });
+}
+
+function alertJoinAccepted() {
+    return Swal.fire({
+        icon: 'success',
+        title: '상대방이 입장을 수락하였습니다.',
+        text: '수락 이후 처리',
+        confirmButtonText: '확인',
+        confirmButtonColor: '#6E7881',
+    });
+}
+
+function alertJoinCanceled(msg) {
+    return Swal.fire({
+        icon: 'warning',
+        title: `상대방이 입장을 ${msg === 'reject' ? '거절' : '취소'}하였습니다.`,
+        confirmButtonText: '확인',
+        confirmButtonColor: '#6E7881',
+    });
+}
+
+function alertNotExist(msg) {
+    return Swal.fire({
+        icon: 'warning',
+        title: `${msg} 존재하지 않습니다.`,
+        confirmButtonText: '확인',
+        confirmButtonColor: '#6E7881',
+    });
+}
+
+
+async function joinRoom(room) {
+    if ((await alertJoinConfirm()).isDismissed) return;
+    if (!rooms[room]) { alertNotExist('방이'); return; }
+    requestQueue = [room, ...requestQueue];
+    socket.emit('join room request', room);
+
+    if (!(await alertJoinWait()).isDismissed) return;
+    socket.emit('join room confirm', room, 'cancel');
+    requestQueue.shift();
+    pollQueue();
+}
+
+async function joinResponse(user, msg) {
+    if (msg === 'accept') {
+        // 수락 이후 코드
+        await alertJoinAccepted();
+        requestQueue.shift();
+        pollQueue();
+    } else if (!requestQueue.slice(1).includes(user)) {
+        await alertJoinCanceled(msg);
+        requestQueue.shift();
+        pollQueue();
+    } else {
+        requestQueue.splice(requestQueue.slice(1).indexOf(user) + 1, 1);
+    }
+}
+
+async function joinRequest(user) {
+    const ok = (await alertJoinRequest(user)).isConfirmed;
+    requestQueue.shift();
+    if (ok) {
+        // 수락 이후 코드
+        if (users[user]) socket.emit('join room confirm', user, 'accept');
+        else {
+            await alertNotExist('유저가');
+            pollQueue();
+        }
+    } else {
+        socket.emit('join room confirm', user, 'reject');
+        pollQueue();
+    }
+}
+
+function pollQueue() {
+    if (requestQueue.length) {
+        joinRequest(requestQueue[0]);
+    }
+}
+
 
 //todo 클래스 변경
 window.addEventListener("load", function() {
@@ -42,7 +165,10 @@ window.addEventListener("load", function() {
         const item = room0.cloneNode(true);
         item.id = user;
         item.children[0].innerText = user;
+        item.children[1].addEventListener('click', () => joinRoom(user));
         roomContainer.appendChild(item);
+        rooms[user] = true;  //
+        users[user] = true;
     }
 
     // socket.io
@@ -57,6 +183,19 @@ window.addEventListener("load", function() {
     });
     socket.on('userleave', (user) => {
         document.getElementById(user).remove();
+        if (requestQueue[0] === user) {
+            requestQueue.shift();
+            alertNotExist('방이');
+        }
+        delete users[user];
+        delete rooms[user];
+    });
+    socket.on('join room request', (user) => {
+        requestQueue.push(user);
+        if (requestQueue.length === 1) pollQueue();
+    });
+    socket.on('join room confirm', (user, msg) => {
+        joinResponse(user, msg);
     });
 
     window.addEventListener("keypress", togleDirection)
