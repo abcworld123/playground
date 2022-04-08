@@ -33,6 +33,7 @@ let play_ball_dr = 1
 let play_ball_dg = 1
 let play_ball_db = 1
 
+//todo 클래스 변경
 window.addEventListener("load", function() {
     window.addEventListener("keypress", togleDirection)
     gameStart()

@@ -22,48 +22,22 @@
   <script>Swal</script>
 </head>
 <body>
-  <div class="room-container" id="roomContainer">
-    <h1>방 목록</h1>
-    <div class="room-tab  high"><span>입장 불가</span></div>
-    <div class="room high">
-      <div class="room-title">김기노잔악</div>
-      <button class="btn btn-secondary btn-start room-enter disabled">
-        <i class="fa-solid fa-arrow-right-to-bracket"></i>
-      </button>
+  <div class="wrapper">
+    <div class="header">
+      <span class="title">방 목록</span>
+      <span id="myId">123123</span>
     </div>
-    <div class="room high">
-      <div class="room-title">방 테스트</div>
-      <button class="btn btn-secondary btn-start room-enter disabled">
-        <i class="fa-solid fa-arrow-right-to-bracket"></i>
-      </button>
+    <div class="room-tab"><span>입장 가능</span></div>
+    <div class="room-container" id="roomContainer">
+      <div class="room" id="room0">
+        <div class="room-title"></div>
+        <button class="btn btn-success btn-start room-enter">
+          <i class="fa-solid fa-arrow-right-to-bracket"></i>
+        </button>
+      </div>
     </div>
-
-    <div class="room-tab medium"><span>게임 중</span></div>
-    <div class="room medium">
-      <div class="room-title">Lorem Ipsum</div>
-      <button class="btn btn-secondary btn-start room-enter disabled">
-        <i class="fa-solid fa-arrow-right-to-bracket"></i>
-      </button>
-    </div>
-
-    <div class="room-tab low"><span>입장 가능</span></div>
-    <div class="room low" id="room0">
-      <div class="room-title"></div>
-      <button class="btn btn-success btn-start room-enter">
-        <i class="fa-solid fa-arrow-right-to-bracket"></i>
-      </button>
-    </div>
-    <div class="room low">
-      <div class="room-title">다람쥐 헌 쳇바퀴</div>
-      <button class="btn btn-success btn-start room-enter">
-        <i class="fa-solid fa-arrow-right-to-bracket"></i>
-      </button>
-    </div>
-    <div class="room low">
-      <span class="room-title">치사한 김덕중의 미궁</span>
-      <button class="btn btn-success btn-start room-enter">
-        <i class="fa-solid fa-arrow-right-to-bracket"></i>
-      </button>
+    <div class="control">
+      <button class="btn btn-primary btn-room-create" onclick="createRoom()">방 만들기</button>
     </div>
   </div>
 </body>

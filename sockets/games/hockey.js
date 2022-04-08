@@ -1,32 +1,53 @@
 module.exports = function (nsp) {
-  const users = {};
-  nsp.on('connection', (socket) => {
-    // console.log(`[hockey] connected user ${socket.id}`);
-    socket.emit('userlist', Object.keys(users));
-    socket.broadcast.emit('userenter', socket.id);
-    users[socket.id] = socket;
-    
-    // socket.on('keypress', (msg) => {
-    //   console.log(msg);
-    // });
+  const users = {};  // all users
+  const rooms = {};  // { id: room }
 
-    socket.on('join room request', (room) => {
-      nsp.to(room).emit('join room request', socket.id);
+  nsp.on('connection', (socket) => {
+    users[socket.id] = true;
+    socket.emit('room list', rooms);
+    
+    socket.on('create room', (room) => {
+      rooms[socket.id] = room;
+      socket.broadcast.emit('new room', socket.id, room);
     });
 
-    socket.on('join room confirm', (room, msg) => {
-      nsp.to(room).emit('join room confirm', socket.id, msg);
+    socket.on('remove room', () => {
+      socket.broadcast.emit('remove room', rooms[socket.id]);
+      delete rooms[socket.id];
+    });
+
+    socket.on('join room request', (host) => {
+      nsp.to(host).emit('join room request', socket.id);
+    });
+
+    socket.on('join room cancel', (host) => {
+      nsp.to(host).emit('join room cancel', socket.id);
+    });
+
+    socket.on('join room accept', (user) => {
+      if (users[user]) {
+        nsp.to(user).emit('join room accept', rooms[socket.id]);
+        socket.emit('join room accept', rooms[socket.id]);
+      } else {
+        socket.emit('user not exist');
+      }
+    });
+
+    socket.on('join room reject', (user) => {
+      nsp.to(user).emit('join room reject');
     });
 
     // debug
     socket.onAny((event, msg) => {
-      console.log(`--------- ${event}:  ${msg} ----------`);
+      console.log(`${event}:  ${msg}`);
     });
 
     socket.on('disconnect', (reason) => {
-      // console.log(`[hockey] disconnected user ${socket.id}`);
-      socket.broadcast.emit('userleave', socket.id);
       delete users[socket.id];
+      if (rooms[socket.id]) {
+        socket.broadcast.emit('remove room', rooms[socket.id]);
+        delete rooms[socket.id];
+      }
     });
   });
 };
