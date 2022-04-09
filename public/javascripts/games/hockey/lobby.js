@@ -3,7 +3,6 @@ const hosts = {};  // { room: id }
 let requestQueue = [];
 let requestFor = '';
 
-
 /*********  alert functions  ***********/
 
 function alertCreateRoom() {
@@ -16,6 +15,15 @@ function alertCreateRoom() {
         cancelButtonText: '취소',
         confirmButtonColor: '#13a829',
         cancelButtonColor: '#cc2121',
+        preConfirm: (room) => {
+            if (!room) {
+                Swal.showValidationMessage('방 제목을 입력해주세요.');
+            } else if (room.length > 100) {
+                Swal.showValidationMessage('방 제목은 100글자 이하로 입력해주세요.');
+            } else if (Object.keys(hosts).includes(room)) {
+                Swal.showValidationMessage('동일한 방 제목이 존재합니다.');
+            }
+        },
     });
 }
 
@@ -108,14 +116,13 @@ function alertRoomNotExist() {
     });
 }
 
-
 /********  handling functions  **********/
 
 // [방장] 방 생성
 async function createRoom() {
     const room = (await alertCreateRoom()).value;
     if (!room) return;
-    socket.emit('create room', room);
+    socket.emit('create room', encodeURIComponent(room));
     waitUser();
 }
 
@@ -132,7 +139,7 @@ function joinReceived(user) {
 }
 
 // [방장] 입장 요청 처리
-async function sendResponse(user) {
+async function handleRequest(user) {
     const accept = (await alertJoinRequest(user)).isConfirmed;
     if (accept) {
         socket.emit('join room accept', user);
@@ -144,9 +151,9 @@ async function sendResponse(user) {
 
 // [방장] 유저가 입장을 취소
 async function joinCanceled(user) {
-    if (requestQueue.slice(1).includes(user)) {
-        requestQueue.splice(requestQueue.slice(1).indexOf(user) + 1, 1);
-    } else {
+    const idx = requestQueue.slice(1).indexOf(user) + 1;
+    if (idx) requestQueue.splice(idx, 1);
+    else {
         await alertJoinCanceled();
         pollQueue(true);
     }
@@ -161,7 +168,7 @@ async function userNotExist() {
 // [방장] 입장 요청 큐 처리
 function pollQueue(shift) {
     if (shift) requestQueue.shift();
-    if (requestQueue.length) sendResponse(requestQueue[0]);
+    if (requestQueue.length) handleRequest(requestQueue[0]);
     else waitUser();
 }
 
@@ -184,7 +191,6 @@ function joinRejected() {
 }
 
 // [ALL] 수락됨, 게임 페이지로 이동
-// fixme 뒤로가기 문제 있음
 function gameStart(room) {
     Swal.close();
     requestQueue.shift();
@@ -210,7 +216,7 @@ window.onload = () => {
     function addRoom(host, room) {
         const item = room0.cloneNode(true);
         item.id = room;
-        item.children[0].innerText = room;
+        item.children[0].innerText = decodeURIComponent(room);
         item.children[1].addEventListener('click', () => joinRoom(room));
         roomContainer.appendChild(item);
         hosts[room] = host;
