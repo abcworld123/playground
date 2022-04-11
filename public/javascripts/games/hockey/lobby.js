@@ -1,6 +1,7 @@
 const socket = io('/hockey');
-const hosts = {};  // { room: id }
-let requestQueue = [];
+const users = new Set();  // { all users }
+const hosts = new Map();  // { room: id }
+const requestQueue = [];
 let requestFor = '';
 
 /*********  alert functions  ***********/
@@ -16,13 +17,15 @@ function alertCreateRoom() {
         confirmButtonColor: '#13a829',
         cancelButtonColor: '#cc2121',
         preConfirm: (room) => {
+            const encodedRoom = encodeURIComponent(room);
             if (!room) {
                 Swal.showValidationMessage('방 제목을 입력해주세요.');
             } else if (room.length > 100) {
                 Swal.showValidationMessage('방 제목은 100글자 이하로 입력해주세요.');
-            } else if (Object.keys(hosts).includes(room)) {
+            } else if (hosts.has(encodedRoom)) {
                 Swal.showValidationMessage('동일한 방 제목이 존재합니다.');
             }
+            return encodedRoom;
         },
     });
 }
@@ -121,8 +124,7 @@ function alertRoomNotExist() {
 // [방장] 방 생성
 async function createRoom() {
     const room = (await alertCreateRoom()).value;
-    if (!room) return;
-    socket.emit('create room', encodeURIComponent(room));
+    socket.emit('create room', room);
     waitUser();
 }
 
@@ -142,7 +144,12 @@ function joinReceived(user) {
 async function handleRequest(user) {
     const accept = (await alertJoinRequest(user)).isConfirmed;
     if (accept) {
-        socket.emit('join room accept', user);
+        if (users.has(user)) {
+            socket.emit('join room accept', user);
+        } else {
+            await alertUserNotExist();
+            pollQueue(true);
+        }
     } else {
         socket.emit('join room reject', user);
         pollQueue(true);
@@ -159,12 +166,6 @@ async function joinCanceled(user) {
     }
 }
 
-// [방장] 유저가 존재하지 않음
-async function userNotExist() {
-    await alertUserNotExist();
-    pollQueue(true);
-}
-
 // [방장] 입장 요청 큐 처리
 function pollQueue(shift) {
     if (shift) requestQueue.shift();
@@ -175,12 +176,12 @@ function pollQueue(shift) {
 // [유저] 방에 입장하기
 async function joinRoom(room) {
     if ((await alertJoinConfirm()).isDismissed) return;
-    if (!hosts[room]) { alertRoomNotExist(); return; }
-    socket.emit('join room request', hosts[room]);
+    if (!hosts.has(room)) { alertRoomNotExist(); return; }
+    socket.emit('join room request', hosts.get(room));
     requestFor = room;
 
     if (!(await alertWaitResponse()).isDismissed) return;
-    socket.emit('join room cancel', hosts[room]);
+    socket.emit('join room cancel', hosts.get(room));
     requestFor = '';
 }
 
@@ -194,24 +195,31 @@ function joinRejected() {
 function gameStart(room) {
     Swal.close();
     requestQueue.shift();
-    location.href = `hockey/${room}`;
+    location.replace(`hockey/${room}`);
 }
 
 // [ALL] 삭제된 방 새로고침
 function removeRoom(room) {
     document.getElementById(room).remove();
-    delete hosts[room];
+    hosts.delete(room);
     if (requestFor === room) {
         alertRoomNotExist();
         requestFor = '';
     }
 }
 
+// [ALL] 나간 유저 새로고침
+function removeUser(user, room) {
+    const idx = requestQueue.slice(1).indexOf(user) + 1;
+    if (idx) requestQueue.splice(idx, 1);
+    if (room) removeRoom(room);
+    users.delete(user);
+}
+
 window.onload = () => {
     const roomContainer = document.getElementById('roomContainer');
     const room0 = document.getElementById('room0');
     const myId = document.getElementById('myId');
-    myId.innerText = socket.id;
 
     function addRoom(host, room) {
         const item = room0.cloneNode(true);
@@ -219,20 +227,22 @@ window.onload = () => {
         item.children[0].innerText = decodeURIComponent(room);
         item.children[1].addEventListener('click', () => joinRoom(room));
         roomContainer.appendChild(item);
-        hosts[room] = host;
+        hosts.set(room, host);
     }
-
     // socket.io
-    socket.onAny((event, msg1, msg2) => {
-        console.log(event, msg1, msg2);
-    });
     socket.on('connect', () => {
         myId.innerText = `ID: ${socket.id}`;
     });
-    socket.on('room list', (arr) => {
-        Object.entries(arr).forEach(x => addRoom(x[0], x[1]));
+    socket.once('user list', (arr) => {
+        arr.forEach(user => users.add(user));
     });
-    socket.on('new room', (host, room) => {
+    socket.once('room list', (arr) => {
+        arr.forEach(([host, room]) => addRoom(host, room));
+    });
+    socket.on('user enter', (user) => {
+        users.add(user);
+    });
+    socket.on('create room', (host, room) => {
         addRoom(host, room);
     });
     socket.on('remove room', (room) => {
@@ -250,7 +260,7 @@ window.onload = () => {
     socket.on('join room reject', () => {
         joinRejected();
     });
-    socket.on('user not exist', () => {
-        userNotExist();
+    socket.on('user leave', (user, room) => {
+        removeUser(user, room);
     });
 };

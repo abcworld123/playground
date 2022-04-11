@@ -1,19 +1,21 @@
 module.exports = function (nsp) {
-  const users = {};  // all users
-  const rooms = {};  // { id: room }
+  const users = new Set();  // { all users }
+  const rooms = new Map();  // { id: room }
 
   nsp.on('connection', (socket) => {
-    users[socket.id] = true;
-    socket.emit('room list', rooms);
-    
+    users.add(socket.id);
+    socket.emit('user list', [...users]);
+    socket.emit('room list', [...rooms]);
+    socket.broadcast.emit('user enter', socket.id);
+
     socket.on('create room', (room) => {
-      rooms[socket.id] = room;
-      socket.broadcast.emit('new room', socket.id, room);
+      rooms.set(socket.id, room);
+      socket.broadcast.emit('create room', socket.id, room);
     });
 
     socket.on('remove room', () => {
-      socket.broadcast.emit('remove room', rooms[socket.id]);
-      delete rooms[socket.id];
+      socket.broadcast.emit('remove room', rooms.get(socket.id));
+      rooms.delete(socket.id);
     });
 
     socket.on('join room request', (host) => {
@@ -25,29 +27,18 @@ module.exports = function (nsp) {
     });
 
     socket.on('join room accept', (user) => {
-      if (users[user]) {
-        nsp.to(user).emit('join room accept', rooms[socket.id]);
-        socket.emit('join room accept', rooms[socket.id]);
-      } else {
-        socket.emit('user not exist');
-      }
+      socket.emit('join room accept', rooms.get(socket.id));
+      nsp.to(user).emit('join room accept', rooms.get(socket.id));
     });
 
     socket.on('join room reject', (user) => {
       nsp.to(user).emit('join room reject');
     });
 
-    // debug
-    socket.onAny((event, msg) => {
-      console.log(`${event}:  ${msg}`);
-    });
-
     socket.on('disconnect', (reason) => {
-      delete users[socket.id];
-      if (rooms[socket.id]) {
-        socket.broadcast.emit('remove room', rooms[socket.id]);
-        delete rooms[socket.id];
-      }
+      socket.broadcast.emit('user leave', socket.id, rooms.get(socket.id));
+      if (rooms.has(socket.id)) rooms.delete(socket.id);
+      users.delete(socket.id);
     });
   });
 };
