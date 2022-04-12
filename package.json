@@ -3,7 +3,8 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "start": "nodemon ./app.js --ignore public"
+    "start": "nodemon ./app.js --ignore public",
+    "test": "node test/test_weather.js"
   },
   "dependencies": {
     "dotenv": "^16.0.0",

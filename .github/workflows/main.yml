@@ -1,0 +1,31 @@
+name: ci
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node: ['10', '16']
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Test node.js ${{ matrix.node }}
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ matrix.node }}
+
+      - name: npm ci, start and test
+        run: |
+          npm ci
+          npm start &
+          sleep 10 &&
+          npm test
+        env:
+          WEATHER_KEY: ${{ secrets.WEATHER_KEY }}
