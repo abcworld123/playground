@@ -1,8 +1,10 @@
 var express = require('express');
 var http = require('http');
 var app = express();
+var mongoose = require('mongoose');
 
 require('dotenv').config();
+mongoose.connect('mongodb://localhost:27017/playground');
 
 app.set('view engine', 'ejs');
 app.use(express.urlencoded({ extended: true }));

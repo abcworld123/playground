@@ -66,6 +66,21 @@ label {
   margin-left: 50px;
 }
 
+.toast-container {
+  z-index: 11;
+}
+
+.toast {
+  display: flex;
+  gap: 20px;
+  align-items: center;
+  margin-bottom: 30px;
+  padding: 15px;
+  font-size: .6em;
+  width: auto;
+  border: none;
+}
+
 @media (max-width: 1440px) {
 
   .container-fluid {

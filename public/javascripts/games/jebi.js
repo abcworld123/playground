@@ -1,5 +1,5 @@
-let jebiContainer, btnMinus, jebiNum;
-let n = 5;
+let jebiContainer, btnMinus, jebiNum, toast, toastText;
+let n = 5, dog = 0;
 let ailen = randint(n);
 
 /* 난수 생성 */
@@ -8,7 +8,7 @@ function randint(n) {
   console.log(`외계인: ${num}`);  // 주작 방지용으로 미리 번호 확인 가능
   return num;
 }
- 
+
 /* 제비 초기화 */
 function reset() {
   const jebies = jebiContainer.children;
@@ -17,6 +17,7 @@ function reset() {
     jebi.src = '/images/games/jebi/jebi.png';
   });
   ailen = randint(n);
+  dog = 0;
 }
 
 /* [+] 버튼 클릭 */
@@ -47,10 +48,33 @@ function jebiMinus() {
 function jebiOpen(jebi) {
   if (parseInt(jebi.id) === ailen) {
     jebi.src = '/images/games/jebi/ailen.jpg';
+    toastShow();
   } else {
+    dog++;
     jebi.src = '/images/games/jebi/haha.jpg';
   }
   jebi.removeAttribute('class');
+}
+
+/* 랭킹 보여주기 */
+function toastShow() {
+  fetch('/jebi/ranking', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ n, dog }),
+  })
+  .then((res) => res.json())
+  .then(({ success, body }) => {
+    if (!success) throw new Error('fetch failed');
+    const { rank, total, top } = body;
+    setTimeout(() => {
+      toastText.innerHTML = `${total}회 중 <b>${rank}</b>위 (상위 <b>${top}%</b>)`;
+    }, 150);
+    toast.show();
+  })
+  .catch((err) => {
+    console.error(err);
+  });
 }
 
 /* live eventListener for '.jebi-unopened' */
@@ -75,4 +99,6 @@ window.onload = () => {
   jebiContainer = document.getElementById('jebiContainer');
   btnMinus = document.getElementById('jebiMinus');
   jebiNum = document.getElementById('jebiNum');
+  toast = new bootstrap.Toast(document.getElementById('toast'));
+  toastText = document.getElementById('toastText');
 };
