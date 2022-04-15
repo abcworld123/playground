@@ -1,12 +1,6 @@
 var express = require('express');
 var router = express.Router();
-var mongoose = require('mongoose');
-
-const Ranking = mongoose.model('Ranking', {
-  _id: Number,
-  count: [Number],
-  total: Number
-});
+const Ranking = require('../../model/jebiRanking');
 
 router.get('/', (req, res, next) => {
   res.render('games/jebi');
@@ -15,9 +9,9 @@ router.get('/', (req, res, next) => {
 router.post('/ranking', async (req, res, next) => {
   try {
     const { n, dog } = req.body;
-    let ranking = await Ranking.findById(n);
+    let ranking = await Ranking.findOne({ n });
     if (!ranking) {
-      ranking = new Ranking({ _id: n, count: Array(n).fill(0), total: 0 });
+      ranking = new Ranking({ n, count: Array(n).fill(0), total: 0 });
       await ranking.save();
     }
     const rank = ranking.count.slice(dog + 1, n).reduce((a, b) => a + b, 0) + 1;

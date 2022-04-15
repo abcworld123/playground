@@ -30,3 +30,7 @@ jobs:
           npm test
         env:
           WEATHER_KEY: ${{ secrets.WEATHER_KEY }}
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
+          MONGOOSE_AUTH: ${{ secrets.MONGOOSE_AUTH }}
+          MONGOOSE_ID: ${{ secrets.MONGOOSE_ID }}
+          MONGOOSE_PW: ${{ secrets.MONGOOSE_PW }}
