@@ -1,14 +1,6 @@
-$(() => {
-  const randint = $('#randint');
-  const range = $('#range');
-  const btn_start = $('#start');
-  let n = 2;
-
-  range.change(() => {
-    n = parseInt(range.val()) + 1;
-  });
-
-  btn_start.click(() => {
-    randint.text(Math.floor(Math.random() * n));
-  })
-});
+function start() {
+  const range = document.getElementById('range');
+  const randint = document.getElementById('randint');
+  const n = parseInt(range.value) + 1;
+  randint.innerText = Math.floor(Math.random() * n);
+}

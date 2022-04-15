@@ -8,15 +8,15 @@ router.get('/', (req, res, next) => {
 
 /* 오늘 날씨 맞히기 */
 router.post('/getWeatherDay', (req, res, next) => {
-  let sec = (new Date().getTime() + 25200000);
+  let sec = new Date().getTime() + 25200000;
   sec += -sec % 10800000 + 7200000;
   const now = new Date(sec).toISOString().replace(/[T\-:]|\..+/g, '');
-  const date = now.substring(0, 8);
-  const time = now.substring(8, 12);
+  const base_date = now.substring(0, 8);
+  const base_time = now.substring(8, 12);
   const category = ['', 'TMP', 'REH', 'WSD', 'SKY'];
-  const idx = req.body.idx;
+  const {idx, nx, ny} = req.body;
   let arr = [];
-
+  
   request.get({
     url: 'http://apis.data.go.kr/1360000/VilageFcstInfoService_2.0/getVilageFcst',
     qs: {
@@ -24,31 +24,32 @@ router.post('/getWeatherDay', (req, res, next) => {
       pageNo: 1,
       numOfRows: 84,
       dataType: 'json',
-      base_date: date,
-      base_time: time,
-      nx: req.body.nx,
-      ny: req.body.ny
+      base_date,
+      base_time,
+      nx,
+      ny
     },
     json: true
   }, (error, response, body) => {
-    if (error) res.status(500).send('getWeather: error');
+    if (error) {
+      res.status(500).send('getWeather: error');
+      return;
+    }
     const data = body.response.body.items.item;
-    data.forEach((x) => {
-      if (x.category === category[idx]) {
-        arr.push(parseInt(x.fcstValue));
-      }
-    })
+    arr = data
+      .filter((x) => x.category === category[idx])
+      .map((x) => parseInt(x.fcstValue));
     res.send(arr);
   });
 });
 
 
-/* 주간 날씨 맞히기 (강수 확률) */
+/* 주간 날씨 맞히기 (최고, 최저 기온) */
 router.post('/getWeatherTa', (req, res, next) => {
-  let sec = (new Date().getTime() + 10800000);
+  let sec = new Date().getTime() + 10800000;
   sec += -sec % 43200000 + 21600000;
   const now = new Date(sec).toISOString().replace(/[T\-:]|\..+/g, '').substring(0, 12);
-  const regId = ['', '11B10101', '11H20201', '11H10701', '11B20201', '11C20401', '11F20501', '11H20101'];
+  const regCodes = ['', '11B10101', '11H20201', '11H10701', '11B20201', '11C20401', '11F20501', '11H20101'];
   const regIdx = req.body.reg;
   const idx = req.body.idx;
   const taTarget = ['taMax', 'taMin'][idx - 5];
@@ -59,7 +60,7 @@ router.post('/getWeatherTa', (req, res, next) => {
     qs: {
       serviceKey: process.env.WEATHER_KEY,
       dataType: 'json',
-      regId: regId[regIdx],
+      regId: regCodes[regIdx],
       tmFc: now
     },
     json: true
@@ -74,9 +75,9 @@ router.post('/getWeatherTa', (req, res, next) => {
 });
 
 
-// 주간 날씨 맞히기 (강수 확률)
+/* 주간 날씨 맞히기 (강수 확률) */
 router.post('/getWeatherMl', (req, res, next) => {
-  let sec = (new Date().getTime() + 10800000);
+  let sec = new Date().getTime() + 10800000;
   sec += -sec % 43200000 + 21600000;
   const now = new Date(sec).toISOString().replace(/[T\-:]|\..+/g, '').substring(0, 12);
   const regId = ['', '11B00000', '11H20000', '11H10000', '11B00000', '11C20000', '11F20000', '11H20000'];

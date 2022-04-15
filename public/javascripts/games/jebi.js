@@ -1,74 +1,104 @@
-$(() => {
+let jebiContainer, btnMinus, jebiNum, toast, toastText;
+let n = 5, dog = 0;
+let ailen = randint(n);
 
-  /* 난수 생성 */
-  function randint(n) {
-    const num = Math.ceil(Math.random() * n);
-    console.log(`외계인: ${num}`);  // 주작 방지용으로 미리 번호 확인 가능
-    return num;
+/* 난수 생성 */
+function randint(n) {
+  const num = Math.ceil(Math.random() * n);
+  console.log(`외계인: ${num}`);  // 주작 방지용으로 미리 번호 확인 가능
+  return num;
+}
+
+/* 제비 초기화 */
+function reset() {
+  const jebies = jebiContainer.children;
+  [...jebies].forEach((jebi) => {
+    jebi.className = 'jebi-unopened';
+    jebi.src = '/images/games/jebi/jebi.png';
+  });
+  ailen = randint(n);
+  dog = 0;
+}
+
+/* [+] 버튼 클릭 */
+function jebiPlus() {
+  n++;
+  reset();
+  const newJebi = jebiContainer.children[0].cloneNode();
+  newJebi.id = n;
+  jebiContainer.appendChild(newJebi);
+  jebiNum.innerText = n;
+  if (n === 3) {
+    btnMinus.disabled = false;
   }
+}
 
-  /* 제비 초기화 */
-  function reset(n) {
-    container.empty();
-    for (let i = 1; i <= n; i++) {
-      let newjebi = newjebi_elem.clone();
-      newjebi.attr('id', i);
-      container.append(newjebi);
-    }
-    ailen = randint(n);
+/* [-] 버튼 클릭 */
+function jebiMinus() {
+  n--;
+  reset();
+  jebiContainer.children[n].remove();
+  jebiNum.innerText = n;
+  if (n === 2) {
+    btnMinus.disabled = true;
   }
+}
 
-  const container = $('.container-fluid');
-  const newjebi_elem = $('<img class="jebi-unopened" src="/images/games/jebi/jebi.png">');
-  const btn_plus = $('#jebiPlus');
-  const btn_minus = $('#jebiMinus');
-  const btn_reset = $('#jebiReset');
-  const jebi_num = $('#jebiNum');
-  let n = 5;
-  let ailen = randint(n);
+/* 제비 클릭, 결과 보여주기 */
+function jebiOpen(jebi) {
+  if (parseInt(jebi.id) === ailen) {
+    jebi.src = '/images/games/jebi/ailen.jpg';
+    toastShow();
+  } else {
+    dog++;
+    jebi.src = '/images/games/jebi/haha.jpg';
+  }
+  jebi.removeAttribute('class');
+}
 
-  /* [+] 버튼 클릭 */
-  btn_plus.click(() => {
-    let newjebi = newjebi_elem.clone();
-    newjebi.attr('id', ++n);
-    container.append(newjebi);
-    jebi_num.text(n);
-    ailen = randint(n);
-    reset(n);
-    if (n === 3) {
-      btn_minus.attr('disabled', false);
-    }
+/* 랭킹 보여주기 */
+function toastShow() {
+  fetch('/jebi/ranking', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ n, dog }),
+  })
+  .then((res) => res.json())
+  .then(({ success, body }) => {
+    if (!success) throw new Error('fetch failed');
+    const { rank, total, top } = body;
+    setTimeout(() => {
+      toastText.innerHTML = `${total}회 중 <b>${rank}</b>위 (상위 <b>${top}%</b>)`;
+    }, 150);
+    toast.show();
+  })
+  .catch((err) => {
+    console.error(err);
   });
+}
 
-  /* [-] 버튼 클릭 */
-  btn_minus.click(() => {
-    container.children('img:last').remove();
-    jebi_num.text(--n);
-    ailen = randint(n);
-    reset(n);
-    if (n === 2) {
-      btn_minus.attr('disabled', true);
-    }
-  });
-
-  /* 초기화 버튼 클릭 */
-  btn_reset.click(() => reset(n));
-
-  /* hover 이벤트 구현 */
-  $(document).on('mouseenter', '.jebi-unopened', function () {
-    $(this).attr('src', '/images/games/jebi/jebi_hover.png');
-  });
-  $(document).on('mouseleave', '.jebi-unopened', function () {
-    $(this).attr('src', '/images/games/jebi/jebi.png');
-  });
-
-  /* 제비 클릭, 결과 보여주기 */
-  $(document).on('click', '.jebi-unopened', function () {
-    if (parseInt($(this).attr('id')) === ailen) {
-      $(this).attr('src', '/images/games/jebi/ailen.jpg');
-    } else {
-      $(this).attr('src', '/images/games/jebi/haha.jpg');
-    }
-    $(this).removeClass();
-  });
+/* live eventListener for '.jebi-unopened' */
+document.addEventListener('mouseover', (e) => {
+  if (e.target.className === 'jebi-unopened') {
+    e.target.src = '/images/games/jebi/jebi_hover.png';
+  }
 });
+document.addEventListener('mouseout', (e) => {
+  if (e.target.className === 'jebi-unopened') {
+    e.target.src = '/images/games/jebi/jebi.png';
+  }
+});
+document.addEventListener('click', (e) => {
+  if (e.target.className === 'jebi-unopened') {
+    jebiOpen(e.target);
+  }
+});
+
+/* onload */
+window.onload = () => {
+  jebiContainer = document.getElementById('jebiContainer');
+  btnMinus = document.getElementById('jebiMinus');
+  jebiNum = document.getElementById('jebiNum');
+  toast = new bootstrap.Toast(document.getElementById('toast'));
+  toastText = document.getElementById('toastText');
+};

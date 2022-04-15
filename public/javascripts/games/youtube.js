@@ -1,6 +1,6 @@
 const g_youtubeRotation = ['조회수', '좋아요', '댓글수', '제목길이']
 let g_youtubeResultCheck = []
-let g_tourubeResultCount = 0
+let g_youtubeResultCount = 0
 let g_youtubeResult = []
 
 window.addEventListener("load", function() {
@@ -120,7 +120,7 @@ async function getResult() {
 function clickHiddenThumbnails(num) {
     if(g_youtubeResultCheck[num][0] === 0){
         g_youtubeResultCheck[num][0] = 1
-        g_tourubeResultCount += 1
+        g_youtubeResultCount += 1
 
         let imgTag = "<img class=\"youtube_result_show_thumbnails\" src=\"" + g_youtubeResult[num].thumbnails + "\">"
 
@@ -132,7 +132,7 @@ function clickHiddenThumbnails(num) {
 function clickHiddenTitle(num) {
     if(g_youtubeResultCheck[num][1] === 0){
         g_youtubeResultCheck[num][1] = 1
-        g_tourubeResultCount += 1
+        g_youtubeResultCount += 1
 
         let titleTag = "<div title='" + g_youtubeResult[num].title.length + "' class=\"youtube_result_title\">"
         titleTag += g_youtubeResult[num].title
@@ -147,7 +147,7 @@ function clickHiddenTitle(num) {
 function clickHiddenViews(num) {
     if(g_youtubeResultCheck[num][2] === 0){
         g_youtubeResultCheck[num][2] = 1
-        g_tourubeResultCount += 1
+        g_youtubeResultCount += 1
 
         let viewsTag = "<div class=\"youtube_result_small_text\">"
         viewsTag +="조회수 : " + g_youtubeResult[num].viewCount
@@ -156,15 +156,13 @@ function clickHiddenViews(num) {
         document.getElementsByClassName('youtube_result_views_area')[num].innerHTML = viewsTag
 
         allChecked()
-
-        allChecked()
     }
 }
 
 function clickHiddenComment(num) {
     if(g_youtubeResultCheck[num][3] === 0){
         g_youtubeResultCheck[num][3] = 1
-        g_tourubeResultCount += 1
+        g_youtubeResultCount += 1
 
         let commentTag = "<div class=\"youtube_result_small_text\">"
         commentTag +="댓글수 : " + g_youtubeResult[num].commentCount
@@ -179,7 +177,7 @@ function clickHiddenComment(num) {
 function clickHiddenLike(num) {
     if(g_youtubeResultCheck[num][4] === 0){
         g_youtubeResultCheck[num][4] = 1
-        g_tourubeResultCount += 1
+        g_youtubeResultCount += 1
 
         let likeTag = "<div class=\"youtube_result_small_text\">"
         likeTag +="좋아요 : " + g_youtubeResult[num].likeCount
@@ -278,7 +276,7 @@ function arrTitleOrder(key) {
 }
 
 function allChecked(){
-    if(g_tourubeResultCount >= 5 * g_youtubeResult.length){
+    if(g_youtubeResultCount >= 5 * g_youtubeResult.length){
         clickResultSubmit()
     }
 }
