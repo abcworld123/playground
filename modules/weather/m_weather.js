@@ -1,5 +1,5 @@
 const axios = require('axios').default;
-const config = require('../../config/config');
+const config = require('#config');
 
 /* 오늘 날씨 맞히기 */
 exports.getWeatherDay = (req, res, next) => {

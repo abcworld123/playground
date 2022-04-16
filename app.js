@@ -2,7 +2,7 @@ const express = require('express');
 const http = require('http');
 const app = express();
 const mongoose = require('mongoose');
-const config = require('./config/config');
+const config = require('#config');
 const server = http.createServer(app);
 
 const mongooseOption = {
