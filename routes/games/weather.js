@@ -1,6 +1,7 @@
 var express = require('express');
 var axios = require('axios').default;
 var router = express.Router();
+var config = require('../../config/config');
 
 router.get('/', (req, res, next) => {
   res.render('games/weather');
@@ -20,7 +21,7 @@ router.post('/getWeatherDay', (req, res, next) => {
   
   axios.get(url, {
     params: {
-      serviceKey: process.env.WEATHER_KEY,
+      serviceKey: config.weather.key,
       pageNo: 1,
       numOfRows: 84,
       dataType: 'json',
@@ -58,7 +59,7 @@ router.post('/getWeatherTa', (req, res, next) => {
 
   axios.get(url, {
     params: {
-      serviceKey: process.env.WEATHER_KEY,
+      serviceKey: config.weather.key,
       dataType: 'json',
       regId: regCodes[regIdx],
       tmFc: now
@@ -91,7 +92,7 @@ router.post('/getWeatherMl', (req, res, next) => {
   
   axios.get(url, {
     params: {
-      serviceKey: process.env.WEATHER_KEY,
+      serviceKey: config.weather.key,
       dataType: 'json',
       regId: regId[regIdx],
       tmFc: now
