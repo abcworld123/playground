@@ -40,10 +40,18 @@ input {
   min-width: 250px;
 }
 
+input[type="number"]::-webkit-inner-spin-button {
+  appearance: none;
+}
+
 .btn {
   height: 80px;
   min-width: 150px;
   margin-left: 50px;
+}
+
+.swal2-popup {
+  font-size: .75em;
 }
 
 @media (max-width: 1440px) {

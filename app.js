@@ -1,9 +1,9 @@
-var express = require('express');
-var http = require('http');
-var app = express();
-var mongoose = require('mongoose');
-var config = require('./config/config');
-require('dotenv').config();
+const express = require('express');
+const http = require('http');
+const app = express();
+const mongoose = require('mongoose');
+const config = require('#config');
+const server = http.createServer(app);
 
 const mongooseOption = {
   useUnifiedTopology: true,
@@ -23,7 +23,6 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.static('public'));
 app.use(express.json());
 
-var server = http.createServer(app);
 app.use('/', require('./routes/index'));
 
 app.use((req, res, next) => {

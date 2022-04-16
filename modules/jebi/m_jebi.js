@@ -1,12 +1,7 @@
-var express = require('express');
-var router = express.Router();
-const Ranking = require('../../model/jebiRanking');
+const Ranking = require('#model/jebiRanking');
 
-router.get('/', (req, res, next) => {
-  res.render('games/jebi');
-});
-
-router.post('/ranking', async (req, res, next) => {
+/* 랭킹 저장 & 불러오기 */
+exports.submitRanking = async (req, res, next) => {
   try {
     const { n, dog } = req.body;
     let ranking = await Ranking.findOne({ n });
@@ -25,6 +20,4 @@ router.post('/ranking', async (req, res, next) => {
     console.error('오류:', err);
     res.send({ success: false });
   }
-});
-
-module.exports = router;
+};

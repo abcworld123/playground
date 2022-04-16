@@ -3,8 +3,9 @@
 <head>
   <title>랜덤</title>
   <link rel="stylesheet" href="/stylesheets/bootstrap.css"/>
-  <link rel="stylesheet" href="/stylesheets/games/random.css"/>
-  <script type="text/javascript" src="/javascripts/games/random.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2"></script>
+  <link rel="stylesheet" href="/stylesheets/random/random.css"/>
+  <script type="text/javascript" src="/javascripts/random/j_random.js"></script>
 </head>
 <body>
 <div class="wrapper">
@@ -15,7 +16,7 @@
   <!-- 난수 컨트롤 div -->
   <div class="control">
     <label for="range">범위:</label>
-    <input type="number" class="form-control" id="range" placeholder="0 ~ N, 기본: 1">
+    <input type="number" class="form-control" id="range" placeholder="0 ~ N">
     <button class="btn btn-primary btn-start" onclick="start()">시작</button>
   </div>
 </div>
