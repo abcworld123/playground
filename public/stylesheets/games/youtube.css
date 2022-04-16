@@ -1,277 +1,277 @@
 body{
-    margin: 0;
+  margin: 0;
 }
 
 .youtube_body{
-    display: flex;
-    justify-content: center;
-    align-items:center;
-    min-height: 100vh;
-    background-color: #F2EDF3;
-    flex-direction: column;
+  display: flex;
+  justify-content: center;
+  align-items:center;
+  min-height: 100vh;
+  background-color: #F2EDF3;
+  flex-direction: column;
 }
 
 .youtube_contain{
-    /*display: none;*/
+  /*display: none;*/
 }
 
 .youtube_btn_area{
-    display: flex;
+  display: flex;
 }
 
 .youtube_btn,
 .youtube_btn::after {
-    -webkit-transition: all 0.5s;
-    -moz-transition: all 0.5s;
-    -o-transition: all 0.5s;
-    transition: all 0.5s;
+  -webkit-transition: all 0.5s;
+  -moz-transition: all 0.5s;
+  -o-transition: all 0.5s;
+  transition: all 0.5s;
 }
 
 .youtube_btn {
-    display: flex;
-    width: 300px;
-    height: 100px;
-    background-color: white;
-    color: black;
-    font-size: 1.6em;
-    font-weight: bold;
-    position: relative;
-    text-transform: uppercase;
-    border-radius: 30px;
-    box-shadow: rgb(0 0 0 / 15%) 0 6px 12px 0;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
+  display: flex;
+  width: 300px;
+  height: 100px;
+  background-color: white;
+  color: black;
+  font-size: 1.6em;
+  font-weight: bold;
+  position: relative;
+  text-transform: uppercase;
+  border-radius: 30px;
+  box-shadow: rgb(0 0 0 / 15%) 0 6px 12px 0;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
 }
 
 .youtube_btn:hover {
-    color: white;
-    background-color: #9a9ad9;
+  color: white;
+  background-color: #9a9ad9;
 }
 
 .youtube_btn::after {
-    background: #fff;
-    content: '';
-    position: absolute;
-    z-index: -1;
+  background: #fff;
+  content: '';
+  position: absolute;
+  z-index: -1;
 }
 
 .youtube_btn_margin{
-    margin-right: 40px;
+  margin-right: 40px;
 }
 
 .youtube_input_text{
-    width: 640px;
-    height: 40px;
-    margin-top: 50px;
-    font-size: 30px;
-    text-align:center
+  width: 640px;
+  height: 40px;
+  margin-top: 50px;
+  font-size: 30px;
+  text-align:center
 }
 
 .youtube_input_text:focus{
-    outline: 1px solid #9a9ad9;
+  outline: 1px solid #9a9ad9;
 }
 
 .youtube_input_area{
-    display: flex;
-    flex-direction: column;
+  display: flex;
+  flex-direction: column;
 }
 
 .youtube_submit_btn{
-    margin-top: 50px;
-    width: 640px;
-    height: 100px;
-    background-color: white;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: black;
-    font-size: 1.6em;
-    font-weight: bold;
-    cursor: pointer;
-    border-radius: 30px;
-    box-shadow: rgb(0 0 0 / 15%) 0 6px 12px 0;
+  margin-top: 50px;
+  width: 640px;
+  height: 100px;
+  background-color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: black;
+  font-size: 1.6em;
+  font-weight: bold;
+  cursor: pointer;
+  border-radius: 30px;
+  box-shadow: rgb(0 0 0 / 15%) 0 6px 12px 0;
 }
 
 .youtube_result_body{
-    /*display: none;*/
+  /*display: none;*/
 }
 
 .youtube_result_one_list{
-    display: flex;
+  display: flex;
 }
 
 .youtube_result_word{
-    height: 210px;
-    margin: 10px 0;
-    border-radius: 10px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    font-size: 16px;
-    width: 200px;
+  height: 210px;
+  margin: 10px 0;
+  border-radius: 10px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 16px;
+  width: 200px;
 }
 
 .youtube_result_thumbnails_area{
-    width: 300px;
-    height: 210px;
-    margin: 10px;
-    border-radius: 10px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
+  width: 300px;
+  height: 210px;
+  margin: 10px;
+  border-radius: 10px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .youtube_result_title_area{
-    width: 600px;
-    height: 120px;
-    margin: 10px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    border-radius: 10px;
+  width: 600px;
+  height: 120px;
+  margin: 10px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 10px;
 }
 
 .youtube_result_info_area{
-    display: flex;
-    width: 600px;
-    height: 80px;
-    margin: 0 10px;
+  display: flex;
+  width: 600px;
+  height: 80px;
+  margin: 0 10px;
 }
 
 .youtube_result_views_area{
-    width: 190px;
-    margin-right: 15px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    border-radius: 10px;
+  width: 190px;
+  margin-right: 15px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 10px;
 }
 
 .youtube_result_comment_area{
-    width: 190px;
-    margin-right: 15px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    border-radius: 10px;
+  width: 190px;
+  margin-right: 15px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 10px;
 }
 
 .youtube_result_like_area{
-    width: 190px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    border-radius: 10px;
+  width: 190px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 10px;
 }
 
 .youtube_result_show_thumbnails{
-    width: 300px;
-    height: 210px;
-    border-radius: 10px;
+  width: 300px;
+  height: 210px;
+  border-radius: 10px;
 
 }
 
 .youtube_result_hidden_area{
-    width: 100%;
-    height: 100%;
-    background-color: #b15ebf;
-    color: white;
-    border-radius: 10px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    cursor: pointer;
-    font-size: 40px;
+  width: 100%;
+  height: 100%;
+  background-color: #b15ebf;
+  color: white;
+  border-radius: 10px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  font-size: 40px;
 }
 
 .youtube_result_title{
-    font-size: 23px;
+  font-size: 23px;
 }
 
 .youtube_result_small_text{
-    font-size: 17px;
+  font-size: 17px;
 }
 
 .youtube_result_submit{
-    width: 640px;
-    height: 100px;
-    background-color: white;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: black;
-    font-size: 1.6em;
-    font-weight: bold;
-    cursor: pointer;
-    border-radius: 30px;
-    box-shadow: rgb(0 0 0 / 15%) 0 6px 12px 0;
-    margin: 50px auto 0 auto;
+  width: 640px;
+  height: 100px;
+  background-color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: black;
+  font-size: 1.6em;
+  font-weight: bold;
+  cursor: pointer;
+  border-radius: 30px;
+  box-shadow: rgb(0 0 0 / 15%) 0 6px 12px 0;
+  margin: 50px auto 0 auto;
 }
 
 .modal {
-    position: fixed;
-    top: 0;
-    right: 0;
-    bottom: 0;
-    left: 0;
-    background: rgba(0, 0, 0, 0.6);
-    overflow-y: scroll;
-    width: 100%;
-    display: none;
-    z-index: 2;
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  background: rgba(0, 0, 0, 0.6);
+  overflow-y: scroll;
+  width: 100%;
+  display: none;
+  z-index: 2;
 }
 
 .youtube_modal{
-    width: 500px;
-    padding: 40px 0;
-    background-color: white;
-    position: relative;
-    box-sizing: border-box;
-    border-radius: 10px;
-    margin: 150px auto;
+  width: 500px;
+  padding: 40px 0;
+  background-color: white;
+  position: relative;
+  box-sizing: border-box;
+  border-radius: 10px;
+  margin: 150px auto;
 }
 
 .youtube_modal_result{
-    display: flex;
-    justify-content: center;
+  display: flex;
+  justify-content: center;
 }
 
 .youtube_modal_rank{
-    width: 70px;
-    height: 70px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 20px;
+  width: 70px;
+  height: 70px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 20px;
 }
 
 .youtube_modal_info{
-    height: 70px;
-    width: 300px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin-left: 20px;
-    margin-bottom: 15px;
+  height: 70px;
+  width: 300px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-left: 20px;
+  margin-bottom: 15px;
 }
 
 .youtube_loading_modal{
-    position: fixed;
-    top: 0;
-    right: 0;
-    bottom: 0;
-    left: 0;
-    background: rgba(0, 0, 0, 0.6);
-    overflow-y: scroll;
-    width: 100%;
-    display: none;
-    z-index: 2;
-    align-items: center;
-    justify-content: center;
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  background: rgba(0, 0, 0, 0.6);
+  overflow-y: scroll;
+  width: 100%;
+  display: none;
+  z-index: 2;
+  align-items: center;
+  justify-content: center;
 }
 
 .youtube_loading_img{
-    height: 200px;
-    width: 200px;
+  height: 200px;
+  width: 200px;
 }
