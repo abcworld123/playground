@@ -1,84 +1,42 @@
-var request = require("request");
+var axios = require('axios').default;
 var config = require('../../config/config');
 
-exports.getResult = async function(req, res, callback){
-    const dataList = req.body.word
-    let resultData = []
+exports.getResult = async function (req, res, callback) {
+  const dataList = req.body.word;
+  let resultData = dataList.map((data) => getInfo(data));
+  resultData = await Promise.all(resultData);
+  return callback(resultData);
+};
 
-    dataList.forEach((data) => {
-        resultData.push(getInfo(data))
-    })
-
-    resultData = await Promise.all(resultData)
-    return callback(resultData)
-}
-
-function getInfo(keyword){
-    return new Promise(async function (resolve, reject) {
-        let searchUrl
-        let videoId
-        let videoUrl
-        let videoInfo
-
-        searchUrl = {
-            uri: "https://www.googleapis.com/youtube/v3/search",
-            qs:{
-                part:"snippet",
-                type:"video",
-                maxResults:"1",
-                q:keyword,
-                key:config.youtube.key,
-            }
-        }
-
-        videoId = await getVideoId(searchUrl)
-
-        videoUrl = {
-            uri: "https://www.googleapis.com/youtube/v3/videos",
-            qs:{
-                id:videoId,
-                key:config.youtube.key,
-                part:"snippet,statistics"
-            }
-        }
-
-        videoInfo = await getVideoInfo(videoUrl, keyword)
-
-        resolve(videoInfo)
-    });
-}
-
-async function getVideoId(searchUrl) {
-    return new Promise(function (resolve, reject) {
-        request(searchUrl, function (error, res, body) {
-            if (!error && res.statusCode == 200) {
-                const obj = JSON.parse(body)
-                resolve(obj.items[0].id.videoId)
-            } else {
-                reject(error);
-            }
-        });
-    });
-}
-
-async function getVideoInfo(videoUrl, word) {
-    return new Promise(function (resolve, reject) {
-        request(videoUrl, function (error, res, body) {
-            if (!error && res.statusCode == 200) {
-                const obj = JSON.parse(body)
-                const videoInfo = obj.items[0]
-
-                resolve({
-                    viewCount : videoInfo.statistics.viewCount,
-                    likeCount : videoInfo.statistics.likeCount,
-                    commentCount : videoInfo.statistics.commentCount,
-                    title : videoInfo.snippet.title,
-                    thumbnails : videoInfo.snippet.thumbnails.high.url,
-                    word : word
-                })
-            } else {
-                reject(error);
-            }
-        });
-    });
+function getInfo(keyword) {
+  return new Promise(async function (resolve, reject) {
+    let response;
+    const urlSearch = 'https://www.googleapis.com/youtube/v3/search';
+    const urlGetVideo = 'https://www.googleapis.com/youtube/v3/videos';
+    const qsGetVideo = { key: config.youtube.key, part: 'snippet,statistics' };
+    const qsSearch = {
+      part: 'snippet',
+      type: 'video',
+      maxResults: '1',
+      q: keyword,
+      key: config.youtube.key,
+    };
+    try {
+      response = await axios.get(urlSearch, { params: qsSearch });
+      qsGetVideo.id = response.data.items[0].id.videoId;
+      response = await axios.get(urlGetVideo, { params: qsGetVideo });
+      const { statistics, snippet } = response.data.items[0];
+      resolve({
+        viewCount: statistics.viewCount,
+        likeCount: statistics.likeCount,
+        commentCount: statistics.commentCount,
+        title: snippet.title,
+        thumbnails: snippet.thumbnails.high.url,
+        word: keyword,
+      });
+    } catch (error) {
+      console.error(error);
+      reject(error);
+    }
+  });
 }

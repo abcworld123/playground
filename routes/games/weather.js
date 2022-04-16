@@ -1,5 +1,5 @@
 var express = require('express');
-var request = require('request');
+var axios = require('axios').default;
 var router = express.Router();
 
 router.get('/', (req, res, next) => {
@@ -8,6 +8,7 @@ router.get('/', (req, res, next) => {
 
 /* 오늘 날씨 맞히기 */
 router.post('/getWeatherDay', (req, res, next) => {
+  const url = 'http://apis.data.go.kr/1360000/VilageFcstInfoService_2.0/getVilageFcst';
   let sec = new Date().getTime() + 25200000;
   sec += -sec % 10800000 + 7200000;
   const now = new Date(sec).toISOString().replace(/[T\-:]|\..+/g, '');
@@ -17,9 +18,8 @@ router.post('/getWeatherDay', (req, res, next) => {
   const {idx, nx, ny} = req.body;
   let arr = [];
   
-  request.get({
-    url: 'http://apis.data.go.kr/1360000/VilageFcstInfoService_2.0/getVilageFcst',
-    qs: {
+  axios.get(url, {
+    params: {
       serviceKey: process.env.WEATHER_KEY,
       pageNo: 1,
       numOfRows: 84,
@@ -28,24 +28,25 @@ router.post('/getWeatherDay', (req, res, next) => {
       base_time,
       nx,
       ny
-    },
-    json: true
-  }, (error, response, body) => {
-    if (error) {
-      res.status(500).send('getWeather: error');
-      return;
     }
-    const data = body.response.body.items.item;
+  })
+  .then((response) => {
+    const data = response.data.response.body.items.item;
     arr = data
       .filter((x) => x.category === category[idx])
       .map((x) => parseInt(x.fcstValue));
     res.send(arr);
+  })
+  .catch((error) => {
+    console.error(error);
+    res.status(500).send('getWeather: error');
   });
 });
 
 
 /* 주간 날씨 맞히기 (최고, 최저 기온) */
 router.post('/getWeatherTa', (req, res, next) => {
+  const url = 'http://apis.data.go.kr/1360000/MidFcstInfoService/getMidTa';
   let sec = new Date().getTime() + 10800000;
   sec += -sec % 43200000 + 21600000;
   const now = new Date(sec).toISOString().replace(/[T\-:]|\..+/g, '').substring(0, 12);
@@ -55,47 +56,49 @@ router.post('/getWeatherTa', (req, res, next) => {
   const taTarget = ['taMax', 'taMin'][idx - 5];
   let arr = [];
 
-  request.get({
-    url: 'http://apis.data.go.kr/1360000/MidFcstInfoService/getMidTa',
-    qs: {
+  axios.get(url, {
+    params: {
       serviceKey: process.env.WEATHER_KEY,
       dataType: 'json',
       regId: regCodes[regIdx],
       tmFc: now
-    },
-    json: true
-  }, (error, response, body) => {
-    if (error) res.status(500).send('getWeather: error');
-    const data = body.response.body.items.item[0];
+    }
+  })
+  .then((response) => {
+    const data = response.data.response.body.items.item[0];
+    console.log(data);
     for (let i = 3; i < 10; i++) {
       arr.push(data[`${taTarget}${i}`]);
     }
     res.send(arr);
+  })
+  .catch((error) => {
+    console.error(error);
+    res.status(500).send('getWeather: error');
   });
 });
 
 
 /* 주간 날씨 맞히기 (강수 확률) */
 router.post('/getWeatherMl', (req, res, next) => {
+  const url = 'http://apis.data.go.kr/1360000/MidFcstInfoService/getMidLandFcst';
   let sec = new Date().getTime() + 10800000;
   sec += -sec % 43200000 + 21600000;
   const now = new Date(sec).toISOString().replace(/[T\-:]|\..+/g, '').substring(0, 12);
   const regId = ['', '11B00000', '11H20000', '11H10000', '11B00000', '11C20000', '11F20000', '11H20000'];
   const regIdx = req.body.reg;
   let arr = [];
-
-  request.get({
-    url: 'http://apis.data.go.kr/1360000/MidFcstInfoService/getMidLandFcst',
-    qs: {
+  
+  axios.get(url, {
+    params: {
       serviceKey: process.env.WEATHER_KEY,
       dataType: 'json',
       regId: regId[regIdx],
       tmFc: now
-    },
-    json: true
-  }, (error, response, body) => {
-    if (error) res.status(500).send('getWeather: error');
-    const data = body.response.body.items.item[0];
+    }
+  })
+  .then((response) => {
+    const data = response.data.response.body.items.item[0];
     arr = [
       data['rnSt3Pm'],
       data['rnSt4Pm'],
@@ -106,6 +109,10 @@ router.post('/getWeatherMl', (req, res, next) => {
       data['rnSt9'],
     ];
     res.send(arr);
+  })
+  .catch((error) => {
+    console.error(error);
+    res.status(500).send('getWeather: error');
   });
 });
 
