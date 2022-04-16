@@ -78,7 +78,7 @@ function start(i) {
       swalError('지역을 선택해주세요.');
       return;
     }
-    url = `/weather/getWeather${i >= 6 ? 'Ta' : 'Ml'}`;
+    url = `/weather/getWeather${i <= 6 ? 'Ta' : 'Ml'}`;
     formdata = {
       idx: i,
       reg: regNums[i]
