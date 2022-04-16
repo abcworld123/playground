@@ -2,12 +2,10 @@ const userNums = [0, 2, 2, 2, 2, 2, 2, 2];
 const regNums = [0, 0, 0, 0, 0, 0, 0, 0];
 const regNames = ['서울', '부산', '대구', '인천', '대전', '광주', '울산'];
 
-function swalError(text, callback) {
+function alertError(text, callback) {
   Swal.fire({
     icon: 'error',
-    title: 'Fail',
-    text: text,
-    customClass: 'swal'
+    title: text
   }).then(callback);
 }
 
@@ -52,19 +50,19 @@ function start(i) {
     const nx = Math.round(tab.getElementsByClassName('input-nx')[0].value);
     const ny = Math.round(tab.getElementsByClassName('input-ny')[0].value);
     if (!nx) {
-      swalError('nx를 입력해주세요.');
+      alertError('nx를 입력해주세요.');
       return;
     }
     if (nx < 1 || 149 < nx) {
-      swalError('nx는 1 ~ 149 내의 숫자로 입력해주세요.');
+      alertError('nx는 1 ~ 149 내의 숫자로 입력해주세요.');
       return;
     }
     if (!ny) {
-      swalError('ny를 입력해주세요.');
+      alertError('ny를 입력해주세요.');
       return;
     }
     if (ny < 1 || 253 < ny) {
-      swalError('ny는 1 ~ 253 내의 숫자로 입력해주세요.');
+      alertError('ny는 1 ~ 253 내의 숫자로 입력해주세요.');
       return;
     }
     url = '/weather/getWeatherDay';
@@ -75,7 +73,7 @@ function start(i) {
     };
   } else {
     if (!regNums[i]) {
-      swalError('지역을 선택해주세요.');
+      alertError('지역을 선택해주세요.');
       return;
     }
     url = `/weather/getWeather${i <= 6 ? 'Ta' : 'Ml'}`;

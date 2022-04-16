@@ -1,8 +1,14 @@
-let n = 2;
-
 function start() {
   const range = document.getElementById('range');
   const randint = document.getElementById('randint');
-  n = parseInt(range.value) + 1;
-  randint.innerText = Math.floor(Math.random() * n);
+  const n = range.value;
+  if (!n) alertError();
+  else randint.innerText = Math.floor(Math.random() * (parseInt(n) + 1));
+}
+
+function alertError() {
+  Swal.fire({
+    icon: 'error',
+    title: 'N을 입력해주세요.'
+  });
 }
