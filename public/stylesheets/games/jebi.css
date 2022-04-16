@@ -17,7 +17,7 @@ body {
   background: lightgray;
 }
 
-.container-fluid {
+.container {
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
@@ -39,7 +39,7 @@ body {
   justify-content: center;
 }
 
-img {
+.container > img {
   width: 200px;
 }
 
@@ -83,11 +83,11 @@ label {
 
 @media (max-width: 1440px) {
 
-  .container-fluid {
+  .container {
     margin-top: 100px;
   }
 
-  img {
+  .container > img {
     width: 190px;
   }
 
