@@ -16,6 +16,7 @@
   },
   "imports": {
     "#modules/*": "./modules/*.js",
-    "#model/*": "./model/*.js"
+    "#model/*": "./model/*.js",
+    "#config": "./config/config.js"
   }
 }
