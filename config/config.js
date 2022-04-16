@@ -1,8 +1,8 @@
-const path = require('path')
-require('dotenv').config({path:path.join('.','.env')});
+const path = require('path');
+require('dotenv').config({path: path.join('.', '.env')});
 
 module.exports = {
-  database:{
+  database: {
     mongooseAUTH: process.env.MONGOOSE_AUTH,
     mongooseID: process.env.MONGOOSE_ID,
     mongoosePW: process.env.MONGOOSE_PW,
@@ -14,4 +14,4 @@ module.exports = {
   weather: {
     key: process.env.WEATHER_KEY
   },
-}
+};

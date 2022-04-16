@@ -11,11 +11,8 @@ router.get('/', (req, res, next) => {
 });
 
 router.use('/random', random);
-
 router.use('/jebi', jebi);
-
 router.use('/weather', weather);
-
 router.use('/youtube',youtube)
 
 module.exports = router;

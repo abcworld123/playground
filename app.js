@@ -3,7 +3,7 @@ var http = require('http');
 var app = express();
 var mongoose = require('mongoose');
 var config = require('./config/config');
-require('dotenv').config();
+var server = http.createServer(app);
 
 const mongooseOption = {
   useUnifiedTopology: true,
@@ -23,7 +23,6 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.static('public'));
 app.use(express.json());
 
-var server = http.createServer(app);
 app.use('/', require('./routes/index'));
 
 app.use((req, res, next) => {
