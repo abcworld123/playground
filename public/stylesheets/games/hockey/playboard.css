@@ -1,3 +1,86 @@
+body{
+  background-image: url("/images/games/hockey/hockeyBackground.png");
+  background-size: cover;
+}
 .playboard_body{
+  width: 100%;
+  height: 100vh;
+  display: -webkit-box;
+  display: -moz-box;
+  display: -ms-flexbox;
+  display: flex;
 
+  -webkit-box-align: center;
+  -moz-box-align: center;
+  -ms-flex-align: center;
+  align-items: center; /* 수직 정렬 */
+
+  -webkit-box-pack: center;
+  -moz-box-pack: center;
+  -ms-flex-pack: center;
+  justify-content: center; /* 수평 정렬 */
+}
+
+.playboard_content{
+  width: 80vw;
+  height: 80vh;
+  margin-bottom: 13vh;
+}
+
+.playboard_red_score{
+  font-size: 123px;
+  font-weight: bold;
+  color: #b23c3c;
+}
+
+.playboard_blue_scord{
+  font-size: 123px;
+  font-weight: bold;
+  color: #333399;
+}
+
+.playboard_header{
+  display: flex;
+  justify-content: space-between;
+}
+
+.playboard_time_area{
+  font-size: 123px;
+  font-weight: bold;
+  color: #cbb2b2;
+}
+
+.playboard_field_area{
+  width: 100%;
+  height: calc(100% - 13vh);
+  background-color: #a288aa;
+  border-radius: 10pc;
+  display: flex;
+  justify-content: space-between;
+}
+
+.playboard_canvas_area{
+  position: fixed;
+  width: 1950px;
+  height: 910px;
+}
+
+.playboard_red_goalpost{
+  background: linear-gradient(to right, #b23c3c, #a288aa);
+  border-radius: 12pc 0 0 12pc;
+  width: 6.5vw;
+  height: 100%;
+}
+
+.playboard_blue_goalpost{
+  background: linear-gradient(to left, #333399, #a288aa);
+  border-radius: 0 12pc 12pc 0;
+  width: 6.5vw;
+  height: 100%;
+}
+
+.playboard_main_board{
+  width: 100%;
+  height: 100%;
+  background-color: #a288aa;
 }

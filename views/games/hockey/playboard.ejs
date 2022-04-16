@@ -1,27 +1,56 @@
 <!doctype html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport"
-          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>하키 게임</title>
+  <meta charset="UTF-8">
+  <meta name="viewport"
+        content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>하키 게임</title>
 
-    <!--stylesheet-->
-    <link rel="stylesheet" href="/stylesheets/games/hockey/playboard.css" />
-    <link rel="stylesheet" href="/stylesheets/bootstrap.css" />
+  <!--stylesheet-->
+  <link rel="stylesheet" href="/stylesheets/games/hockey/playboard.css" />
+  <link rel="stylesheet" href="/stylesheets/bootstrap.css" />
 
-    <!-- Font Awesome icons (free version) -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css"/>
+  <!-- Font Awesome icons (free version) -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css"/>
 
-    <!--sweetalert2 -->
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2"></script>
+  <!--sweetalert2 -->
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2"></script>
 
-    <!--javascript-->
-    <script src="/socket.io/socket.io.js"></script>
-    <script language="JavaScript" src="/javascripts/games/hockey/playboard.js"></script>
+  <!--javascript-->
+  <script src="/socket.io/socket.io.js"></script>
+  <script language="JavaScript" src="/javascripts/games/hockey/playboard.js"></script>
 </head>
 <body>
-    <canvas id="canvas" width="600" height="600"></canvas>
+<div class="playboard_body">
+
+  <div class="playboard_content">
+    <div class="playboard_header">
+      <div class="playboard_red_score">
+        0
+      </div>
+
+      <div class="playboard_time_area">
+        0:50
+      </div>
+
+      <div class="playboard_blue_scord">
+        2
+      </div>
+    </div>
+
+    <div class="playboard_field_area">
+      <div class="playboard_red_goalpost">
+      </div>
+      <div class="playboard_main_board">
+
+      </div>
+      <div class="playboard_blue_goalpost">
+      </div>
+      <canvas id="canvas" class="playboard_canvas_area"></canvas>
+    </div>
+  </div>
+
+</div>
 </body>
 </html>
