@@ -7,7 +7,6 @@ request.post({
 }, (error, response, body) => {
   console.log(body);
   if (!body) {
-    console.error(body);
     throw new Error(body);
   }
 });

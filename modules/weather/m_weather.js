@@ -12,7 +12,7 @@ exports.getWeatherDay = (req, res, next) => {
   const category = ['', 'TMP', 'REH', 'WSD', 'SKY'];
   const {idx, nx, ny} = req.body;
   let arr;
-  
+
   axios.get(url, {
     params: {
       serviceKey: config.weather.key,
@@ -60,7 +60,6 @@ exports.getWeatherTa = (req, res, next) => {
   })
   .then((response) => {
     const data = response.data.response.body.items.item[0];
-    console.log(data);
     for (let i = 3; i < 10; i++) {
       arr.push(data[`${taTarget}${i}`]);
     }
@@ -81,7 +80,7 @@ exports.getWeatherMl = (req, res, next) => {
   const regId = ['', '11B00000', '11H20000', '11H10000', '11B00000', '11C20000', '11F20000', '11H20000'];
   const regIdx = req.body.reg;
   let arr = [];
-  
+
   axios.get(url, {
     params: {
       serviceKey: config.weather.key,
