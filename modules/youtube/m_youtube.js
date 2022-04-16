@@ -1,5 +1,5 @@
-var axios = require('axios').default;
-var config = require('../../config/config');
+const axios = require('axios').default;
+const config = require('../../config/config');
 
 exports.getResult = async function (req, res, callback) {
   const dataList = req.body.word;

@@ -1,9 +1,9 @@
-var express = require('express');
-var http = require('http');
-var app = express();
-var mongoose = require('mongoose');
-var config = require('./config/config');
-var server = http.createServer(app);
+const express = require('express');
+const http = require('http');
+const app = express();
+const mongoose = require('mongoose');
+const config = require('./config/config');
+const server = http.createServer(app);
 
 const mongooseOption = {
   useUnifiedTopology: true,

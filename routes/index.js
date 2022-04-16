@@ -1,7 +1,7 @@
-var express = require('express');
-var router = express.Router();
+const express = require('express');
+const router = express.Router();
 
-const youtube = require('./games/r_youtube')
+const youtube = require('./games/r_youtube');
 const weather = require('./games/r_weather');
 const random = require('./games/r_random');
 const jebi = require('./games/r_jebi');

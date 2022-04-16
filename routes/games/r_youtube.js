@@ -1,5 +1,5 @@
-var express = require('express');
-var router = express.Router();
+const express = require('express');
+const router = express.Router();
 const r_youtube = require('#modules/youtube/m_youtube');
 
 router.get('/', (req, res, next) => {

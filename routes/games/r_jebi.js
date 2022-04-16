@@ -1,5 +1,5 @@
-var express = require('express');
-var router = express.Router();
+const express = require('express');
+const router = express.Router();
 const r_jebi = require('#modules/jebi/m_jebi');
 
 router.get('/', (req, res, next) => {
