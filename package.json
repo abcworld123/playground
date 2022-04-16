@@ -13,5 +13,9 @@
     "mongoose": "^6.3.0",
     "nodemon": "^2.0.15",
     "request": "^2.88.2"
+  },
+  "imports": {
+    "#modules/*": "./modules/*.js",
+    "#model/*": "./model/*.js"
   }
 }

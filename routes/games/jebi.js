@@ -1,6 +1,6 @@
 var express = require('express');
 var router = express.Router();
-const Ranking = require('../../model/jebiRanking');
+const Ranking = require('#model/jebiRanking');
 
 router.get('/', (req, res, next) => {
   res.render('games/jebi');
