@@ -23,6 +23,8 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.static('public'));
 app.use(express.json());
 
+require('./sockets/socket')(server);
+
 app.use('/', require('./routes/index'));
 
 app.use((req, res, next) => {

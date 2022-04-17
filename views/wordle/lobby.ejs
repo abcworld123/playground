@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>숫자야구 로비</title>
+  <!--stylesheet-->
+  <link rel="stylesheet" href="/stylesheets/wordle/lobby.css" />
+  <link rel="stylesheet" href="/stylesheets/bootstrap.css" />
+
+  <!-- Font Awesome icons (free version) -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css"/>
+
+  <!--sweetalert2 -->
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2"></script>
+
+  <!--javascript-->
+  <script src="/socket.io/socket.io.js"></script>
+  <script language="JavaScript" src="/javascripts/wordle/lobby.js"></script>
+</head>
+<body>
+  <div class="wrapper">
+    <div class="header">
+      <span class="title">방 목록</span>
+      <span class="my-id" id="myId">ID:</span>
+    </div>
+    <div class="room-tab"><span>입장 가능</span></div>
+    <div class="room-container" id="roomContainer">
+      <div class="room" id="room0">
+        <div class="room-title"></div>
+        <button class="btn btn-success btn-start room-enter">
+          <i class="fa-solid fa-arrow-right-to-bracket"></i>
+        </button>
+      </div>
+    </div>
+    <div class="control">
+      <button class="btn btn-primary btn-room-create" onclick="createRoom()">방 만들기</button>
+    </div>
+  </div>
+</body>
+</html>
