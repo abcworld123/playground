@@ -7,9 +7,9 @@ router.get('/', (req, res, next) => {
 });
 
 router.post('/result', (req, res, next) => {
-  r_youtube.getResult(req,res,function (callback){
-    res.send(callback)
-  })
+  r_youtube.getResult(req, res, function (callback) {
+    res.send(callback);
+  });
 });
 
 module.exports = router;

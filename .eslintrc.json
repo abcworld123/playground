@@ -1,0 +1,41 @@
+{
+    "env": {
+        "browser": true,
+        "es2021": true
+    },
+    "parserOptions": {
+        "ecmaVersion": "latest",
+        "sourceType": "module"
+    },
+    "extends": [
+      "eslint:recommended"
+    ],
+    "rules": {
+        "semi": ["warn", "always"],
+        "no-extra-semi": "warn",
+        "no-spaced-func": "warn",
+        "prefer-const": "warn",
+        "space-before-blocks": ["warn", "always"],
+        "space-infix-ops": ["warn", {"int32Hint": false}],
+        "semi-spacing": ["warn", {"before": false, "after": true}],
+        "keyword-spacing": ["warn", {"before": true, "after": true}],
+        "comma-spacing": ["warn", { "before": false, "after": true }],
+        "key-spacing": ["warn", {"beforeColon": false, "afterColon": true}],
+        "space-unary-ops": ["warn", {"words": true, "nonwords": false}],
+        "no-trailing-spaces": ["warn", {"skipBlankLines": true, "ignoreComments": true}],
+        "no-multi-spaces": ["warn", {"ignoreEOLComments": true, "exceptions": {"Property": true}}],
+        "space-before-function-paren": ["warn", {"anonymous": "always", "named": "never", "asyncArrow": "always"}],
+        "prefer-object-spread": "warn",
+        "prefer-spread": "warn",
+        // "prefer-arrow-callback": ["warn", {"allowNamedFunctions": true, "allowUnboundThis": true}],
+        "prefer-exponentiation-operator": "warn",
+        "no-useless-return": "warn",
+        "no-var": "error",
+        "indent": [1, 2, { "MemberExpression": "off"}],
+        // "comma-dangle": ["warn", "always-multiline"],
+
+        // override eslint:recommended
+        "no-unused-vars": "off",
+        "no-undef": "off"
+    }
+}

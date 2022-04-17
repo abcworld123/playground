@@ -15,7 +15,7 @@ const mongooseOption = {
   },
 };
 mongoose.connect(`mongodb://${config.database.serverURL}/${config.database.mongooseAUTH}`, mongooseOption, function (err) {
-  err ? console.error(err) : console.log('Data DB Connected.');
+  err ? console.error(err) : console.info('\x1B[36mData DB Connected.\x1B[0m');
 });
 
 app.set('view engine', 'ejs');
@@ -27,7 +27,7 @@ app.use('/', require('./routes/index'));
 
 app.use((req, res, next) => {
   res.status(404).render('cannotAccess');
-  console.error(`no exists: ${req.originalUrl}`);
+  console.warn(`not exists: ${req.originalUrl}`);
 });
 
 server.on('error', (err) => {
@@ -35,5 +35,5 @@ server.on('error', (err) => {
 });
 
 server.listen(3000, () => {
-  console.log('connected!!');
+  console.info('\x1B[36mconnected!!\x1B[0m');
 });
