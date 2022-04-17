@@ -1,6 +1,5 @@
-const socket = io('/wordle');
-const users = new Set();  // { all users }
-const hosts = new Map();  // { room: id }
+let socket;
+const rooms = new Set();  // { lobby room list }
 const requestQueue = [];
 let requestFor = '';
 
@@ -16,13 +15,17 @@ function alertCreateRoom() {
     cancelButtonText: '취소',
     confirmButtonColor: '#13a829',
     cancelButtonColor: '#cc2121',
-    preConfirm: (room) => {
+    preConfirm: async (room) => {
       const encodedRoom = encodeURIComponent(room);
       if (!room) {
         Swal.showValidationMessage('방 제목을 입력해주세요.');
       } else if (room.length > 100) {
         Swal.showValidationMessage('방 제목은 100글자 이하로 입력해주세요.');
-      } else if (hosts.has(encodedRoom)) {
+      }
+      const roomExist = await new Promise(resolve => {
+        socket.emit('room exist check', encodedRoom, x => resolve(x));
+      });
+      if (roomExist) {
         Swal.showValidationMessage('동일한 방 제목이 존재합니다.');
       }
       return encodedRoom;
@@ -124,6 +127,7 @@ function alertRoomNotExist() {
 // [방장] 방 생성
 async function createRoom() {
   const room = (await alertCreateRoom()).value;
+  if (!room) return;
   socket.emit('create room', room);
   waitUser();
 }
@@ -144,7 +148,10 @@ function joinReceived(user) {
 async function handleRequest(user) {
   const accept = (await alertJoinRequest(user)).isConfirmed;
   if (accept) {
-    if (users.has(user)) {
+    const userExist = await new Promise(resolve => {
+      socket.emit('user exist check', user, x => resolve(x));
+    });
+    if (userExist) {
       socket.emit('join room accept', user);
     } else {
       await alertUserNotExist();
@@ -176,12 +183,12 @@ function pollQueue(shift) {
 // [유저] 방에 입장하기
 async function joinRoom(room) {
   if ((await alertJoinConfirm()).isDismissed) return;
-  if (!hosts.has(room)) { alertRoomNotExist(); return; }
-  socket.emit('join room request', hosts.get(room));
+  if (!rooms.has(room)) { alertRoomNotExist(); return; }
+  socket.emit('join room request', room);
   requestFor = room;
 
   if (!(await alertWaitResponse()).isDismissed) return;
-  socket.emit('join room cancel', hosts.get(room));
+  socket.emit('join room cancel', room);
   requestFor = '';
 }
 
@@ -201,7 +208,7 @@ function gameStart(room) {
 // [ALL] 삭제된 방 새로고침
 function removeRoom(room) {
   document.getElementById(room).remove();
-  hosts.delete(room);
+  rooms.delete(room);
   if (requestFor === room) {
     alertRoomNotExist();
     requestFor = '';
@@ -209,11 +216,9 @@ function removeRoom(room) {
 }
 
 // [ALL] 나간 유저 새로고침
-function removeUser(user, room) {
+function removeUser(user) {
   const idx = requestQueue.slice(1).indexOf(user) + 1;
   if (idx) requestQueue.splice(idx, 1);
-  if (room) removeRoom(room);
-  users.delete(user);
 }
 
 window.onload = () => {
@@ -221,29 +226,26 @@ window.onload = () => {
   const room0 = document.getElementById('room0');
   const myId = document.getElementById('myId');
 
-  function addRoom(host, room) {
+  function addRoom(room) {
     const item = room0.cloneNode(true);
     item.id = room;
     item.children[0].innerText = decodeURIComponent(room);
     item.children[1].addEventListener('click', () => joinRoom(room));
     roomContainer.appendChild(item);
-    hosts.set(room, host);
+    rooms.add(room);
   }
+  
   // socket.io
+  socket = io('/wordle');
+  
   socket.on('connect', () => {
     myId.innerText = `ID: ${socket.id}`;
   });
-  socket.once('user list', (arr) => {
-    arr.forEach(user => users.add(user));
-  });
   socket.once('room list', (arr) => {
-    arr.forEach(([host, room]) => addRoom(host, room));
+    arr.forEach(room => addRoom(room));
   });
-  socket.on('user enter', (user) => {
-    users.add(user);
-  });
-  socket.on('create room', (host, room) => {
-    addRoom(host, room);
+  socket.on('create room', (room) => {
+    addRoom(room);
   });
   socket.on('remove room', (room) => {
     removeRoom(room);
@@ -260,7 +262,7 @@ window.onload = () => {
   socket.on('join room reject', () => {
     joinRejected();
   });
-  socket.on('user leave', (user, room) => {
-    removeUser(user, room);
+  socket.on('user leave', (user) => {
+    removeUser(user);
   });
 };
