@@ -1,0 +1,89 @@
+input[type="number"]::-webkit-inner-spin-button {
+  appearance: none;
+}
+
+.wrapper {
+  width: 1000px;
+  margin: 0 auto;
+  padding: 50px 0 200px 0;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  min-width: 1000px;
+  margin: 0 20px 80px 20px;
+  font-size: 1.5em;
+  color: #999;
+}
+
+.header-item {
+  width: 300px;
+  text-align: center;
+}
+
+.my-answer-container {
+  display: flex;
+  align-items: center;
+  gap: 30px;
+}
+
+.my-answer {
+  min-width: 150px;
+}
+
+.timer {
+  font-size: 3em;
+}
+
+.container {
+  display: flex;
+  flex-direction: column;
+  font-size: 2.5em;
+  gap: 25px;
+}
+
+.line {
+  display: flex;
+  align-self: center;
+  gap: 15px;
+}
+
+.tile-container {
+  display: flex;
+  gap: 15px;
+}
+
+.tile {
+  display: grid;
+  width: 60px;
+  height: 60px;
+  place-items: center;
+  border: 3px solid #bbb;
+}
+
+.result {
+  display: flex;
+  font-size: .75em;
+  gap: 20px;
+  min-width: 100px;
+  margin-left: 30px;
+  align-items: center;
+}
+
+.result-strike {
+  color: #6aaa64;
+}
+
+.result-ball {
+  color: #c9b458;
+}
+
+.result-out {
+  color: #dc6f7c;
+}
+
+.result-success {
+  color: #97eded;
+}

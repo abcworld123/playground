@@ -1,3 +1,5 @@
+const allRooms = require('#modules/wordle/m_wordle').allRooms;
+
 module.exports = function (nsp) {
   const users = new Set();  // { all users }
   const hosts = new Map();  // { room: id }
@@ -14,7 +16,7 @@ module.exports = function (nsp) {
     });
     
     socket.on('room exist check', (room, callback) => {
-      callback(hosts.has(room));
+      callback(hosts.has(room) || allRooms.has(room));
     });
 
     socket.on('remove room', () => {
@@ -36,6 +38,7 @@ module.exports = function (nsp) {
     });
 
     socket.on('join room accept', (user) => {
+      allRooms.set(myRoom, 0);
       socket.emit('join room accept', myRoom);
       nsp.to(user).emit('join room accept', myRoom);
     });

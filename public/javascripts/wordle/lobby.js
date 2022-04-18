@@ -201,8 +201,8 @@ function joinRejected() {
 // [ALL] 수락됨, 게임 페이지로 이동
 function gameStart(room) {
   Swal.close();
-  requestQueue.shift();
-  location.replace(`wordle/${room}`);
+  const host = Boolean(requestQueue.length);
+  location.replace(`wordle/${room}?host=${host}`);
 }
 
 // [ALL] 삭제된 방 새로고침

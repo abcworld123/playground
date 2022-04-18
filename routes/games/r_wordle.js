@@ -7,7 +7,7 @@ router.get('/', (req, res, next) => {
 });
 
 router.get('/:roomname', (req, res, next) => {
-  res.render('wordle/playboard');
+  wordle.enterRoom(req, res, next);
 });
 
 module.exports = router;
