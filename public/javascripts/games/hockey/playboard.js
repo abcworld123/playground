@@ -40,8 +40,6 @@ window.addEventListener("load", function () {
   document.querySelector('#canvas').height = document.querySelector('#canvas').offsetHeight;
   WIDTH = document.querySelector('#canvas').offsetWidth;
   HEIGHT = document.querySelector('#canvas').offsetHeight;
-  console.log(WIDTH);
-  console.log(HEIGHT);
 
   window.addEventListener("keypress", togleDirection);
 
@@ -52,13 +50,16 @@ window.addEventListener("load", function () {
     // console.log(event, msg1, msg2);
   });
 
-  socket.on('playboard', (a, b, c, d, e, f) => {
+  socket.on('playboard', (a, b, c, d, e, f, g, h) => {
     WIDTH = document.querySelector('.playboard_canvas_area').offsetWidth;
     HEIGHT = document.querySelector('.playboard_canvas_area').offsetHeight;
     screenClear();
     screenDrawPlayer(Number(a * WIDTH / 100), Number(b * HEIGHT / 100), 20 * HEIGHT / 100);
     screenDrawPlayer(Number(c * WIDTH / 100), Number(d * HEIGHT / 100), 20 * HEIGHT / 100);
     screenDrawBall(Number(e * WIDTH / 100), Number(f * HEIGHT / 100));
+    document.getElementsByClassName('playboard_red_score')[0].innerHTML = g;
+    document.getElementsByClassName('playboard_blue_scord')[0].innerHTML = h;
+
     player1_x = a;
     player1_y = b;
 
@@ -70,6 +71,12 @@ window.addEventListener("load", function () {
 
     // playAction = window.requestAnimationFrame(draw)
 
+  });
+
+  socket.on('timeFlow', () => {
+    const timeHtml = document.getElementsByClassName('playboard_time_area')[0];
+    const nowTime = Number(timeHtml.innerHTML.trim());
+    timeHtml.innerHTML = String(nowTime - 1);
   });
 
   // gameStart()
@@ -118,7 +125,6 @@ function draw() {
 
 // canvas를 지우는 함수
 function screenClear() {
-  console.log(WIDTH, HEIGHT);
   playBoard.clearRect(0, 0, WIDTH, HEIGHT);
 }
 
