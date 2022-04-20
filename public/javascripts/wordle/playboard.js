@@ -245,6 +245,7 @@ window.addEventListener('keydown', (e) => {
       tiles[cursor++].innerText = e.key;
     }
   } else if (e.code === 'Backspace') {
+    e.preventDefault();
     if (cursor > 0) {
       tiles[--cursor].innerText = '';
     }
