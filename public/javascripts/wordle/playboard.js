@@ -18,13 +18,13 @@ function alertConfig() {
     preConfirm: () => {
       const timelimit = Swal.getPopup().querySelector('#timelimit').value;
       const numlen = Swal.getPopup().querySelector('#numlen').value;
-      const timelimit_int = parseInt(timelimit);
-      const numlen_int = parseInt(numlen);
+      const timelimit_int = Number(timelimit);
+      const numlen_int = Number(numlen);
       if (!timelimit) {
         Swal.showValidationMessage('제한 시간을 설정해주세요.');
       } else if (!numlen) {
         Swal.showValidationMessage('자릿수를 설정해주세요.');
-      } else if (timelimit_int != timelimit || numlen_int != numlen) {
+      } else if (timelimit_int % 1 || numlen_int % 1) {
         Swal.showValidationMessage('정수만 입력해주세요.');
       } else if (timelimit_int < 1 || 10000 < timelimit_int) {
         Swal.showValidationMessage('제한 시간은 1~10000 사이의 숫자로 입력해주세요.');
@@ -59,9 +59,11 @@ function alertSetNumber() {
     preConfirm: (myAnswer) => {
       if (!myAnswer) {
         Swal.showValidationMessage('숫자를 입력해주세요.');
-      } else if (parseInt(myAnswer) != myAnswer) {
+      } else if (Number(myAnswer) % 1) {
         Swal.showValidationMessage('정수만 입력해주세요.');
-      } else if (myAnswer.length !== numlen) {
+      }
+      myAnswer = parseInt(myAnswer).toString();
+      if (myAnswer.length !== numlen) {
         Swal.showValidationMessage(`숫자 ${numlen}자리를 입력해주세요.`);
       } else if (new Set(myAnswer).size !== numlen) {
         Swal.showValidationMessage(`중복 없이 입력해주세요.`);
