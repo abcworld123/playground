@@ -53,10 +53,11 @@ module.exports = function (nsp) {
     function handleTurn(win, turn) {
       if (turn === 1 && (win[0] || win[1])) {
         if (win[0] && win[1]) {
-          nsp.to(room).emit('game end', 'draw');
+          socket.emit('game end', 'draw', answers.get(socket.id));
+          nsp.to(rival).emit('game end', 'draw', answers.get(rival));
         } else {
-          socket.emit('game end', win[1] ? 'win' : 'lose');
-          nsp.to(rival).emit('game end', win[0] ? 'win' : 'lose');
+          socket.emit('game end', win[1] ? 'win' : 'lose', answers.get(socket.id));
+          nsp.to(rival).emit('game end', win[0] ? 'win' : 'lose', answers.get(rival));
         }
         closeRoom();
       } else {

@@ -1,6 +1,6 @@
 let socket;
 let timelimit, numlen, myAnswer, myTurn, cursor, timer;
-let lineTemplate, container, tiles, resultText, timerText, turnText;
+let divMyAnswer, lineTemplate, container, tiles, resultText, timerText, turnText;
 
 /*********  alert functions  ***********/
 
@@ -204,11 +204,16 @@ function showResult(strike, ball) {
 }
 
 // [ALL] 게임 종료
-function gameEnd(result) {
-  clearInterval(timer);
+function gameEnd(result, answer) {
   if (result === 'win') alertWin();
-  else if (result === 'lose') alertLose();
+  else if (result === 'lose') alertLose(answer);
   else if (result === 'draw') alertDraw();
+  clearInterval(timer);
+  turnText.innerText = `정답: ${answer}`;
+  timerText.style.color = '#999';
+  turnText.style.color = '#bc6bc6';
+  divMyAnswer.innerText = myAnswer;
+  divMyAnswer.outerHTML = divMyAnswer.outerHTML + '';
 }
 
 // line template
@@ -251,7 +256,7 @@ window.addEventListener('keydown', (e) => {
 window.onload = () => {
   const room = document.getElementById('room').value;
   const isHost = document.getElementById('host').value === 'true';
-  const divMyAnswer = document.getElementById('myAnswer');
+  divMyAnswer = document.getElementById('myAnswer');
   lineTemplate = document.getElementById('lineTemplate');
   container = document.getElementById('container');
   timerText = document.getElementById('timer');
@@ -283,8 +288,8 @@ window.onload = () => {
   socket.on('result', (strike, ball) => {
     showResult(strike, ball);
   });
-  socket.on('game end', (result) => {
-    gameEnd(result);
+  socket.on('game end', (result, answer) => {
+    gameEnd(result, answer);
   });
   socket.on('user leave', () => {
     clearInterval(timer);
