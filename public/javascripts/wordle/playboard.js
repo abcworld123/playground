@@ -8,7 +8,7 @@ function alertConfig() {
   return Swal.fire({
     icon: 'info',
     title: '게임 구성',
-    html: `<input type="text" id="timelimit" class="swal2-input" autocomplete="off" placeholder="제한 시간">
+    html: `<input type="text" id="timelimit" class="swal2-input" autocomplete="off" placeholder="제한 시간 (초)">
     <input type="text" id="numlen" class="swal2-input" autocomplete="off" placeholder="자릿수">`,
     allowOutsideClick: false,
     confirmButtonText: '확인',
@@ -25,7 +25,9 @@ function alertConfig() {
         Swal.showValidationMessage('자릿수를 설정해주세요.');
       } else if (timelimit_int != timelimit || numlen_int != numlen) {
         Swal.showValidationMessage('정수만 입력해주세요.');
-      } else if (numlen_int < 1 || 10 < numlen_int) {
+      } else if (timelimit_int < 1 || 10000 < timelimit_int) {
+        Swal.showValidationMessage('제한 시간은 1~10000 사이의 숫자로 입력해주세요.');
+      }else if (numlen_int < 1 || 10 < numlen_int) {
         Swal.showValidationMessage('자릿수는 1~10 사이의 숫자로 입력해주세요.');
       }
       return { timelimit: timelimit_int, numlen: numlen_int };
