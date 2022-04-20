@@ -16,19 +16,18 @@ function alertCreateRoom() {
     confirmButtonColor: '#13a829',
     cancelButtonColor: '#cc2121',
     preConfirm: async (room) => {
-      const encodedRoom = encodeURIComponent(room);
       if (!room) {
         Swal.showValidationMessage('방 제목을 입력해주세요.');
       } else if (room.length > 100) {
         Swal.showValidationMessage('방 제목은 100글자 이하로 입력해주세요.');
       }
       const roomExist = await new Promise(resolve => {
-        socket.emit('room exist check', encodedRoom, x => resolve(x));
+        socket.emit('room exist check', room, x => resolve(x));
       });
       if (roomExist) {
         Swal.showValidationMessage('동일한 방 제목이 존재합니다.');
       }
-      return encodedRoom;
+      return room;
     },
   });
 }
@@ -201,6 +200,7 @@ function joinRejected() {
 // [ALL] 수락됨, 게임 페이지로 이동
 function gameStart(room) {
   Swal.close();
+  room = encodeURIComponent(room);
   const host = Boolean(requestQueue.length);
   location.replace(`wordle/${room}?host=${host}`);
 }
@@ -229,7 +229,7 @@ window.onload = () => {
   function addRoom(room) {
     const item = room0.cloneNode(true);
     item.id = room;
-    item.children[0].innerText = decodeURIComponent(room);
+    item.children[0].innerText = room;
     item.children[1].addEventListener('click', () => joinRoom(room));
     roomContainer.appendChild(item);
     rooms.add(room);
