@@ -29,7 +29,6 @@ module.exports = function (nsp) {
       }
     }
     
-    // todo 패배했을 경우 상대방 정답 공개?
     function submit(num) {
       const win = ended.get(room);
       const turn = turns.get(room);
@@ -46,7 +45,7 @@ module.exports = function (nsp) {
           else if (ans.includes(num[i])) ball++;
         }
         if (strike === num.length) win[turn] = true;
-        socket.emit('result', strike, ball);
+        nsp.to(room).emit('result', strike, ball);
       }
     }
     
@@ -93,6 +92,10 @@ module.exports = function (nsp) {
       setNumber(num);
     });
     
+    socket.on('keydown', (key) => {
+      nsp.to(rival).emit('rival keydown', key);
+    });
+
     socket.on('submit', (num) => {
       submit(num);
     });

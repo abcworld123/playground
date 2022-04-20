@@ -1,6 +1,7 @@
 let socket;
 let timelimit, numlen, myAnswer, myTurn, cursor, timer;
-let divMyAnswer, lineTemplate, container, tiles, resultText, timerText, turnText;
+let lineTemplate, myContainer, rivalContainer, divMyAnswer, tiles;
+let resultText, timerText, turnText;
 
 /*********  alert functions  ***********/
 
@@ -27,7 +28,7 @@ function alertConfig() {
         Swal.showValidationMessage('정수만 입력해주세요.');
       } else if (timelimit_int < 1 || 10000 < timelimit_int) {
         Swal.showValidationMessage('제한 시간은 1~10000 사이의 숫자로 입력해주세요.');
-      }else if (numlen_int < 1 || 10 < numlen_int) {
+      } else if (numlen_int < 1 || 10 < numlen_int) {
         Swal.showValidationMessage('자릿수는 1~10 사이의 숫자로 입력해주세요.');
       }
       return { timelimit: timelimit_int, numlen: numlen_int };
@@ -138,6 +139,8 @@ async function configRoom() {
 
 // [ALL] 게임 구성 완료
 function configRoomComplete(_timeLimit, _numlen) {
+  const container = document.getElementById('container');
+  container.classList.add(`numlen-${_numlen}`);
   timelimit = _timeLimit;
   numlen = _numlen;
   templateInit();
@@ -153,15 +156,18 @@ async function setNumber() {
 
 // [ALL] 게임 시작
 function start(isFirst) {
+  const toast = document.getElementById('toast');
+  const toastText = document.getElementById('toastText');
   const myAnswerContainer = document.getElementById('myAnswerContainer');
-  const toast = new bootstrap.Toast(document.getElementById('toast'));
-  myAnswerContainer.removeAttribute('style');
+  const users = document.getElementsByClassName('user');
+  myContainer = users[+!isFirst];
+  rivalContainer = users[+isFirst];
   myTurn = isFirst;
+  myAnswerContainer.removeAttribute('style');
+  toastText.innerHTML = `<b>${isFirst ? '선' : '후'}공</b>입니다.`;
+  toast.classList.add('toast-shown');
+  setTimeout(() => toast.classList.remove('toast-shown'), 4000);
   Swal.close();
-  setTimeout(() => {
-    toastText.innerHTML = `<b>${isFirst ? '선' : '후'}공</b>입니다.`;
-  }, 150);
-  toast.show();
   turn();
 }
 
@@ -171,7 +177,7 @@ function turn() {
   timerText.innerText = sec;
   clearInterval(timer);
   if (myTurn) {
-    addLine();
+    addLine(myContainer);
     turnText.innerText = '내 차례입니다.';
     timerText.style.color = sec <= 10 ? 'red' : '#74bf76';
     turnText.style.color = '#74bf76';
@@ -179,11 +185,13 @@ function turn() {
       timerText.innerText = --sec;
       if (!sec) {
         socket.emit('submit', null);
+        tiles.forEach(tile => tile.classList.remove('tile-cur'));
       } else if (sec <= 10) {
         timerText.style.color = 'red';
       }
     }, 1000);
   } else {
+    addLine(rivalContainer);
     turnText.innerText = '상대방의 차례입니다.';
     timerText.style.color = '#999';
     turnText.style.color = '#999';
@@ -204,10 +212,11 @@ function showResult(strike, ball) {
     resultText.innerHTML = spanOut;
   }
   const success = strike == numlen;
-  for (const tile of tiles) {
-    if (success) tile.classList.replace('tile-cur', 'tile-success');
-    else tile.classList.remove('tile-cur');
-  }
+  tiles.forEach((tile) => {
+    const cls = tile.classList;
+    if (success) cls.replace('tile-cur', 'tile-success') || cls.add('tile-success');
+    else cls.remove('tile-cur');
+  });
 }
 
 // [ALL] 게임 종료
@@ -223,20 +232,28 @@ function gameEnd(result, answer) {
   divMyAnswer.outerHTML = divMyAnswer.outerHTML + '';
 }
 
-// line template
-function templateInit() {
-  const divTile = '<div class="tile tile-cur"></div>';
-  const tileContainer = lineTemplate.content.querySelector('.tile-container');
-  tileContainer.innerHTML = divTile.repeat(numlen);
-}
-
-function addLine() {
+// 칸 추가
+function addLine(user) {
   const line = document.importNode(lineTemplate.content, true).children[0];
-  tiles = line.getElementsByClassName('tile');
-  container.appendChild(line);
+  tiles = [...line.getElementsByClassName('tile')];
+  if (myTurn) tiles.forEach(tile => tile.classList.add('tile-cur'));
+  user.appendChild(line);
   resultText = line.children[1];
   window.scrollTo(0, document.body.scrollHeight);
   cursor = 0;
+}
+
+// 상대방 키 입력 처리
+function rivalKeydown(key) {
+  if (key < 10) tiles[cursor++].innerText = key;
+  else tiles[--cursor].innerText = '';
+}
+
+// line template
+function templateInit() {
+  const divTile = '<div class="tile"></div>';
+  const tileContainer = lineTemplate.content.querySelector('.tile-container');
+  tileContainer.innerHTML = divTile.repeat(numlen);
 }
 
 // keyboard listener
@@ -245,28 +262,27 @@ window.addEventListener('keydown', (e) => {
   if (parseInt(e.key) == e.key) {
     if (cursor < numlen) {
       tiles[cursor++].innerText = e.key;
+      socket.emit('keydown', e.key);
     }
   } else if (e.code === 'Backspace') {
     e.preventDefault();
     if (cursor > 0) {
       tiles[--cursor].innerText = '';
+      socket.emit('keydown', '100');
     }
   } else if (e.code === 'Enter') {
     if (cursor === numlen) {
-      const ans = [...tiles].map((tile) => tile.innerText).join('');
+      const ans = tiles.map(tile => tile.innerText).join('');
       socket.emit('submit', ans);
     }
   }
 });
-
-// todo 상대방 실시간 화면도 옆에 같이?
 
 window.onload = () => {
   const room = document.getElementById('room').value;
   const isHost = document.getElementById('host').value === 'true';
   divMyAnswer = document.getElementById('myAnswer');
   lineTemplate = document.getElementById('lineTemplate');
-  container = document.getElementById('container');
   timerText = document.getElementById('timer');
   turnText = document.getElementById('turn');
   
@@ -292,6 +308,9 @@ window.onload = () => {
   socket.on('turn', () => {
     myTurn = !myTurn;
     turn();
+  });
+  socket.on('rival keydown', (key) => {
+    rivalKeydown(key);
   });
   socket.on('result', (strike, ball) => {
     showResult(strike, ball);

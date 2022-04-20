@@ -5,10 +5,6 @@
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>숫자야구 게임</title>
-  <!-- bootstrap -->
-  <link rel="stylesheet" href="/stylesheets/bootstrap.css"/>
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
-  
   <!-- sweetalert2 -->
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2"></script>
   
@@ -33,21 +29,25 @@
       <div id="turn" class="header-item turn"></div>
     </div>
     <div id="container" class="container">
-      <template id="lineTemplate">
-        <div class="line">
-          <div class="tile-container"></div>
-          <div class="result"></div>
-        </div>
-      </template>
+      <div class="user user-left"></div>
+      <div class="ver-line"></div>
+      <div class="user user-right"></div>
     </div>
   </div>
   <!-- toast -->
-  <div class="toast-container position-fixed bottom-0 start-50 translate-middle-x">
+  <div class="toast-container">
     <div id="toast" class="toast">
       <i class="fa-solid fa-circle-info" style="color: #20a2df"></i>
       <span id="toastText"></span>
     </div>
   </div>
+  <!-- line template -->
+  <template id="lineTemplate">
+    <div class="line">
+      <div class="tile-container"></div>
+      <div class="result"></div>
+    </div>
+  </template>
   <!-- js values -->
   <input type="hidden" id="room" value="<%= room %>">
   <input type="hidden" id="host" value="<%= host %>">

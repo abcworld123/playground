@@ -2,22 +2,19 @@
   box-sizing: content-box;
 }
 
-input[type="number"]::-webkit-inner-spin-button {
-  appearance: none;
-}
-
 .wrapper {
-  width: 950px;
+  display: flex;
+  flex-direction: column;
+  gap: 80px;
+  width: 1340px;
   margin: 0 auto;
   padding: 50px 0 200px 0;
 }
 
 .header {
   display: flex;
-  justify-content: space-between;
+  justify-content: center;
   align-items: center;
-  width: 100%;
-  margin: 0 20px 80px 20px;
   font-size: 1.5em;
   color: #999;
 }
@@ -43,21 +40,33 @@ input[type="number"]::-webkit-inner-spin-button {
 
 .container {
   display: flex;
+  justify-content: center;
+}
+
+.user {
+  display: flex;
   flex-direction: column;
-  max-width: none;
+  width: 601px;
   font-size: 2.5em;
   gap: 25px;
 }
 
+.user-left {
+  align-items: flex-end;
+}
+
+.user-right {
+  align-items: flex-start;
+}
+
 .line {
   display: flex;
-  align-self: center;
   gap: 15px;
 }
 
 .tile-container {
   display: flex;
-  gap: 15px;
+  gap: 14px;
 }
 
 .tile {
@@ -81,7 +90,7 @@ input[type="number"]::-webkit-inner-spin-button {
   display: flex;
   font-size: .75em;
   gap: 20px;
-  min-width: 100px;
+  min-width: 90px;
   margin-left: 30px;
   align-items: center;
 }
@@ -102,8 +111,41 @@ input[type="number"]::-webkit-inner-spin-button {
   color: #97eded;
 }
 
+.ver-line {
+  background: #e4e4e4;
+  width: 2px;
+}
+
+.numlen-1 .ver-line {
+  margin: 0 176px;
+}
+
+.numlen-2 .ver-line {
+  margin: 0 156px;
+}
+
+.numlen-3 .ver-line {
+  margin: 0 136px;
+}
+
+.numlen-4 .ver-line {
+  margin: 0 116px;
+}
+
+.numlen-5 .ver-line {
+  margin: 0 96px;
+}
+
+.numlen-6 > .ver-line {
+  margin: 0 66px;
+}
+
 .toast-container {
   z-index: 11;
+  transform: translateX(-50%);
+  left: 50%;
+  bottom: 0;
+  position: fixed;
 }
 
 .toast {
@@ -114,6 +156,18 @@ input[type="number"]::-webkit-inner-spin-button {
   padding: 15px;
   font-size: 1.5em;
   box-shadow: #0003 0 6px 30px 5px;
+  visibility: hidden;
+  opacity: 0;
   width: auto;
   border: none;
+}
+
+.toast-shown {
+  visibility: visible;
+  animation: fadeinout 4s linear forwards;
+}
+
+@keyframes fadeinout {
+  20% { opacity: 1; }
+  80% { opacity: 1; }
 }
