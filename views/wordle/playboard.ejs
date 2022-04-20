@@ -5,16 +5,21 @@
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>숫자야구 게임</title>
-  <!-- stylesheet -->
-  <link rel="stylesheet" href="/stylesheets/wordle/playboard.css"/>
+  <!-- bootstrap -->
+  <link rel="stylesheet" href="/stylesheets/bootstrap.css"/>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
   
   <!-- sweetalert2 -->
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2"></script>
   
+  <!-- Font Awesome icons (free version) -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css"/>
+  
   <!-- socket.io -->
   <script src="/socket.io/socket.io.js"></script>
   
-  <!-- javascript -->
+  <!-- my -->
+  <link rel="stylesheet" href="/stylesheets/wordle/playboard.css"/>
   <script language="JavaScript" src="/javascripts/wordle/playboard.js"></script>
 </head>
 <body>
@@ -36,6 +41,14 @@
       </template>
     </div>
   </div>
+  <!-- toast -->
+  <div class="toast-container position-fixed bottom-0 start-50 translate-middle-x">
+    <div id="toast" class="toast">
+      <i class="fa-solid fa-circle-info" style="color: #20a2df"></i>
+      <span id="toastText"></span>
+    </div>
+  </div>
+  <!-- js values -->
   <input type="hidden" id="room" value="<%= room %>">
   <input type="hidden" id="host" value="<%= host %>">
 </body>

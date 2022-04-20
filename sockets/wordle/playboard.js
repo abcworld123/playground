@@ -8,37 +8,24 @@ module.exports = function (nsp) {
   
   nsp.on('connection', (socket) => {
     const room = socket.handshake.query.room;
-    socket.join(room);
-    if (rooms.get(room).size === 2) {
-      ended.set(room, [false, false]);
-      turns.set(room, 0);
+    let rival;
+    init();
+    
+    function init() {
+      socket.join(room);
+      if (rooms.get(room).size === 2) {
+        ended.set(room, [false, false]);
+        turns.set(room, 0);
+        nsp.to(room).emit('all entered');
+      }
     }
     
-    socket.on('room config', (timelimit, numlen) => {
-      nsp.to(room).emit('room config', timelimit, numlen);
-    });
-    
-    socket.on('set number', (num) => {
-      setNumber(num);
-    });
-    
-    socket.on('submit', (num) => {
-      submit(num);
-    });
-    
-    socket.on('disconnect', (reason) => {
-      answers.delete(socket.id);
-      if (allRooms.has(room)) {
-        nsp.to(room).emit('user leave');
-        closeRoom();
-      }
-    });
-    
     function setNumber(num) {
-      const rival = [...rooms.get(room)].filter(x => x !== socket.id)[0];
       answers.set(rival, num);
       if (answers.has(socket.id)) {
-        nsp.to(room).emit('game start');
+        const isFirst = Math.random() < 0.5;
+        socket.emit('game start', isFirst);
+        nsp.to(rival).emit('game start', !isFirst);
       }
     }
     
@@ -69,7 +56,7 @@ module.exports = function (nsp) {
           nsp.to(room).emit('game end', 'draw');
         } else {
           socket.emit('game end', win[1] ? 'win' : 'lose');
-          socket.broadcast.to(room).emit('game end', win[0] ? 'win' : 'lose');
+          nsp.to(rival).emit('game end', win[0] ? 'win' : 'lose');
         }
         closeRoom();
       } else {
@@ -84,5 +71,33 @@ module.exports = function (nsp) {
       turns.delete(room);
       ended.delete(room);
     }
+    
+    function disconnectUser() {
+      answers.delete(socket.id);
+      if (allRooms.has(room)) {
+        nsp.to(room).emit('user leave');
+        closeRoom();
+      }
+    }
+    
+    socket.on('all entered', () => {
+      rival = [...rooms.get(room)].filter(x => x !== socket.id)[0];
+    });
+    
+    socket.on('room config', (timelimit, numlen) => {
+      nsp.to(room).emit('room config', timelimit, numlen);
+    });
+    
+    socket.on('set number', (num) => {
+      setNumber(num);
+    });
+    
+    socket.on('submit', (num) => {
+      submit(num);
+    });
+    
+    socket.on('disconnect', (reason) => {
+      disconnectUser();
+    });
   });
 };

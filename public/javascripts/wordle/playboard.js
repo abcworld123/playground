@@ -122,6 +122,12 @@ function alertUserLeft() {
 
 /********  handling functions  **********/
 
+function allEntered(isHost) {
+  if (isHost) configRoom();
+  else alertWaitConfig();
+  socket.emit('all entered');
+}
+
 // [방장] 게임 구성
 async function configRoom() {
   const { timelimit, numlen } = (await alertConfig()).value;
@@ -144,10 +150,16 @@ async function setNumber() {
 }
 
 // [ALL] 게임 시작
-function start() {
+function start(isFirst) {
   const myAnswerContainer = document.getElementById('myAnswerContainer');
+  const toast = new bootstrap.Toast(document.getElementById('toast'));
   myAnswerContainer.removeAttribute('style');
+  myTurn = isFirst;
   Swal.close();
+  setTimeout(() => {
+    toastText.innerHTML = `<b>${isFirst ? '선' : '후'}공</b>입니다.`;
+  }, 150);
+  toast.show();
   turn();
 }
 
@@ -156,7 +168,6 @@ function turn() {
   let sec = timelimit;
   timerText.innerText = sec;
   clearInterval(timer);
-  myTurn = !myTurn;
   if (myTurn) {
     addLine();
     turnText.innerText = '내 차례입니다.';
@@ -245,9 +256,6 @@ window.onload = () => {
   container = document.getElementById('container');
   timerText = document.getElementById('timer');
   turnText = document.getElementById('turn');
-  myTurn = !isHost;
-  if (isHost) configRoom();
-  else alertWaitConfig();
   
   divMyAnswer.addEventListener('mouseenter', (e) => {
     divMyAnswer.innerText = myAnswer;
@@ -259,13 +267,17 @@ window.onload = () => {
   // socket.io
   socket = io(`/wordle/playboard?room=${room}`);
   
+  socket.on('all entered', () => {
+    allEntered(isHost);
+  });
   socket.on('room config', (timeLimit, numlen) => {
     configRoomComplete(timeLimit, numlen);
   });
-  socket.on('game start', () => {
-    start();
+  socket.on('game start', (isFirst) => {
+    start(isFirst);
   });
   socket.on('turn', () => {
+    myTurn = !myTurn;
     turn();
   });
   socket.on('result', (strike, ball) => {

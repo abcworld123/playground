@@ -1,3 +1,7 @@
+* {
+  box-sizing: content-box;
+}
+
 input[type="number"]::-webkit-inner-spin-button {
   appearance: none;
 }
@@ -86,4 +90,20 @@ input[type="number"]::-webkit-inner-spin-button {
 
 .result-success {
   color: #97eded;
+}
+
+.toast-container {
+  z-index: 11;
+}
+
+.toast {
+  display: flex;
+  gap: 20px;
+  align-items: center;
+  margin-bottom: 100px;
+  padding: 15px;
+  font-size: 1.5em;
+  box-shadow: #0003 0 6px 30px 5px;
+  width: auto;
+  border: none;
 }
