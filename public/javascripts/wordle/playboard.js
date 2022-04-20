@@ -201,6 +201,11 @@ function showResult(strike, ball) {
     const spanOut = `<span class="result-out">OUT</span>`;
     resultText.innerHTML = spanOut;
   }
+  const success = strike == numlen;
+  for (const tile of tiles) {
+    if (success) tile.classList.replace('tile-cur', 'tile-success');
+    else tile.classList.remove('tile-cur');
+  }
 }
 
 // [ALL] 게임 종료
@@ -218,7 +223,7 @@ function gameEnd(result, answer) {
 
 // line template
 function templateInit() {
-  const divTile = '<div class="tile"></div>';
+  const divTile = '<div class="tile tile-cur"></div>';
   const tileContainer = lineTemplate.content.querySelector('.tile-container');
   tileContainer.innerHTML = divTile.repeat(numlen);
 }
