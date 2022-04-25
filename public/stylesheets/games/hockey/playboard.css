@@ -28,13 +28,13 @@ body{
 }
 
 .playboard_red_score{
-  font-size: 123px;
+  font-size: 90px;
   font-weight: bold;
   color: #b23c3c;
 }
 
 .playboard_blue_scord{
-  font-size: 123px;
+  font-size: 90px;
   font-weight: bold;
   color: #333399;
 }
@@ -45,14 +45,14 @@ body{
 }
 
 .playboard_time_area{
-  font-size: 123px;
+  font-size: 90px;
   font-weight: bold;
   color: #cbb2b2;
 }
 
 .playboard_field_area{
   width: 100%;
-  height: calc(100% - 13vh);
+  height: calc(100% - 14vh);
   background-color: #a288aa;
   border-radius: 10pc;
   display: flex;

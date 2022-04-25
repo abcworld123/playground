@@ -33,6 +33,7 @@ let roomNum = "";
 
 //todo 클래스 변경
 window.addEventListener("load", function () {
+  // document.getElementById('count').className = 'b';
   roomNum = window.location.href.split("/")[4];
   socket.emit('connection', roomNum);
 

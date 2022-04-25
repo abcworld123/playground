@@ -81,9 +81,11 @@ module.exports = function (nsp) {
         // });
       } else {
         const userInfo = playBoard.get(roomNum);
-        userInfo.play2 = socket.id;
-        playBoard.set(roomNum, userInfo);
-        setInterval(calPlay.bind(this, roomNum), 15 );
+        if (!userInfo.play2){
+          userInfo.play2 = socket.id;
+          playBoard.set(roomNum, userInfo);
+          setInterval(calPlay.bind(this, roomNum), 15 );
+        }
       }
     });
 
