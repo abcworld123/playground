@@ -30,11 +30,11 @@ exports.getWeatherDay = (req, res, next) => {
     arr = data
       .filter((x) => x.category === category[idx])
       .map((x) => parseInt(x.fcstValue));
-    res.send(arr);
+    res.send({ success: true, data: arr });
   })
   .catch((error) => {
     console.error(error);
-    res.status(500).send('getWeather: error');
+    res.status(500).send({ success: false });
   });
 };
 
@@ -63,11 +63,11 @@ exports.getWeatherTa = (req, res, next) => {
     for (let i = 3; i < 10; i++) {
       arr.push(data[`${taTarget}${i}`]);
     }
-    res.send(arr);
+    res.send({ success: true, data: arr });
   })
   .catch((error) => {
     console.error(error);
-    res.status(500).send('getWeather: error');
+    res.status(500).send({ success: false });
   });
 };
 
@@ -100,10 +100,10 @@ exports.getWeatherMl = (req, res, next) => {
       data['rnSt8'],
       data['rnSt9'],
     ];
-    res.send(arr);
+    res.send({ success: true, data: arr });
   })
   .catch((error) => {
     console.error(error);
-    res.status(500).send('getWeather: error');
+    res.status(500).send({ success: false });
   });
 };

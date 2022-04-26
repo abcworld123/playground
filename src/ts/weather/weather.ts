@@ -8,6 +8,7 @@ type div = HTMLDivElement;
 type span = HTMLSpanElement;
 type button = HTMLButtonElement;
 type input = HTMLInputElement;
+type response = { success: boolean, data?: number[] };
 
 const userNums = [0, 2, 2, 2, 2, 2, 2, 2];
 const regNums = [0, 0, 0, 0, 0, 0, 0, 0];
@@ -98,7 +99,8 @@ function start(i: number) {
     body: JSON.stringify(formdata),
   })
   .then((res) => res.json())
-  .then((data: number[]) => {
+  .then(({ success, data }: response) => {
+    if (!success) throw new Error('서버 오류');
     const userContainer = tab[idx].querySelector<div>('.user-container');
     const anss = userContainer.querySelectorAll<input>('.item-answer');
     const userList = userContainer.children;
@@ -123,8 +125,7 @@ function start(i: number) {
       anss[j].value = String(data[j]);
     }
   })
-  .catch((err) => {
-    console.error('오류인');
+  .catch((err: Error) => {
     console.error(err);
   })
   .finally(() => {
