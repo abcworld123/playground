@@ -3,7 +3,10 @@ const http = require('http');
 const app = express();
 const mongoose = require('mongoose');
 const config = require('#config');
+const liveServer = require('./liveserver');
 const server = http.createServer(app);
+
+liveServer(app);
 
 const mongooseOption = {
   useUnifiedTopology: true,
