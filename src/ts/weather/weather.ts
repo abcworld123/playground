@@ -1,11 +1,9 @@
 import 'bootstrap3/dist/css/bootstrap.min.css';
 import '@fortawesome/fontawesome-free/css/all.min.css';
 import '@css/weather/weather.css';
-import 'bootstrap3/js/dropdown.js';
-import 'bootstrap3/js/transition.js';
-import 'bootstrap3/js/tab.js';
 import Swal from 'sweetalert2';
 
+type li = HTMLLIElement;
 type div = HTMLDivElement;
 type span = HTMLSpanElement;
 type button = HTMLButtonElement;
@@ -14,9 +12,12 @@ type input = HTMLInputElement;
 const userNums = [0, 2, 2, 2, 2, 2, 2, 2];
 const regNums = [0, 0, 0, 0, 0, 0, 0, 0];
 const regNames = ['서울', '부산', '대구', '인천', '대전', '광주', '울산'];
+const sleep = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
 
 const tab = document.querySelectorAll<div>('.tab-game');
 const userContainer = document.querySelectorAll<div>('.user-container');
+const dropdown = document.querySelectorAll<li>('.dropdown');
+let curTab = <div>document.getElementById('tab0');
 
 function alertError(text: string) {
   return Swal.fire({
@@ -48,8 +49,8 @@ function userMinus(i: number) {
 
 function regSet(i: number, n: number) {
   regNums[i] = n;
-  const btnText = tab[i - 1].querySelector<span>('.btn-text');
-  btnText.innerText = regNames[n - 1];
+  const btnReg = tab[i - 1].querySelector<span>(`#btnReg${i}`);
+  btnReg.innerHTML = `${regNames[n - 1]} <span class="caret"></span>`;
 }
 
 function start(i: number) {
@@ -137,6 +138,31 @@ function start(i: number) {
 userContainer.forEach((container) => {
   (<div>container.children[0]).style.display = 'none';
 });
+
+// dropdown click event
+document.addEventListener('click', (_e) => {
+  const e = _e.target;
+  if (!(e instanceof HTMLElement)) return;
+  
+  const flag = e.parentElement?.classList.contains('closed');
+  dropdown.forEach(e => e.classList.replace('open', 'closed'));
+  if (flag) e.parentElement.classList.replace('closed', 'open');
+});
+
+// tab visibility
+for (let i = 1; i <= 7; i++) {
+  const menu = document.getElementById(`menu${i}`);
+  menu.addEventListener('click', async (e) => {
+    curTab.classList.remove('in');
+    await sleep(75);
+    curTab.classList.remove('active');
+    curTab = tab[i - 1];
+    curTab.classList.add('active');
+    await sleep(75);
+    curTab.classList.add('in');
+  });
+}
+
 
 global.userMinus = userMinus;
 global.userPlus = userPlus;
