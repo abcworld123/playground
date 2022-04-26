@@ -22,8 +22,8 @@ exports.getWeatherDay = (req, res, next) => {
       base_date,
       base_time,
       nx,
-      ny
-    }
+      ny,
+    },
   })
   .then((response) => {
     const data = response.data.response.body.items.item;
@@ -55,8 +55,8 @@ exports.getWeatherTa = (req, res, next) => {
       serviceKey: config.weather.key,
       dataType: 'json',
       regId: regCodes[regIdx],
-      tmFc: now
-    }
+      tmFc: now,
+    },
   })
   .then((response) => {
     const data = response.data.response.body.items.item[0];
@@ -86,8 +86,8 @@ exports.getWeatherMl = (req, res, next) => {
       serviceKey: config.weather.key,
       dataType: 'json',
       regId: regId[regIdx],
-      tmFc: now
-    }
+      tmFc: now,
+    },
   })
   .then((response) => {
     const data = response.data.response.body.items.item[0];

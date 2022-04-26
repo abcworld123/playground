@@ -52,7 +52,7 @@ async function getResult() {
     traditional: true,
     data: {
       word: word,
-      type: youtubeCategory
+      type: youtubeCategory,
     },
     async: true,
     success: function (result) {
@@ -115,7 +115,7 @@ async function getResult() {
         document.getElementsByClassName('youtube_result_like_area')[x].addEventListener('click', clickHiddenLike.bind(this, x));
       }
       document.getElementsByClassName('youtube_result_submit')[0].addEventListener('click', clickResultSubmit);
-    }
+    },
   });
 }
 
