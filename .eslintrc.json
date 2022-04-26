@@ -37,5 +37,32 @@
         // override eslint:recommended
         "no-unused-vars": "off",
         "no-undef": "off"
-    }
+    },
+    
+    // for typescript
+    "overrides": [
+        {
+            "files": [
+                "src/ts/**/*.ts",
+                "src/ts/**/*.tsx"
+            ],
+            "parser": "@typescript-eslint/parser",
+            "parserOptions": {
+                "project": "./src/ts/tsconfig.json"
+            },
+            "plugins": ["@typescript-eslint"],
+            "extends": [
+                "plugin:@typescript-eslint/eslint-recommended",
+                "plugin:@typescript-eslint/recommended"
+            ],
+            "rules": {
+                "@typescript-eslint/no-explicit-any": "off",
+                "@typescript-eslint/semi": ["warn", "always"],
+                "@typescript-eslint/type-annotation-spacing": "warn",
+                "@typescript-eslint/no-unused-vars": ["warn", { "args": "none" }],
+                "@typescript-eslint/space-infix-ops": ["warn", {"int32Hint": false}],
+                "@typescript-eslint/ban-ts-comment": ["error", { "ts-ignore": "allow-with-description" }]
+            }
+        }
+    ]
 }
