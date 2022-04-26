@@ -1,3 +1,11 @@
+import 'bootstrap3/dist/css/bootstrap.min.css';
+import '@fortawesome/fontawesome-free/css/all.min.css';
+import '@css/weather/weather.css';
+import 'bootstrap3/js/dropdown.js';
+import 'bootstrap3/js/transition.js';
+import 'bootstrap3/js/tab.js';
+import Swal from 'sweetalert2';
+
 type div = HTMLDivElement;
 type span = HTMLSpanElement;
 type button = HTMLButtonElement;
@@ -129,3 +137,8 @@ function start(i: number) {
 userContainer.forEach((container) => {
   (<div>container.children[0]).style.display = 'none';
 });
+
+global.userMinus = userMinus;
+global.userPlus = userPlus;
+global.regSet = regSet;
+global.start = start;

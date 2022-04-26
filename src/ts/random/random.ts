@@ -1,3 +1,7 @@
+import 'bootstrap/dist/css/bootstrap.min.css';
+import '@css/random/random.css';
+import Swal from 'sweetalert2';
+
 type p = HTMLParagraphElement;
 type input = HTMLInputElement;
 
@@ -15,3 +19,5 @@ function alertError() {
     title: 'N을 입력해주세요.',
   });
 }
+
+global.start = start;

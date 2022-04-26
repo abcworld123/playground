@@ -1,9 +1,13 @@
+import 'bootstrap/dist/css/bootstrap.min.css';
+import '@fortawesome/fontawesome-free/css/all.min.css';
+import '@css/jebi/jebi.css';
+import Toast from 'bootstrap/js/dist/toast.js';
+
 type div = HTMLDivElement;
 type img = HTMLImageElement;
 type span = HTMLSpanElement;
 type button = HTMLButtonElement;
 
-// @ts-ignore: cdn bootstrap
 const toast = new Toast(document.getElementById('toast'));
 const jebiContainer = <div>document.getElementById('jebiContainer');
 const btnMinus = <button>document.getElementById('jebiMinus');
@@ -107,3 +111,7 @@ document.addEventListener('click', (e) => {
     jebiOpen(e.target);
   }
 });
+
+global.jebiMinus = jebiMinus;
+global.jebiPlus = jebiPlus;
+global.reset = reset;
