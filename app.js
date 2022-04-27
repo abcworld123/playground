@@ -1,25 +1,12 @@
 const express = require('express');
 const http = require('http');
 const app = express();
-const mongoose = require('mongoose');
-const config = require('#config');
-const liveServer = require('./liveserver');
+const dbConnect = require('./config/mongoose');
+const liveServer = require('./config/liveserver');
 const server = http.createServer(app);
 
 liveServer(app);
-
-const mongooseOption = {
-  useUnifiedTopology: true,
-  useNewUrlParser: true,
-  auth: {
-    authdb: config.database.mongooseAUTH,
-    username: config.database.mongooseID,
-    password: config.database.mongoosePW,
-  },
-};
-mongoose.connect(`mongodb://${config.database.serverURL}/${config.database.mongooseAUTH}`, mongooseOption, function (err) {
-  err ? console.error(err) : console.info('\x1B[36mData DB Connected.\x1B[0m');
-});
+dbConnect();
 
 app.set('view engine', 'ejs');
 app.use(express.urlencoded({ extended: true }));
