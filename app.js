@@ -1,23 +1,25 @@
 const express = require('express');
 const http = require('http');
 const app = express();
+const compression = require('compression');
 const dbConnect = require('./config/mongoose');
 const liveServer = require('./config/liveserver');
 const server = http.createServer(app);
 
-liveServer(app);
-dbConnect();
-
 app.set('view engine', 'ejs');
-app.use(express.urlencoded({ extended: true }));
+app.use(compression());
 app.use(express.static('public'));
+app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
+
+dbConnect();
+liveServer(app);
 
 app.use('/', require('./routes/index'));
 
 app.use((req, res, next) => {
   res.status(404).render('cannotAccess');
-  console.warn(`not exists: ${req.originalUrl}`);
+  console.warn(`not exists: ${req.url}`);
 });
 
 server.on('error', (err) => {
