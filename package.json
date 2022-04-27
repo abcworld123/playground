@@ -30,7 +30,6 @@
     "@typescript-eslint/eslint-plugin": "^5.21.0",
     "connect-livereload": "^0.6.1",
     "css-loader": "^6.7.1",
-    "eslint-plugin-jsdoc": "^39.2.9",
     "livereload": "^0.9.3",
     "mini-css-extract-plugin": "^2.6.0",
     "nodemon": "^2.0.15",

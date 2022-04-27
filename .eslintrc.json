@@ -11,9 +11,6 @@
     "extends": [
         "eslint:recommended"
     ],
-    "plugins": [
-        "jsdoc"
-    ],
     "rules": {
         "semi": ["warn", "always"],
         "no-extra-semi": "warn",
@@ -37,9 +34,8 @@
         "indent": ["warn", 2, { "MemberExpression": "off"}],
         "comma-dangle": ["warn", "always-multiline"],
         "arrow-spacing": ["warn", { "before": true, "after": true }],
-        "no-unused-vars": ["warn", { "args": "none" }],
-        "no-undef": "off",
-        "jsdoc/no-undefined-types": "warn"
+        "no-unused-vars": "off",
+        "no-undef": "off"
     },
     
     // for typescript
