@@ -34,6 +34,7 @@ let roomNum = "";
 //todo 클래스 변경
 window.addEventListener("load", function () {
   // document.getElementById('count').className = 'b';
+  document.getElementById('ccc').className = 'bbb'
   roomNum = window.location.href.split("/")[4];
   socket.emit('connection', roomNum);
 
@@ -51,9 +52,29 @@ window.addEventListener("load", function () {
     // console.log(event, msg1, msg2);
   });
 
+  socket.on('3', () => {
+    document.getElementById('ccc').className = 'bbb';
+    document.getElementById('ccc').innerHTML = 3;
+    document.getElementById('ccc').className = 'aaa';
+  });
+
+  socket.on('2', () => {
+    document.getElementById('ccc').className = 'bbb';
+    document.getElementById('ccc').innerHTML = 2;
+    document.getElementById('ccc').className = 'aaa';
+  });
+
+  socket.on('1', () => {
+    document.getElementById('ccc').className = 'bbb';
+    document.getElementById('ccc').innerHTML = 1;
+    document.getElementById('ccc').className = 'aaa';
+  });
+
   socket.on('playboard', (a, b, c, d, e, f, g, h) => {
     WIDTH = document.querySelector('.playboard_canvas_area').offsetWidth;
     HEIGHT = document.querySelector('.playboard_canvas_area').offsetHeight;
+    document.querySelector('#canvas').width = WIDTH;
+    document.querySelector('#canvas').height = HEIGHT;
     screenClear();
     screenDrawPlayer(Number(a * WIDTH / 100), Number(b * HEIGHT / 100), 20 * HEIGHT / 100);
     screenDrawPlayer(Number(c * WIDTH / 100), Number(d * HEIGHT / 100), 20 * HEIGHT / 100);

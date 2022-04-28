@@ -81,13 +81,22 @@ module.exports = function (nsp) {
         // });
       } else {
         const userInfo = playBoard.get(roomNum);
-        if (!userInfo.play2){
+        if (!userInfo.play2) {
           userInfo.play2 = socket.id;
           playBoard.set(roomNum, userInfo);
-          setInterval(calPlay.bind(this, roomNum), 15 );
+
+          abc(userInfo.play1, userInfo.play2, "3");
+          setTimeout(() => abc(userInfo.play1, userInfo.play2, "2"), 1500);
+          setTimeout(() => abc(userInfo.play1, userInfo.play2, "1"), 3000);
+          setTimeout(() => setInterval(calPlay.bind(this, roomNum), 15 ), 4500);
+
         }
       }
     });
+    function abc(play1, play2, num) {
+      nsp.to(play1).emit(num);
+      nsp.to(play2).emit(num);
+    }
 
     function calPlay(roomNum) {
       let userInfo = playBoard.get(roomNum);
@@ -120,8 +129,8 @@ module.exports = function (nsp) {
 
       userInfo = checkCrash(userInfo);
 
-      nsp.to(userInfo.play1).emit('playboard', userInfo.player1_x, userInfo.player1_y, userInfo.player2_x, userInfo.player2_y, userInfo.play_ball_x, userInfo.play_ball_y, userInfo.player1_score, userInfo.player2_score);
-      nsp.to(userInfo.play2).emit('playboard', userInfo.player1_x, userInfo.player1_y, userInfo.player2_x, userInfo.player2_y, userInfo.play_ball_x, userInfo.play_ball_y, userInfo.player1_score, userInfo.player2_score);
+      nsp.to(userInfo.play1).emit('playboard', userInfo.player1_x, userInfo.player1_y, userInfo.player2_x, userInfo.player2_y, Math.round(userInfo.play_ball_x), Math.round(userInfo.play_ball_y), userInfo.player1_score, userInfo.player2_score);
+      nsp.to(userInfo.play2).emit('playboard', userInfo.player1_x, userInfo.player1_y, userInfo.player2_x, userInfo.player2_y, Math.round(userInfo.play_ball_x), Math.round(userInfo.play_ball_y), userInfo.player1_score, userInfo.player2_score);
     }
 
     function checkCrash(userInfo) {
