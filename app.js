@@ -17,6 +17,7 @@ app.locals = appLocals;
 dbConnect();
 liveServer(app);
 
+app.use('/favicon.ico', express.static('public/images/favicon.ico'));
 app.use('/', require('./routes/index'));
 
 app.use((req, res, next) => {
