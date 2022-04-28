@@ -8,6 +8,9 @@
         "ecmaVersion": "latest",
         "sourceType": "module"
     },
+    "ignorePatterns": [
+        "public/javascripts/**/*"
+    ],
     "extends": [
         "eslint:recommended"
     ],
