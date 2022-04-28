@@ -6,12 +6,12 @@ module.exports = {
     mongooseAUTH: process.env.MONGOOSE_AUTH,
     mongooseID: process.env.MONGOOSE_ID,
     mongoosePW: process.env.MONGOOSE_PW,
-    serverURL: process.env.DATABASE_URL
+    serverURL: process.env.DATABASE_URL,
   },
   youtube: {
-    key: process.env.YOUTUBE_DATA_API_V3_KEY
+    key: process.env.YOUTUBE_DATA_API_V3_KEY,
   },
   weather: {
-    key: process.env.WEATHER_KEY
+    key: process.env.WEATHER_KEY,
   },
 };

@@ -1,9 +1,24 @@
-let jebiContainer, btnMinus, jebiNum, toast, toastText;
+import 'bootstrap/dist/css/bootstrap.min.css';
+import '@fortawesome/fontawesome-free/css/all.min.css';
+import '@css/jebi/jebi.css';
+import Toast from 'bootstrap/js/dist/toast.js';
+
+type div = HTMLDivElement;
+type img = HTMLImageElement;
+type span = HTMLSpanElement;
+type button = HTMLButtonElement;
+
+const toast = new Toast(document.getElementById('toast'));
+const jebiContainer = <div>document.getElementById('jebiContainer');
+const btnMinus = <button>document.getElementById('jebiMinus');
+const jebiNum = <span>document.getElementById('jebiNum');
+const toastText = <span>document.getElementById('toastText');
+
 let n = 5, dog = 0;
 let ailen = randint(n);
 
 /* 난수 생성 */
-function randint(n) {
+function randint(n: number) {
   const num = Math.ceil(Math.random() * n);
   console.log(`외계인: ${num}`);  // 주작 방지용으로 미리 번호 확인 가능
   return num;
@@ -11,7 +26,7 @@ function randint(n) {
 
 /* 제비 초기화 */
 function reset() {
-  const jebies = jebiContainer.children;
+  const jebies = <HTMLCollectionOf<img>>jebiContainer.children;
   [...jebies].forEach((jebi) => {
     jebi.className = 'jebi-unopened';
     jebi.src = '/images/games/jebi/jebi.png';
@@ -24,10 +39,10 @@ function reset() {
 function jebiPlus() {
   n++;
   reset();
-  const newJebi = jebiContainer.children[0].cloneNode();
-  newJebi.id = n;
+  const newJebi = <img>jebiContainer.children[0].cloneNode();
+  newJebi.id = String(n);
   jebiContainer.appendChild(newJebi);
-  jebiNum.innerText = n;
+  jebiNum.innerText = String(n);
   if (n === 3) {
     btnMinus.disabled = false;
   }
@@ -38,14 +53,14 @@ function jebiMinus() {
   n--;
   reset();
   jebiContainer.children[n].remove();
-  jebiNum.innerText = n;
+  jebiNum.innerText = String(n);
   if (n === 2) {
     btnMinus.disabled = true;
   }
 }
 
 /* 제비 클릭, 결과 보여주기 */
-function jebiOpen(jebi) {
+function jebiOpen(jebi: img) {
   if (parseInt(jebi.id) === ailen) {
     jebi.src = '/images/games/jebi/ailen.jpg';
     toastShow();
@@ -79,26 +94,24 @@ function toastShow() {
 
 /* live eventListener for '.jebi-unopened' */
 document.addEventListener('mouseover', (e) => {
+  if (!(e.target instanceof Image)) return;
   if (e.target.className === 'jebi-unopened') {
     e.target.src = '/images/games/jebi/jebi_hover.png';
   }
 });
 document.addEventListener('mouseout', (e) => {
+  if (!(e.target instanceof Image)) return;
   if (e.target.className === 'jebi-unopened') {
     e.target.src = '/images/games/jebi/jebi.png';
   }
 });
 document.addEventListener('click', (e) => {
+  if (!(e.target instanceof Image)) return;
   if (e.target.className === 'jebi-unopened') {
     jebiOpen(e.target);
   }
 });
 
-/* onload */
-window.onload = () => {
-  jebiContainer = document.getElementById('jebiContainer');
-  btnMinus = document.getElementById('jebiMinus');
-  jebiNum = document.getElementById('jebiNum');
-  toast = new bootstrap.Toast(document.getElementById('toast'));
-  toastText = document.getElementById('toastText');
-};
+global.jebiMinus = jebiMinus;
+global.jebiPlus = jebiPlus;
+global.reset = reset;

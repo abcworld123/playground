@@ -22,19 +22,19 @@ exports.getWeatherDay = (req, res, next) => {
       base_date,
       base_time,
       nx,
-      ny
-    }
+      ny,
+    },
   })
   .then((response) => {
     const data = response.data.response.body.items.item;
     arr = data
       .filter((x) => x.category === category[idx])
       .map((x) => parseInt(x.fcstValue));
-    res.send(arr);
+    res.send({ success: true, data: arr });
   })
   .catch((error) => {
     console.error(error);
-    res.status(500).send('getWeather: error');
+    res.status(500).send({ success: false });
   });
 };
 
@@ -55,19 +55,19 @@ exports.getWeatherTa = (req, res, next) => {
       serviceKey: config.weather.key,
       dataType: 'json',
       regId: regCodes[regIdx],
-      tmFc: now
-    }
+      tmFc: now,
+    },
   })
   .then((response) => {
     const data = response.data.response.body.items.item[0];
     for (let i = 3; i < 10; i++) {
       arr.push(data[`${taTarget}${i}`]);
     }
-    res.send(arr);
+    res.send({ success: true, data: arr });
   })
   .catch((error) => {
     console.error(error);
-    res.status(500).send('getWeather: error');
+    res.status(500).send({ success: false });
   });
 };
 
@@ -86,8 +86,8 @@ exports.getWeatherMl = (req, res, next) => {
       serviceKey: config.weather.key,
       dataType: 'json',
       regId: regId[regIdx],
-      tmFc: now
-    }
+      tmFc: now,
+    },
   })
   .then((response) => {
     const data = response.data.response.body.items.item[0];
@@ -100,10 +100,10 @@ exports.getWeatherMl = (req, res, next) => {
       data['rnSt8'],
       data['rnSt9'],
     ];
-    res.send(arr);
+    res.send({ success: true, data: arr });
   })
   .catch((error) => {
     console.error(error);
-    res.status(500).send('getWeather: error');
+    res.status(500).send({ success: false });
   });
 };

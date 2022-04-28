@@ -1,3 +1,7 @@
+a {
+  cursor: pointer;
+}
+
 .container {
   font-size: 1.3em;
 }
@@ -56,7 +60,7 @@ input[type="number"]::-webkit-inner-spin-button {
   min-width: 60px;
 }
 
-.swal2-popup {
+body .swal2-popup {
   font-size: 1.2em;
 }
 
