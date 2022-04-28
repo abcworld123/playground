@@ -37,6 +37,7 @@
         "indent": ["warn", 2, { "MemberExpression": "off"}],
         "comma-dangle": ["warn", "always-multiline"],
         "arrow-spacing": ["warn", { "before": true, "after": true }],
+        "quotes": ["warn", "single"],
         "no-unused-vars": "off",
         "no-undef": "off"
     },
