@@ -10,6 +10,10 @@ router.get('/', (req, res, next) => {
   res.render('index');
 });
 
+router.get('/favicon.ico', (req, res, next) => {
+  res.redirect('/images/favicon.ico');
+});
+
 router.use('/random', random);
 router.use('/youtube', youtube);
 router.use('/jebi', jebi);

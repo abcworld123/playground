@@ -4,6 +4,7 @@ const app = express();
 const compression = require('compression');
 const dbConnect = require('./config/mongoose');
 const liveServer = require('./config/liveserver');
+const appLocals = require("./config/app.locals");
 const server = http.createServer(app);
 
 app.set('view engine', 'ejs');
@@ -11,6 +12,7 @@ app.use(compression());
 app.use(express.static('public'));
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
+app.locals = appLocals;
 
 dbConnect();
 liveServer(app);
