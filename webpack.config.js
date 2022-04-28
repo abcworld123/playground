@@ -19,6 +19,7 @@ console.log('\x1B[33mbuilding...\x1B[0m');
 /** @type {Configuration} */
 module.exports = {
   watch: true,
+  devtool: 'inline-source-map',
   entry: Object.fromEntries(ts.map((path) => [path, `${srcPath}/${path}.ts`])),
   output: {
     filename: 'javascripts/[name].js',
