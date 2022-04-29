@@ -1,5 +1,5 @@
 import 'bootstrap/dist/css/bootstrap.min.css';
-import '@css/random/random.css';
+import '@css/random/random.scss';
 import Swal from 'sweetalert2';
 
 type p = HTMLParagraphElement;
