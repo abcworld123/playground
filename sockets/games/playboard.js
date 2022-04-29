@@ -86,9 +86,9 @@ module.exports = function (nsp) {
           playBoard.set(roomNum, userInfo);
 
           abc(userInfo.play1, userInfo.play2, "3");
-          setTimeout(() => abc(userInfo.play1, userInfo.play2, "2"), 1500);
-          setTimeout(() => abc(userInfo.play1, userInfo.play2, "1"), 3000);
-          setTimeout(() => setInterval(calPlay.bind(this, roomNum), 15 ), 4500);
+          setTimeout(() => abc(userInfo.play1, userInfo.play2, "2"), 2000);
+          setTimeout(() => abc(userInfo.play1, userInfo.play2, "1"), 4000);
+          setTimeout(() => setInterval(calPlay.bind(this, roomNum), 15 ), 6000);
 
         }
       }

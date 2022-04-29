@@ -34,7 +34,6 @@ let roomNum = "";
 //todo 클래스 변경
 window.addEventListener("load", function () {
   // document.getElementById('count').className = 'b';
-  document.getElementById('ccc').className = 'bbb'
   roomNum = window.location.href.split("/")[4];
   socket.emit('connection', roomNum);
 
@@ -53,24 +52,25 @@ window.addEventListener("load", function () {
   });
 
   socket.on('3', () => {
-    document.getElementById('ccc').className = 'bbb';
+    document.getElementById('ccc').style.display = 'block';
     document.getElementById('ccc').innerHTML = 3;
-    document.getElementById('ccc').className = 'aaa';
+    setTimeout(() => setInterval(wer, 15 ), 100);
   });
 
   socket.on('2', () => {
-    document.getElementById('ccc').className = 'bbb';
-    document.getElementById('ccc').innerHTML = 2;
     document.getElementById('ccc').className = 'aaa';
+    document.getElementById('ccc').innerHTML = 2;
+    setTimeout(() => setInterval(wer, 15 ), 100);
   });
 
   socket.on('1', () => {
-    document.getElementById('ccc').className = 'bbb';
-    document.getElementById('ccc').innerHTML = 1;
     document.getElementById('ccc').className = 'aaa';
+    document.getElementById('ccc').innerHTML = 1;
+    setTimeout(() => setInterval(wer, 15 ), 100);
   });
 
   socket.on('playboard', (a, b, c, d, e, f, g, h) => {
+    document.getElementById('ccc').style.display = 'none';
     WIDTH = document.querySelector('.playboard_canvas_area').offsetWidth;
     HEIGHT = document.querySelector('.playboard_canvas_area').offsetHeight;
     document.querySelector('#canvas').width = WIDTH;
@@ -103,6 +103,10 @@ window.addEventListener("load", function () {
 
   // gameStart()
 });
+
+function wer() {
+  document.getElementById('ccc').className = 'bbb';
+}
 
 // html에 있는 canvas 영역을 받아오고 함수 실행
 function gameStart() {
