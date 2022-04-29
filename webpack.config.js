@@ -1,35 +1,41 @@
-const { Configuration } = require('webpack');
+const glob = require('glob');
+const webpack = require('webpack');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
-const path = require('path');
+const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin');
 
-// path
 const srcPath = './src/ts';
-const distPath = './public';
+const outPath = './public';
+const tsPath = `${process.cwd()}/${srcPath}/**/*.ts`;
+const prelen = process.cwd().length + srcPath.length + 2;
+const entries = glob.sync(tsPath).map(name => name.slice(prelen, -3));
 
-// entries
-const ts = [
-  'home',
-  'random/random',
-  'jebi/jebi',
-  'weather/weather',
-];
+const mode = 'development';
+// const mode = 'production';
 
+const isDev = mode === 'development';
 console.log('\x1B[33mbuilding...\x1B[0m');
 
-/** @type {Configuration} */
+/** @type {webpack.Configuration} */
 module.exports = {
-  watch: true,
-  devtool: 'inline-source-map',
-  entry: Object.fromEntries(ts.map((path) => [path, `${srcPath}/${path}.ts`])),
+  watch: isDev,
+  devtool: isDev ? 'inline-source-map' : false,
+  entry: Object.fromEntries(entries.map((path) => [path, `${srcPath}/${path}.ts`])),
   output: {
     filename: 'javascripts/[name].js',
-    path: path.resolve(__dirname, distPath),
+    path: `${__dirname}/${outPath}`,
   },
   module: {
     rules: [
       {
         test: /\.ts$/,
         loader: 'ts-loader',
+        options: {
+          transpileOnly: true,
+        },
+      },
+      {
+        test: /\.scss$/,
+        use: [MiniCssExtractPlugin.loader, 'css-loader', 'sass-loader'],
       },
       {
         test: /\.css$/,
@@ -48,18 +54,26 @@ module.exports = {
     new MiniCssExtractPlugin({
       filename: 'stylesheets/[name].css',
     }),
+    new ForkTsCheckerWebpackPlugin({
+      logger: {
+        log: () => {},
+        error: console.error,
+      },
+      typescript: {
+        configFile: `${srcPath}/tsconfig.json`,
+      },
+    }),
   ],
   resolve: {
     alias: {
-      '@css': path.resolve(__dirname, 'src/css'),
+      '@css': `${__dirname}/src/css`,
+      '@components': `${__dirname}/src/components`,
     },
   },
-  stats: {
+  stats: isDev ? {
     preset: 'minimal',
     assets: false,
     modules: false,
-  },
-  
-  // mode: 'production',
-  mode: 'development',
+  } : {},
+  mode,
 };
