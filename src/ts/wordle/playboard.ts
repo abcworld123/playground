@@ -43,8 +43,8 @@ function alertConfig() {
       numlen = parseInt(numlen);
       if (timelimit < 1 || 10000 < timelimit) {
         Swal.showValidationMessage('제한 시간은 1~10000 사이의 숫자로 입력해주세요.');
-      } else if (numlen < 1 || 10 < numlen) {
-        Swal.showValidationMessage('자릿수는 1~10 사이의 숫자로 입력해주세요.');
+      } else if (numlen < 1 || 6 < numlen) {
+        Swal.showValidationMessage('자릿수는 1~6 사이의 숫자로 입력해주세요.');
       }
       return { timelimit, numlen };
     },
