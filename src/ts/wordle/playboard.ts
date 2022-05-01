@@ -303,7 +303,7 @@ divMyAnswer.addEventListener('mouseleave', (e) => {
 });
 
 // socket.io
-const socket = io(`/wordle/playboard?room=${room}`);
+const socket = io(`/wordle/playboard?room=${room}`, { transports: ['websocket'] });
 
 socket.on('all entered', () => {
   allEntered(isHost);
