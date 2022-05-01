@@ -1,5 +1,8 @@
+$bg-color: #f2edf3;
+$clockable-color: #b71ed9;
+
 body {
-  background: #F2EDF3;
+  background: $bg-color;
 }
 
 .container {
@@ -21,7 +24,7 @@ body {
 }
 
 .clickable {
-  color: #b71ed9;
+  color: $clockable-color;
   cursor: pointer;
 }
 

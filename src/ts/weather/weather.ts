@@ -1,14 +1,12 @@
 import 'bootstrap3/dist/css/bootstrap.min.css';
 import '@fortawesome/fontawesome-free/css/all.min.css';
-import '@css/weather/weather.css';
+import '@css/weather/weather.scss';
 import Swal from 'sweetalert2';
 
-type li = HTMLLIElement;
-type div = HTMLDivElement;
-type span = HTMLSpanElement;
-type button = HTMLButtonElement;
-type input = HTMLInputElement;
-type response = { success: boolean, data?: number[] };
+interface response {
+  success: boolean;
+  data?: number[];
+}
 
 const userNums = [0, 2, 2, 2, 2, 2, 2, 2];
 const regNums = [0, 0, 0, 0, 0, 0, 0, 0];

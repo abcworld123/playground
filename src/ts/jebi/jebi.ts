@@ -1,12 +1,7 @@
 import 'bootstrap/dist/css/bootstrap.min.css';
 import '@fortawesome/fontawesome-free/css/all.min.css';
-import '@css/jebi/jebi.css';
+import '@css/jebi/jebi.scss';
 import Toast from 'bootstrap/js/dist/toast.js';
-
-type div = HTMLDivElement;
-type img = HTMLImageElement;
-type span = HTMLSpanElement;
-type button = HTMLButtonElement;
 
 const toast = new Toast(document.getElementById('toast'));
 const jebiContainer = <div>document.getElementById('jebiContainer');

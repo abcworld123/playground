@@ -1,9 +1,9 @@
 html {
   font-size: 2em;
-}
-
-html::-webkit-scrollbar {
-  display: none;
+  
+  &::-webkit-scrollbar {
+    display: none;
+  }
 }
 
 body {
@@ -38,10 +38,10 @@ label {
 
 input {
   min-width: 250px;
-}
-
-input[type="number"]::-webkit-inner-spin-button {
-  appearance: none;
+  
+  &[type="number"]::-webkit-inner-spin-button {
+    appearance: none;
+  }
 }
 
 .btn {

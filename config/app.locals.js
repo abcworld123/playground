@@ -1,3 +1,3 @@
 module.exports = {
-  views: process.cwd() + "/views/",
+  views: process.cwd() + '/views/',
 };
