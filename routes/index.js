@@ -1,24 +1,22 @@
-var express = require('express');
-var router = express.Router();
+const express = require('express');
+const router = express.Router();
 
-const youtube = require('./games/youtube')
-const weather = require('./games/weather');
-const random = require('./games/random');
-const jebi = require('./games/jebi');
+const random = require('./games/r_random');
+const youtube = require('./games/r_youtube');
+const jebi = require('./games/r_jebi');
+const weather = require('./games/r_weather');
 const hockey = require('./games/hockey');
+const wordle = require('./games/r_wordle');
 
 router.get('/', (req, res, next) => {
   res.render('index');
 });
 
 router.use('/random', random);
-
+router.use('/youtube', youtube);
 router.use('/jebi', jebi);
-
 router.use('/weather', weather);
-
-router.use('/youtube',youtube)
-
-router.use('/hockey',hockey)
+router.use('/hockey',hockey);
+router.use('/wordle', wordle);
 
 module.exports = router;

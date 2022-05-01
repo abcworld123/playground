@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <%- include(views + 'header.ejs') %>
+  <title>숫자야구 게임</title>
+  <link rel="stylesheet" href="/stylesheets/wordle/playboard.css"/>
+  <script defer src="/javascripts/wordle/playboard.js"></script>
+</head>
+<body>
+  <div class="wrapper">
+    <div class="header">
+      <div id="myAnswerContainer" class="header-item my-answer-container" style="visibility: hidden;">
+        <label for="myAnswer">내 숫자:&nbsp;</label>
+        <div id="myAnswer" class="my-answer">[ 확인하기 ]</div>
+      </div>
+      <div id="timer" class="header-item timer"></div>
+      <div id="turn" class="header-item turn"></div>
+    </div>
+    <div id="container" class="container">
+      <div class="user user-left"></div>
+      <div class="ver-line"></div>
+      <div class="user user-right"></div>
+    </div>
+  </div>
+  <!-- toast -->
+  <div class="toast-container">
+    <div id="toast" class="toast">
+      <i class="fa-solid fa-circle-info" style="color: #20a2df"></i>
+      <span id="toastText"></span>
+    </div>
+  </div>
+  <!-- line template -->
+  <template id="lineTemplate">
+    <div class="line">
+      <div class="tile-container"></div>
+      <div class="result"></div>
+    </div>
+  </template>
+  <!-- js values -->
+  <input type="hidden" id="room" value="<%= room %>">
+  <input type="hidden" id="host" value="<%= host %>">
+</body>
+</html>

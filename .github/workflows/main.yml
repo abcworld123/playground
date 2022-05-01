@@ -1,0 +1,40 @@
+name: CI
+
+on:
+  push:
+    branches:
+      - main
+      - develop
+  pull_request:
+    branches:
+      - main
+      - develop
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node: ['16']
+      fail-fast: false
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Test node.js ${{ matrix.node }}
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ matrix.node }}
+
+      - name: npm ci, start and test
+        run: |
+          npm ci
+          npm start &
+          sleep 10 &&
+          npm test
+        env:
+          WEATHER_KEY: ${{ secrets.WEATHER_KEY }}
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
+          MONGOOSE_AUTH: ${{ secrets.MONGOOSE_AUTH }}
+          MONGOOSE_ID: ${{ secrets.MONGOOSE_ID }}
+          MONGOOSE_PW: ${{ secrets.MONGOOSE_PW }}
