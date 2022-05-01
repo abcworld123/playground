@@ -7,5 +7,6 @@ declare global {
   type span = HTMLSpanElement;
   type input = HTMLInputElement;
   type button = HTMLButtonElement;
+  type template = HTMLTemplateElement;
   type p = HTMLParagraphElement;
 }

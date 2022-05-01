@@ -4,6 +4,7 @@ const app = express();
 const compression = require('compression');
 const dbConnect = require('./config/mongoose');
 const liveServer = require('./config/liveserver');
+const socket = require('./sockets/socket');
 const appLocals = require('./config/app.locals');
 const server = http.createServer(app);
 
@@ -16,6 +17,7 @@ app.locals = appLocals;
 
 dbConnect();
 liveServer(app);
+socket(server);
 
 app.use('/favicon.ico', express.static('public/images/favicon.ico'));
 app.use('/', require('./routes/index'));
