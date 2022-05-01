@@ -7,7 +7,9 @@ const srcPath = './src/ts';
 const outPath = './public';
 const tsPath = `${process.cwd()}/${srcPath}/**/*.ts`;
 const prelen = process.cwd().length + srcPath.length + 2;
-const entries = glob.sync(tsPath).map(name => name.slice(prelen, -3));
+const entries = glob.sync(tsPath)
+  .filter(name => !/\.d\.ts$/.test(name))
+  .map(name => name.slice(prelen, -3));
 
 const mode = 'development';
 // const mode = 'production';

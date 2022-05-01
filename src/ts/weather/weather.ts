@@ -3,12 +3,6 @@ import '@fortawesome/fontawesome-free/css/all.min.css';
 import '@css/weather/weather.scss';
 import Swal from 'sweetalert2';
 
-type li = HTMLLIElement;
-type div = HTMLDivElement;
-type span = HTMLSpanElement;
-type button = HTMLButtonElement;
-type input = HTMLInputElement;
-
 interface response {
   success: boolean;
   data?: number[];
