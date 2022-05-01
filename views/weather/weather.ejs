@@ -1,23 +1,10 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
+  <%- include(views + 'header.ejs') %>
   <title>날씨예측</title>
-  <!-- JQuery -->
-  <script type="text/javascript" src="/libraries/jquery/jquery.min.js"></script>
-
-  <!-- Bootstrap -->
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css"/>
-  <script type="text/javascript" src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
-
-  <!-- Font Awesome icons (free version) -->
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css"/>
-
-  <!--sweetalert2 -->
-  <script src="https://cdn.jsdelivr.net/npm/sweetalert2"></script>
-
-  <!-- my -->
   <link rel="stylesheet" href="/stylesheets/weather/weather.css"/>
-  <script type="text/javascript" src="/javascripts/weather/j_weather.js"></script>
+  <script defer src="/javascripts/weather/weather.js"></script>
 </head>
 <body>
 <div class="container">
@@ -28,21 +15,21 @@
     <div class="panel panel-info">
       <div class="panel-heading">
         <ul class="nav nav-tabs">
-          <li class="dropdown">
-            <a href="#" data-toggle="dropdown">오늘 날씨 맞히기<span class="caret"></span></a>
+          <li class="dropdown closed">
+            <a data-toggle="dropdown">오늘 날씨 맞히기<span class="caret"></span></a>
             <ul class="dropdown-menu" role="menu">
-              <li><a href="#tab1" data-toggle="tab">기온</a></li>
-              <li><a href="#tab2" data-toggle="tab">습도</a></li>
-              <li><a href="#tab3" data-toggle="tab">풍속</a></li>
-              <li><a href="#tab4" data-toggle="tab">날씨 (구름, 비 등)</a></li>
+              <li><a id="menu1" data-toggle="tab">기온</a></li>
+              <li><a id="menu2" data-toggle="tab">습도</a></li>
+              <li><a id="menu3" data-toggle="tab">풍속</a></li>
+              <li><a id="menu4" data-toggle="tab">날씨 (구름, 비 등)</a></li>
             </ul>
           </li>
-          <li class="dropdown">
-            <a href="#" data-toggle="dropdown">주간 날씨 맞히기<span class="caret"></span></a>
+          <li class="dropdown closed">
+            <a id="btnWeek" data-toggle="dropdown">주간 날씨 맞히기<span class="caret"></span></a>
             <ul class="dropdown-menu" role="menu">
-              <li><a href="#tab5" data-toggle="tab">최고 기온</a></li>
-              <li><a href="#tab6" data-toggle="tab">최저 기온</a></li>
-              <li><a href="#tab7" data-toggle="tab">강수 확률</a></li>
+              <li><a id="menu5" data-toggle="tab">최고 기온</a></li>
+              <li><a id="menu6" data-toggle="tab">최저 기온</a></li>
+              <li><a id="menu7" data-toggle="tab">강수 확률</a></li>
             </ul>
           </li>
         </ul>
@@ -92,19 +79,18 @@
                   <input type="text" class="form-control input-nx" id="nx<%= i %>" placeholder="nx">
                   <input type="text" class="form-control input-ny" id="ny<%= i %>" placeholder="ny">
                 <% } else { %>
-                  <div class="dropdown">
+                  <div class="dropdown closed">
                     <button class="btn btn-primary dropdown-toggle btn-reg" id="btnReg<%= i %>" type="button" data-toggle="dropdown">
-                      <span class="btn-text">지역</span>
-                      <span class="caret"></span>
+                      지역 <span class="caret"></span>
                     </button>
                     <ul class="dropdown-menu">
-                      <li><a href="#" onclick="regSet(<%= i %>, 1)">서울</a></li>
-                      <li><a href="#" onclick="regSet(<%= i %>, 2)">부산</a></li>
-                      <li><a href="#" onclick="regSet(<%= i %>, 3)">대구</a></li>
-                      <li><a href="#" onclick="regSet(<%= i %>, 4)">인천</a></li>
-                      <li><a href="#" onclick="regSet(<%= i %>, 5)">대전</a></li>
-                      <li><a href="#" onclick="regSet(<%= i %>, 6)">광주</a></li>
-                      <li><a href="#" onclick="regSet(<%= i %>, 7)">울산</a></li>
+                      <li><a onclick="regSet(<%= i %>, 1)">서울</a></li>
+                      <li><a onclick="regSet(<%= i %>, 2)">부산</a></li>
+                      <li><a onclick="regSet(<%= i %>, 3)">대구</a></li>
+                      <li><a onclick="regSet(<%= i %>, 4)">인천</a></li>
+                      <li><a onclick="regSet(<%= i %>, 5)">대전</a></li>
+                      <li><a onclick="regSet(<%= i %>, 6)">광주</a></li>
+                      <li><a onclick="regSet(<%= i %>, 7)">울산</a></li>
                     </ul>
                   </div>
                 <% } %>

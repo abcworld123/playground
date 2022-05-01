@@ -1,0 +1,93 @@
+a {
+  cursor: pointer;
+}
+
+.container {
+  font-size: 1.3em;
+}
+
+.tab-pane {
+  font-size: 1.3em;
+}
+
+.user-container {
+  display: flex;
+  flex-direction: column;
+  gap: 40px;
+  margin: 50px;
+}
+
+#tab0 {
+  font-size: 1.3em;
+}
+
+.user {
+  display: grid;
+  grid-template-columns: 1fr 2fr 2fr 2fr 2fr 2fr 2fr 2fr 3fr;
+  place-items: center;
+  gap: 10px 40px;
+}
+
+.form-control, .item-result, .item-answer, .item-result-total {
+  min-height: 35px;
+  text-align: center;
+}
+
+input[type="number"]::-webkit-inner-spin-button {
+  appearance: none;
+}
+
+.control {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  gap: 30px;
+  justify-content: center;
+  width: 100%;
+  margin: 70px 0 40px 0;
+  
+  &-label {
+    flex-basis: 40px;
+  }
+  & > input {
+    flex-basis: 70px;
+  }
+}
+
+.btn-start {
+  min-width: 60px;
+}
+
+body .swal2-popup {
+  font-size: 1.2em;
+}
+
+.panel-heading {
+  padding: 5px 5px 0 5px;
+}
+
+$dropdown-bg-color: #d9edf7;
+$dropdown-focus-color: #bce8f1;
+
+.nav-tabs {
+  & .open > a,
+  & .open > a:hover,
+  & .open > a:focus,
+  & li > a:hover,
+  & li > a:focus {
+    background-color: $dropdown-focus-color;
+    border-color: transparent;
+  }
+}
+
+.dropdown-menu {
+  background-color: $dropdown-bg-color;
+  border-color: $dropdown-focus-color;
+}
+
+.dropdown-menu > li > a {
+  &:hover,
+  &:focus {
+    background-color: $dropdown-focus-color;
+  }
+}
