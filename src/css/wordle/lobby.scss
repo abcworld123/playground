@@ -1,3 +1,13 @@
+@import "bootstrap/scss/functions";
+@import "bootstrap/scss/variables";
+@import "bootstrap/scss/mixins";
+
+$theme-colors: (
+  "primary": $primary,
+  "success": $success,
+);  
+@import 'bootstrap/scss/buttons'; 
+
 body h1 {
   margin: 15px 15px 30px 15px;
 }
@@ -25,30 +35,6 @@ body h1 {
   color: #999999;
 }
 
-.room-tab {
-  background: #cfedda;
-}
-
-.room-tab span {
-  display: inline-block;
-  background: #4dbd74;
-  padding: 2px 10px;
-  color: #fff;
-  font-size: 12px;
-}
-
-.room-title {
-  flex-grow: 1;
-  overflow: hidden;
-  white-space: pre;
-  text-overflow: ellipsis;
-}
-
-.room-enter {
-  min-width: 50px;
-  text-align: right;
-}
-
 #room0 {
   display: none;
 }
@@ -64,10 +50,32 @@ body h1 {
   border-left: 3px solid #4dbd74;
   border-bottom: 1px solid #e4e5e6;
   transition: background-color .3s;
-}
-
-.room:hover {
-  background-color: #dff1e6;
+  
+  &-tab {
+    background: #cfedda;
+    span {
+      display: inline-block;
+      background: #4dbd74;
+      padding: 2px 10px;
+      color: #fff;
+      font-size: 12px;
+    }
+  }
+  
+  &-title {
+    flex-grow: 1;
+    overflow: hidden;
+    white-space: pre;
+    text-overflow: ellipsis;
+  }
+  
+  &-enter {
+    min-width: 50px;
+  }
+  
+  &:hover {
+    background-color: #dff1e6;
+  }
 }
 
 .control {

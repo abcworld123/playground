@@ -1,9 +1,23 @@
-let socket;
-let timelimit, numlen, myAnswer, myTurn, cursor, timer;
-let lineTemplate, myContainer, rivalContainer, divMyAnswer, tiles;
-let resultText, timerText, turnText;
+import '@fortawesome/fontawesome-free/css/all.min.css';
+import '@css/wordle/playboard.scss';
+import io from 'socket.io-client';
+import Swal from 'sweetalert2';
 
-/*********  alert functions  ***********/
+let myTurn: boolean;
+let myAnswer: string;
+let timer: NodeJS.Timer;
+let [timelimit, numlen, cursor]: number[] = [];
+let [myContainer, rivalContainer, resultText]: div[] = [];
+let tiles: div[];
+
+const room = (<input>document.getElementById('room')).value;
+const isHost = (<input>document.getElementById('host')).value === 'true';
+const lineTemplate = <template>document.getElementById('lineTemplate');
+const divMyAnswer = <div>document.getElementById('myAnswer');
+const timerText = <div>document.getElementById('timer');
+const turnText = <div>document.getElementById('turn');
+
+/* ********  alert functions  ********** */
 
 function alertConfig() {
   return Swal.fire({
@@ -16,22 +30,23 @@ function alertConfig() {
     focusConfirm: false,
     allowEscapeKey: false,
     preConfirm: () => {
-      const timelimit = Swal.getPopup().querySelector('#timelimit').value;
-      const numlen = Swal.getPopup().querySelector('#numlen').value;
-      const timelimit_int = Number(timelimit);
-      const numlen_int = Number(numlen);
+      let timelimit: string | number = Swal.getPopup().querySelector<input>('#timelimit').value;
+      let numlen: string | number = Swal.getPopup().querySelector<input>('#numlen').value;
       if (!timelimit) {
         Swal.showValidationMessage('제한 시간을 설정해주세요.');
       } else if (!numlen) {
         Swal.showValidationMessage('자릿수를 설정해주세요.');
-      } else if (timelimit_int % 1 || numlen_int % 1) {
+      } else if (!/^\d+$/.test(timelimit) || !/^\d+$/.test(numlen)) {
         Swal.showValidationMessage('정수만 입력해주세요.');
-      } else if (timelimit_int < 1 || 10000 < timelimit_int) {
+      }
+      timelimit = parseInt(timelimit);
+      numlen = parseInt(numlen);
+      if (timelimit < 1 || 10000 < timelimit) {
         Swal.showValidationMessage('제한 시간은 1~10000 사이의 숫자로 입력해주세요.');
-      } else if (numlen_int < 1 || 10 < numlen_int) {
+      } else if (numlen < 1 || 10 < numlen) {
         Swal.showValidationMessage('자릿수는 1~10 사이의 숫자로 입력해주세요.');
       }
-      return { timelimit: timelimit_int, numlen: numlen_int };
+      return { timelimit, numlen };
     },
   });
 }
@@ -56,17 +71,15 @@ function alertSetNumber() {
     allowOutsideClick: false,
     confirmButtonText: '확인',
     allowEscapeKey: false,
-    preConfirm: (myAnswer) => {
+    preConfirm: (myAnswer: string) => {
       if (!myAnswer) {
         Swal.showValidationMessage('숫자를 입력해주세요.');
-      } else if (Number(myAnswer) % 1) {
-        Swal.showValidationMessage('정수만 입력해주세요.');
-      }
-      myAnswer = parseInt(myAnswer).toString();
-      if (myAnswer.length !== numlen) {
+      } else if (myAnswer.length !== numlen) {
         Swal.showValidationMessage(`숫자 ${numlen}자리를 입력해주세요.`);
+      } else if (!/^\d+$/.test(myAnswer)) {
+        Swal.showValidationMessage('정수만 입력해주세요.');
       } else if (new Set(myAnswer).size !== numlen) {
-        Swal.showValidationMessage(`중복 없이 입력해주세요.`);
+        Swal.showValidationMessage('중복 없이 입력해주세요.');
       }
       return myAnswer;
     },
@@ -125,9 +138,9 @@ function alertUserLeft() {
   });
 }
 
-/********  handling functions  **********/
+/* *******  handling functions  ********* */
 
-function allEntered(isHost) {
+function allEntered(isHost: boolean) {
   if (isHost) configRoom();
   else alertWaitConfig();
   socket.emit('all entered');
@@ -140,7 +153,7 @@ async function configRoom() {
 }
 
 // [ALL] 게임 구성 완료
-function configRoomComplete(_timeLimit, _numlen) {
+function configRoomComplete(_timeLimit: number, _numlen: number) {
   const container = document.getElementById('container');
   container.classList.add(`numlen-${_numlen}`);
   timelimit = _timeLimit;
@@ -157,11 +170,11 @@ async function setNumber() {
 }
 
 // [ALL] 게임 시작
-function start(isFirst) {
+function start(isFirst: boolean) {
   const toast = document.getElementById('toast');
   const toastText = document.getElementById('toastText');
   const myAnswerContainer = document.getElementById('myAnswerContainer');
-  const users = document.getElementsByClassName('user');
+  const users = document.querySelectorAll<div>('.user');
   myContainer = users[+!isFirst];
   rivalContainer = users[+isFirst];
   myTurn = isFirst;
@@ -176,7 +189,7 @@ function start(isFirst) {
 // [ALL] 한 턴씩 토글
 function turn() {
   let sec = timelimit;
-  timerText.innerText = sec;
+  timerText.innerText = String(sec);
   clearInterval(timer);
   if (myTurn) {
     addLine(myContainer);
@@ -184,7 +197,7 @@ function turn() {
     timerText.style.color = sec <= 10 ? 'red' : '#74bf76';
     turnText.style.color = '#74bf76';
     timer = setInterval(() => {
-      timerText.innerText = --sec;
+      timerText.innerText = String(--sec);
       if (!sec) {
         socket.emit('submit', null);
         tiles.forEach(tile => tile.classList.remove('tile-cur'));
@@ -198,19 +211,21 @@ function turn() {
     timerText.style.color = '#999';
     turnText.style.color = '#999';
     timer = setInterval(() => {
-      timerText.innerText = --sec;
+      timerText.innerText = String(--sec);
     }, 1000);
   }
 }
 
 // [ALL] 한 줄 결과 보여주기
-function showResult(strike, ball) {
+function showResult(strike: number, ball: number) {
+  console.log(strike, ball);
+  
   if (strike || ball) {
     const spanStrike = `<span class="result-strike">${strike}S</span>`;
     const spanBall = `<span class="result-ball">${ball}B</span>`;
     resultText.innerHTML = spanStrike + spanBall;
   } else {
-    const spanOut = `<span class="result-out">OUT</span>`;
+    const spanOut = '<span class="result-out">OUT</span>';
     resultText.innerHTML = spanOut;
   }
   const success = strike == numlen;
@@ -222,9 +237,9 @@ function showResult(strike, ball) {
 }
 
 // [ALL] 게임 종료
-function gameEnd(result, answer) {
+function gameEnd(result: string, answer: string) {
   if (result === 'win') alertWin();
-  else if (result === 'lose') alertLose(answer);
+  else if (result === 'lose') alertLose();
   else if (result === 'draw') alertDraw();
   clearInterval(timer);
   turnText.innerText = `정답: ${answer}`;
@@ -235,19 +250,19 @@ function gameEnd(result, answer) {
 }
 
 // 칸 추가
-function addLine(user) {
+function addLine(user: div) {
   const line = document.importNode(lineTemplate.content, true).children[0];
-  tiles = [...line.getElementsByClassName('tile')];
+  tiles = [...line.querySelectorAll<div>('.tile')];
   if (myTurn) tiles.forEach(tile => tile.classList.add('tile-cur'));
   user.appendChild(line);
-  resultText = line.children[1];
+  resultText = <div>line.children[1];
   window.scrollTo(0, document.body.scrollHeight);
   cursor = 0;
 }
 
 // 상대방 키 입력 처리
-function rivalKeydown(key) {
-  if (key < 10) tiles[cursor++].innerText = key;
+function rivalKeydown(key: string) {
+  if (key <= '9') tiles[cursor++].innerText = key;
   else tiles[--cursor].innerText = '';
 }
 
@@ -261,7 +276,7 @@ function templateInit() {
 // keyboard listener
 window.addEventListener('keydown', (e) => {
   if (!myTurn) return;
-  if (parseInt(e.key) == e.key) {
+  if ('0' <= e.key && e.key <= '9') {
     if (cursor < numlen) {
       tiles[cursor++].innerText = e.key;
       socket.emit('keydown', e.key);
@@ -270,7 +285,7 @@ window.addEventListener('keydown', (e) => {
     e.preventDefault();
     if (cursor > 0) {
       tiles[--cursor].innerText = '';
-      socket.emit('keydown', '100');
+      socket.emit('keydown', 'b');
     }
   } else if (e.code === 'Enter') {
     if (cursor === numlen) {
@@ -280,48 +295,39 @@ window.addEventListener('keydown', (e) => {
   }
 });
 
-window.onload = () => {
-  const room = document.getElementById('room').value;
-  const isHost = document.getElementById('host').value === 'true';
-  divMyAnswer = document.getElementById('myAnswer');
-  lineTemplate = document.getElementById('lineTemplate');
-  timerText = document.getElementById('timer');
-  turnText = document.getElementById('turn');
-  
-  divMyAnswer.addEventListener('mouseenter', (e) => {
-    divMyAnswer.innerText = myAnswer;
-  });
-  divMyAnswer.addEventListener('mouseleave', (e) => {
-    divMyAnswer.innerText = '[ 확인하기 ]';
-  });
-  
-  // socket.io
-  socket = io(`/wordle/playboard?room=${room}`);
-  
-  socket.on('all entered', () => {
-    allEntered(isHost);
-  });
-  socket.on('room config', (timeLimit, numlen) => {
-    configRoomComplete(timeLimit, numlen);
-  });
-  socket.on('game start', (isFirst) => {
-    start(isFirst);
-  });
-  socket.on('turn', () => {
-    myTurn = !myTurn;
-    turn();
-  });
-  socket.on('rival keydown', (key) => {
-    rivalKeydown(key);
-  });
-  socket.on('result', (strike, ball) => {
-    showResult(strike, ball);
-  });
-  socket.on('game end', (result, answer) => {
-    gameEnd(result, answer);
-  });
-  socket.on('user leave', () => {
-    clearInterval(timer);
-    alertUserLeft();
-  });
-};
+divMyAnswer.addEventListener('mouseenter', (e) => {
+  divMyAnswer.innerText = myAnswer;
+});
+divMyAnswer.addEventListener('mouseleave', (e) => {
+  divMyAnswer.innerText = '[ 확인하기 ]';
+});
+
+// socket.io
+const socket = io(`/wordle/playboard?room=${room}`);
+
+socket.on('all entered', () => {
+  allEntered(isHost);
+});
+socket.on('room config', (timeLimit: number, numlen: number) => {
+  configRoomComplete(timeLimit, numlen);
+});
+socket.on('game start', (isFirst: boolean) => {
+  start(isFirst);
+});
+socket.on('turn', () => {
+  myTurn = !myTurn;
+  turn();
+});
+socket.on('rival keydown', (key: string) => {
+  rivalKeydown(key);
+});
+socket.on('result', (strike: number, ball: number) => {
+  showResult(strike, ball);
+});
+socket.on('game end', (result: string, answer: string) => {
+  gameEnd(result, answer);
+});
+socket.on('user leave', () => {
+  clearInterval(timer);
+  alertUserLeft();
+});

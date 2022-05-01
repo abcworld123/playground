@@ -1,9 +1,19 @@
-let socket;
+import 'bootstrap/dist/css/bootstrap.min.css';
+import '@fortawesome/fontawesome-free/css/all.min.css';
+import '@css/wordle/lobby.scss';
+import io from 'socket.io-client';
+import Swal from 'sweetalert2';
+
 const rooms = new Set();  // { lobby room list }
 const requestQueue = [];
 let requestFor = '';
 
-/*********  alert functions  ***********/
+// todo room0 -> template
+const roomContainer = <div>document.getElementById('roomContainer');
+const room0 = <div>document.getElementById('room0');
+const myId = <span>document.getElementById('myId');
+
+/* *********  alert functions  ********** */
 
 function alertCreateRoom() {
   return Swal.fire({
@@ -15,14 +25,14 @@ function alertCreateRoom() {
     cancelButtonText: '취소',
     confirmButtonColor: '#13a829',
     cancelButtonColor: '#cc2121',
-    preConfirm: async (room) => {
+    preConfirm: async (room: string) => {
       if (!room) {
         Swal.showValidationMessage('방 제목을 입력해주세요.');
       } else if (room.length > 100) {
         Swal.showValidationMessage('방 제목은 100글자 이하로 입력해주세요.');
       }
-      const roomExist = await new Promise(resolve => {
-        socket.emit('room exist check', room, x => resolve(x));
+      const roomExist = await new Promise<boolean>(resolve => {
+        socket.emit('room exist check', room, (x: boolean) => resolve(x));
       });
       if (roomExist) {
         Swal.showValidationMessage('동일한 방 제목이 존재합니다.');
@@ -71,7 +81,7 @@ function alertWaitResponse() {
   });
 }
 
-function alertJoinRequest(user) {
+function alertJoinRequest(user: string) {
   return Swal.fire({
     icon: 'info',
     title: '입장 요청',
@@ -121,7 +131,7 @@ function alertRoomNotExist() {
   });
 }
 
-/********  handling functions  **********/
+/* ********  handling functions  ********* */
 
 // [방장] 방 생성
 async function createRoom() {
@@ -138,17 +148,17 @@ async function waitUser() {
 }
 
 // [방장] 유저가 입장을 요청
-function joinReceived(user) {
+function joinReceived(user: string) {
   requestQueue.push(user);
   if (requestQueue.length === 1) pollQueue(false);
 }
 
 // [방장] 입장 요청 처리
-async function handleRequest(user) {
+async function handleRequest(user: string) {
   const accept = (await alertJoinRequest(user)).isConfirmed;
   if (accept) {
-    const userExist = await new Promise(resolve => {
-      socket.emit('user exist check', user, x => resolve(x));
+    const userExist = await new Promise<boolean>(resolve => {
+      socket.emit('user exist check', user, (x: boolean) => resolve(x));
     });
     if (userExist) {
       socket.emit('join room accept', user);
@@ -163,7 +173,7 @@ async function handleRequest(user) {
 }
 
 // [방장] 유저가 입장을 취소
-async function joinCanceled(user) {
+async function joinCanceled(user: string) {
   const idx = requestQueue.slice(1).indexOf(user) + 1;
   if (idx) requestQueue.splice(idx, 1);
   else {
@@ -173,14 +183,14 @@ async function joinCanceled(user) {
 }
 
 // [방장] 입장 요청 큐 처리
-function pollQueue(shift) {
+function pollQueue(shift: boolean) {
   if (shift) requestQueue.shift();
   if (requestQueue.length) handleRequest(requestQueue[0]);
   else waitUser();
 }
 
 // [유저] 방에 입장하기
-async function joinRoom(room) {
+async function joinRoom(room: string) {
   if ((await alertJoinConfirm()).isDismissed) return;
   if (!rooms.has(room)) { alertRoomNotExist(); return; }
   socket.emit('join room request', room);
@@ -198,7 +208,7 @@ function joinRejected() {
 }
 
 // [ALL] 수락됨, 게임 페이지로 이동
-function gameStart(room) {
+function gameStart(room: string) {
   Swal.close();
   room = encodeURIComponent(room);
   const host = Boolean(requestQueue.length);
@@ -206,7 +216,7 @@ function gameStart(room) {
 }
 
 // [ALL] 삭제된 방 새로고침
-function removeRoom(room) {
+function removeRoom(room: string) {
   document.getElementById(room).remove();
   rooms.delete(room);
   if (requestFor === room) {
@@ -216,53 +226,49 @@ function removeRoom(room) {
 }
 
 // [ALL] 나간 유저 새로고침
-function removeUser(user) {
+function removeUser(user: string) {
   const idx = requestQueue.slice(1).indexOf(user) + 1;
   if (idx) requestQueue.splice(idx, 1);
 }
 
-window.onload = () => {
-  const roomContainer = document.getElementById('roomContainer');
-  const room0 = document.getElementById('room0');
-  const myId = document.getElementById('myId');
+function addRoom(room: string) {
+  const item = <div>room0.cloneNode(true);
+  item.id = room;
+  (<div>item.children[0]).innerText = room;
+  (<div>item.children[1]).addEventListener('click', () => joinRoom(room));
+  roomContainer.appendChild(item);
+  rooms.add(room);
+}
+ 
+// socket.io
+const socket = io('/wordle', { transports: ['websocket'] });
 
-  function addRoom(room) {
-    const item = room0.cloneNode(true);
-    item.id = room;
-    item.children[0].innerText = room;
-    item.children[1].addEventListener('click', () => joinRoom(room));
-    roomContainer.appendChild(item);
-    rooms.add(room);
-  }
-  
-  // socket.io
-  socket = io('/wordle');
-  
-  socket.on('connect', () => {
-    myId.innerText = `ID: ${socket.id}`;
-  });
-  socket.once('room list', (arr) => {
-    arr.forEach(room => addRoom(room));
-  });
-  socket.on('create room', (room) => {
-    addRoom(room);
-  });
-  socket.on('remove room', (room) => {
-    removeRoom(room);
-  });
-  socket.on('join room request', (user) => {
-    joinReceived(user);
-  });
-  socket.on('join room cancel', (user) => {
-    joinCanceled(user);
-  });
-  socket.on('join room accept', (room) => {
-    gameStart(room);
-  });
-  socket.on('join room reject', () => {
-    joinRejected();
-  });
-  socket.on('user leave', (user) => {
-    removeUser(user);
-  });
-};
+socket.on('connect', () => {
+  myId.innerText = `ID: ${socket.id}`;
+});
+socket.once('room list', (arr: string[]) => {
+  arr.forEach(room => addRoom(room));
+});
+socket.on('create room', (room: string) => {
+  addRoom(room);
+});
+socket.on('remove room', (room: string) => {
+  removeRoom(room);
+});
+socket.on('join room request', (user: string) => {
+  joinReceived(user);
+});
+socket.on('join room cancel', (user: string) => {
+  joinCanceled(user);
+});
+socket.on('join room accept', (room: string) => {
+  gameStart(room);
+});
+socket.on('join room reject', () => {
+  joinRejected();
+});
+socket.on('user leave', (user: string) => {
+  removeUser(user);
+});
+
+global.createRoom = createRoom;
