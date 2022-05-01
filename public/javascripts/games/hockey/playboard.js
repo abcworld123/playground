@@ -1,5 +1,5 @@
 const socket = io('/hockeyPlay');
-
+const sleep = (ms) => new Promise(resolve => setTimeout(resolve, ms));
 
 //canvas에 관한 정보
 let playBoard;
@@ -33,7 +33,6 @@ let roomNum = "";
 
 //todo 클래스 변경
 window.addEventListener("load", function () {
-  // document.getElementById('count').className = 'b';
   roomNum = window.location.href.split("/")[4];
   socket.emit('connection', roomNum);
 
@@ -51,26 +50,14 @@ window.addEventListener("load", function () {
     // console.log(event, msg1, msg2);
   });
 
-  socket.on('3', () => {
-    document.getElementById('ccc').style.display = 'block';
-    document.getElementById('ccc').innerHTML = 3;
-    setTimeout(() => setInterval(wer, 15 ), 100);
+  socket.on('3', async () => {
+    await countDown();
   });
 
-  socket.on('2', () => {
-    document.getElementById('ccc').className = 'aaa';
-    document.getElementById('ccc').innerHTML = 2;
-    setTimeout(() => setInterval(wer, 15 ), 100);
-  });
-
-  socket.on('1', () => {
-    document.getElementById('ccc').className = 'aaa';
-    document.getElementById('ccc').innerHTML = 1;
-    setTimeout(() => setInterval(wer, 15 ), 100);
-  });
 
   socket.on('playboard', (a, b, c, d, e, f, g, h) => {
-    document.getElementById('ccc').style.display = 'none';
+    document.getElementsByClassName('test_obj')[0].style.display = 'none';
+    document.getElementsByClassName('test_obj2')[0].style.display = 'none';
     WIDTH = document.querySelector('.playboard_canvas_area').offsetWidth;
     HEIGHT = document.querySelector('.playboard_canvas_area').offsetHeight;
     document.querySelector('#canvas').width = WIDTH;
@@ -101,52 +88,29 @@ window.addEventListener("load", function () {
     timeHtml.innerHTML = String(nowTime - 1);
   });
 
+  socket.on('player1_goal', () => {
+    document.getElementsByClassName('test_obj')[0].style.display = 'block';
+  });
+
+  socket.on('player2_goal', () => {
+    document.getElementsByClassName('test_obj2')[0].style.display = 'block';
+  });
+
   // gameStart()
 });
 
-function wer() {
-  document.getElementById('ccc').className = 'bbb';
-}
-
-// html에 있는 canvas 영역을 받아오고 함수 실행
-function gameStart() {
-  playBoard = document.getElementById('canvas').getContext('2d');
-
-  playAction = window.requestAnimationFrame(draw);
-}
-
-// 화면 지우기 => 플레이어 및 공 그리기 => 충돌 검사 식으로 진행
-//todo 벽에 박으면 멈추게
-// crush를 그냥 전체 함수 안에 두기
-function draw() {
-  document.querySelector('.playboard_canvas_area').width = document.querySelector('#canvas').offsetWidth;
-  document.querySelector('.playboard_canvas_area').height = document.querySelector('#canvas').offsetHeight;
-  WIDTH = document.querySelector('.playboard_canvas_area').offsetWidth;
-  HEIGHT = document.querySelector('.playboard_canvas_area').offsetHeight;
-
-  screenClear();
-  screenDrawPlayer(player1_x, player1_y, player1_high);
-  screenDrawPlayer(player2_x, player2_y, player1_high);
-  screenDrawBall(play_ball_x, play_ball_y);
-
-  player1_y += player1_dy;
-  player2_y += player2_dy;
-  play_ball_x += play_ball_dx;
-  play_ball_y += play_ball_dy;
-  play_ball_pause = play_ball_pause < 1 ? play_ball_pause : play_ball_pause - 1;
-
-  if ( player1_y >= HEIGHT - player1_high || player1_y <= 0) {player1_dy = 0; }
-  if ( player2_y >= HEIGHT - player2_high || player2_y <= 0) {player2_dy = 0; }
-  if ((play_ball_x >= WIDTH - play_ball_radius || play_ball_x <= play_ball_radius) && play_ball_pause < 1 ) {
-    play_ball_dx = -play_ball_dx;
+async function countDown() {
+  document.getElementsByClassName('test_obj')[0].style.display = 'none';
+  document.getElementsByClassName('test_obj2')[0].style.display = 'none';
+  const abcworld = document.getElementById('abcworld').children;
+  for (let x = 0; x < 3; x++) {
+    console.log(x, abcworld[x]);
+    abcworld[x].style.visibility = 'visible';
+    abcworld[x].classList.add('bbb');
+    await sleep(1000);
+    abcworld[x].classList.remove('bbb');
+    abcworld[x].style.visibility = 'hidden';
   }
-  if ( play_ball_y >= HEIGHT - play_ball_radius || play_ball_y <= play_ball_radius) {
-    play_ball_dy = -play_ball_dy;
-  }
-
-  checkCrash();
-
-  playAction = window.requestAnimationFrame(draw);
 }
 
 // canvas를 지우는 함수
@@ -189,23 +153,5 @@ function togleDirection(e) {
   } else if (e.keyCode === 115) {
     // s 클릭
     socket.emit('moveDown', roomNum);
-  } else if (e.keyCode === 56) {
-    // 8 클릭
-    player2_dy = -player2_y_speed;
-  } else if (e.keyCode === 50) {
-    // 2 클릭
-    player2_dy = player2_y_speed;
-  }
-}
-
-// player에 충돌이 일어났는지 검사
-//todo 중심부 => 모든 영역
-function checkCrash() {
-  if (player1_x < play_ball_x && play_ball_x < player1_x + 10 && player1_y < play_ball_y && play_ball_y < player1_y + player1_high) {
-    play_ball_dx *= -1;
-    play_ball_pause = 10;
-  } else if (player2_x < play_ball_x && play_ball_x < player2_x + 10 && player2_y < play_ball_y && play_ball_y < player2_y + player2_high) {
-    play_ball_dx *= -1;
-    play_ball_pause = 10;
   }
 }
