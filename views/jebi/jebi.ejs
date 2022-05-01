@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <%- include(views + 'header.ejs') %>
+  <title>제비뽑기</title>
+  <link rel="stylesheet" href="/stylesheets/jebi/jebi.css"/>
+  <script defer src="/javascripts/jebi/jebi.js"></script>
+</head>
+<body>
+<div class="wrapper">
+  <!-- 제비 컨테이너 div -->
+  <div class="container" id="jebiContainer">
+    <img class="jebi-unopened" src="/images/jebi/jebi.png" id="1">
+    <img class="jebi-unopened" src="/images/jebi/jebi.png" id="2">
+    <img class="jebi-unopened" src="/images/jebi/jebi.png" id="3">
+    <img class="jebi-unopened" src="/images/jebi/jebi.png" id="4">
+    <img class="jebi-unopened" src="/images/jebi/jebi.png" id="5">
+  </div>
+  <!-- 제비 수 컨트롤 div -->
+  <div class="control">
+    <label>제비 수:</label>
+    <button class="btn btn-secondary btn-jebinum" id="jebiMinus" onclick="jebiMinus()">-</button>
+    <span id="jebiNum">5</span>
+    <button class="btn btn-secondary btn-jebinum" id="jebiPlus" onclick="jebiPlus()">+</button>
+    <button class="btn btn-danger btn-reset" id="jebiReset" onclick="reset()">초기화</button>
+  </div>
+</div>
+<!-- toast -->
+<div class="toast-container position-fixed bottom-0 start-50 translate-middle-x">
+  <div id="toast" class="toast">
+    <i class="fa-solid fa-circle-info" style="color: #20a2df"></i>
+    <span id="toastText"></span>
+    <button type="button" class="btn-close" data-bs-dismiss="toast"></button>
+  </div>
+</div>
+</body>
+</html>

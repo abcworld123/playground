@@ -1,8 +1,9 @@
 <!DOCTYPE html>
 <html>
 <head>
+  <%- include(views + 'header.ejs') %>
   <title>이잉</title>
-  <link rel="stylesheet" href="/stylesheets/style.css"/>
+  <link rel="stylesheet" href="/stylesheets/home.css"/>
 </head>
 <body>
   <div class="container">
@@ -11,7 +12,7 @@
     <div class="game clickable" onclick="location.href = 'jebi'">제비뽑기</div>
     <div class="game clickable" onclick="location.href = 'weather'">날씨</div>
     <div class="game">이잉</div>
-    <div class="game">이잉</div>
+    <div class="game clickable" onclick="location.href = 'wordle'">숫자야구</div>
     <div class="game">이잉</div>
     <div class="game">이잉</div>
     <div class="game">이잉</div>

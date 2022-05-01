@@ -1,0 +1,97 @@
+html {
+  font-size: 2em;
+  
+  &::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+body {
+  background: #343A40;
+}
+
+.wrapper {
+  margin: 5% 10%;
+  padding: 5%;
+  border-radius: 1rem;
+  background: lightgray;
+}
+
+.container {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 75px 30px;
+  margin-bottom: 150px;
+  
+  & > img {
+    width: 200px;
+  }
+}
+
+.jebi-unopened {
+  cursor: pointer;
+}
+
+.control {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  gap: 30px;
+  align-items: center;
+  justify-content: center;
+}
+
+label {
+  min-width: 120px;
+}
+
+.btn {
+  height: 80px;
+  line-height: 0;
+  
+  &-jebinum {
+    font-size: 1.5em;
+    width: 80px;
+  }
+}
+
+#jebiNum {
+  font-size: 1.2em;
+}
+
+#jebiReset {
+  min-width: 200px;
+  margin-left: 50px;
+}
+
+.toast-container {
+  z-index: 11;
+}
+
+.toast {
+  display: flex;
+  gap: 20px;
+  align-items: center;
+  margin-bottom: 30px;
+  padding: 15px;
+  font-size: .6em;
+  width: auto;
+  border: none;
+}
+
+@media (max-width: 1440px) {
+
+  .container {
+    margin-top: 100px;
+    
+    & > img {
+      width: 190px;
+    }
+  }
+  
+  .btn {
+    scale: 1.25;
+  }
+}

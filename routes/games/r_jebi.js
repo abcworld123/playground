@@ -1,0 +1,13 @@
+const express = require('express');
+const router = express.Router();
+const jebi = require('#modules/jebi/m_jebi');
+
+router.get('/', (req, res, next) => {
+  res.render('jebi/jebi');
+});
+
+router.post('/ranking', (req, res, next) => {
+  jebi.submitRanking(req, res, next);
+});
+
+module.exports = router;

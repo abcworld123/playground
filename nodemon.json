@@ -1,0 +1,5 @@
+{
+  "restartable": "npm start",
+  "ignore": ["public", "test", "webpack.config.js"],
+  "ext": "js"
+}
