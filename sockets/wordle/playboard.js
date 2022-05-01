@@ -11,6 +11,30 @@ module.exports = function (nsp) {
     let rival;
     init();
     
+    socket.on('all entered', () => {
+      rival = [...rooms.get(room)].filter(x => x !== socket.id)[0];
+    });
+    
+    socket.on('room config', (timelimit, numlen) => {
+      nsp.to(room).emit('room config', timelimit, numlen);
+    });
+    
+    socket.on('set number', (num) => {
+      setNumber(num);
+    });
+    
+    socket.on('keydown', (key) => {
+      nsp.to(rival).emit('rival keydown', key);
+    });
+
+    socket.on('submit', (num) => {
+      submit(num);
+    });
+    
+    socket.on('disconnect', (reason) => {
+      disconnectUser();
+    });
+    
     function init() {
       socket.join(room);
       if (rooms.get(room).size === 2) {
@@ -79,29 +103,5 @@ module.exports = function (nsp) {
         closeRoom();
       }
     }
-    
-    socket.on('all entered', () => {
-      rival = [...rooms.get(room)].filter(x => x !== socket.id)[0];
-    });
-    
-    socket.on('room config', (timelimit, numlen) => {
-      nsp.to(room).emit('room config', timelimit, numlen);
-    });
-    
-    socket.on('set number', (num) => {
-      setNumber(num);
-    });
-    
-    socket.on('keydown', (key) => {
-      nsp.to(rival).emit('rival keydown', key);
-    });
-
-    socket.on('submit', (num) => {
-      submit(num);
-    });
-    
-    socket.on('disconnect', (reason) => {
-      disconnectUser();
-    });
   });
 };
