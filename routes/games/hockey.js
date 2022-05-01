@@ -1,13 +1,13 @@
-var express = require('express');
-var router = express.Router();
+const express = require('express');
+const router = express.Router();
 const hockey = require('../../modules/games/hockey');
 
 router.get('/', (req, res, next) => {
-    res.render('games/hockey/lobby');
+  res.render('hockey/lobby');
 });
 
 router.get('/:roomname', (req, res, next) => {
-    res.render('games/hockey/playboard');
+  res.render('hockey/playboard');
 });
 
 module.exports = router;

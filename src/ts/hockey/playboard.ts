@@ -1,3 +1,6 @@
+import '@css/hockey/playboard.scss';
+import io from 'socket.io-client';
+
 const socket = io('/hockeyPlay');
 const sleep = (ms) => new Promise(resolve => setTimeout(resolve, ms));
 
@@ -7,21 +10,21 @@ let WIDTH = 0;
 let HEIGHT = 0;
 const play_ball_radius = 10;
 
-let roomNum = "";
+let roomNum = '';
 
 //todo 클래스 변경
-window.addEventListener("load", function () {
-  roomNum = window.location.href.split("/")[4];
+window.addEventListener('load', function () {
+  roomNum = window.location.href.split('/')[4];
   socket.emit('connection', roomNum);
 
-  document.querySelector('#canvas').width = document.querySelector('#canvas').offsetWidth;
-  document.querySelector('#canvas').height = document.querySelector('#canvas').offsetHeight;
-  WIDTH = document.querySelector('#canvas').offsetWidth;
-  HEIGHT = document.querySelector('#canvas').offsetHeight;
+  document.querySelector('canvas').width = document.querySelector('canvas').offsetWidth;
+  document.querySelector('canvas').height = document.querySelector('canvas').offsetHeight;
+  WIDTH = document.querySelector('canvas').offsetWidth;
+  HEIGHT = document.querySelector('canvas').offsetHeight;
 
-  window.addEventListener("keypress", togleDirection);
+  window.addEventListener('keypress', togleDirection);
 
-  playBoard = document.getElementById('canvas').getContext('2d');
+  playBoard = document.querySelector('canvas').getContext('2d');
 
   socket.onAny((event, msg1, msg2) => {
     // console.log(event, msg1, msg2);
@@ -33,12 +36,12 @@ window.addEventListener("load", function () {
 
 
   socket.on('playboard', (player1_x, player1_y, player2_x, player2_y, play_ball_x, play_ball_y, player1_score, player2_score) => {
-    document.getElementsByClassName('playboard_play1_goal')[0].style.display = 'none';
-    document.getElementsByClassName('playboard_play2_goal')[0].style.display = 'none';
-    WIDTH = document.querySelector('.playboard_canvas_area').offsetWidth;
-    HEIGHT = document.querySelector('.playboard_canvas_area').offsetHeight;
-    document.querySelector('#canvas').width = WIDTH;
-    document.querySelector('#canvas').height = HEIGHT;
+    document.querySelector<div>('.playboard_play1_goal').style.display = 'none';
+    document.querySelector<div>('.playboard_play2_goal').style.display = 'none';
+    WIDTH = document.querySelector<div>('.playboard_canvas_area').offsetWidth;
+    HEIGHT = document.querySelector<div>('.playboard_canvas_area').offsetHeight;
+    document.querySelector('canvas').width = WIDTH;
+    document.querySelector('canvas').height = HEIGHT;
     screenClear();
     screenDrawPlayer(Number(player1_x * WIDTH / 1000), Number(player1_y * HEIGHT / 500), 20 * HEIGHT / 100);
     screenDrawPlayer(Number(player2_x * WIDTH / 1000), Number(player2_y * HEIGHT / 500), 20 * HEIGHT / 100);
@@ -54,20 +57,20 @@ window.addEventListener("load", function () {
   });
 
   socket.on('player1_goal', () => {
-    document.getElementsByClassName('playboard_play1_goal')[0].style.display = 'block';
+    document.querySelector<div>('.playboard_play1_goal').style.display = 'block';
   });
 
   socket.on('player2_goal', () => {
-    document.getElementsByClassName('playboard_play2_goal')[0].style.display = 'block';
+    document.querySelector<div>('.playboard_play2_goal').style.display = 'block';
   });
 
   // gameStart()
 });
 
 async function countDown() {
-  document.getElementsByClassName('playboard_play1_goal')[0].style.display = 'none';
-  document.getElementsByClassName('playboard_play2_goal')[0].style.display = 'none';
-  const countDown = document.getElementById('countDown').children;
+  document.querySelector<div>('.playboard_play1_goal').style.display = 'none';
+  document.querySelector<div>('.playboard_play2_goal').style.display = 'none';
+  const countDown = <HTMLCollectionOf<div>>document.getElementById('countDown').children;
   for (let x = 0; x < 3; x++) {
     console.log(x, countDown[x]);
     countDown[x].style.visibility = 'visible';

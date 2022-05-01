@@ -71,7 +71,7 @@ module.exports = function (nsp) {
           playBoard.set(roomNum, userInfo);
 
           abc(userInfo.play1, userInfo.play2, "countDown", roomNum);
-          setTimeout(function () {userInfo.gameBoard = setInterval(calPlay.bind(this, roomNum), 25 ); }, 3000);
+          setTimeout(function () {userInfo.gameBoard = setInterval(calPlay.bind(this, roomNum), 15 ); }, 3000);
         }
       }
     });
@@ -179,7 +179,7 @@ module.exports = function (nsp) {
     }
 
     function gameLoading(userInfo, roomNum) {
-      setTimeout(function () {userInfo.gameBoard = setInterval(calPlay.bind(this, roomNum), 25 ); }, 6000);
+      setTimeout(function () {userInfo.gameBoard = setInterval(calPlay.bind(this, roomNum), 15 ); }, 6000);
     }
   });
 };

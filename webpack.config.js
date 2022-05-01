@@ -44,7 +44,7 @@ module.exports = {
         use: [MiniCssExtractPlugin.loader, 'css-loader'],
       },
       {
-        test: /\.(svg|eot|woff|woff2|ttf)$/,
+        test: /\.(svg|eot|woff|woff2|ttf|png)$/,
         type: 'asset/resource',
         generator: {
           filename: 'assets/[name][ext][query]',
@@ -70,6 +70,7 @@ module.exports = {
     alias: {
       '@css': `${__dirname}/src/css`,
       '@components': `${__dirname}/src/components`,
+      '@image': `${__dirname}/public/images`,
     },
   },
   stats: isDev ? {
