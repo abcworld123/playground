@@ -1,13 +1,3 @@
-@import "bootstrap/scss/functions";
-@import "bootstrap/scss/variables";
-@import "bootstrap/scss/mixins";
-
-$theme-colors: (
-  "primary": $primary,
-  "success": $success,
-);  
-@import 'bootstrap/scss/buttons'; 
-
 body h1 {
   margin: 15px 15px 30px 15px;
 }
