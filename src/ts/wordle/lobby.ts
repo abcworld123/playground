@@ -8,9 +8,8 @@ const rooms = new Set();  // { lobby room list }
 const requestQueue = [];
 let requestFor = '';
 
-// todo room0 -> template
 const roomContainer = <div>document.getElementById('roomContainer');
-const room0 = <div>document.getElementById('room0');
+const roomTemplate = <template>document.getElementById('roomTemplate');
 const myId = <span>document.getElementById('myId');
 
 /* *********  alert functions  ********** */
@@ -232,7 +231,7 @@ function removeUser(user: string) {
 }
 
 function addRoom(room: string) {
-  const item = <div>room0.cloneNode(true);
+  const item = <div>document.importNode(roomTemplate.content, true).children[0];
   item.id = room;
   (<div>item.children[0]).innerText = room;
   (<div>item.children[1]).addEventListener('click', () => joinRoom(room));
