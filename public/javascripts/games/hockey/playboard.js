@@ -3,31 +3,9 @@ const sleep = (ms) => new Promise(resolve => setTimeout(resolve, ms));
 
 //canvas에 관한 정보
 let playBoard;
-let playAction;
 let WIDTH = 0;
 let HEIGHT = 0;
-
-// player 1 에관한 정보
-let player1_x = 200;
-let player1_y = 150;
-let player1_dy = 4;
-const player1_y_speed = 4;
-const player1_high = 100;
-
-// player 2 에관한 정보
-let player2_x = 1750;
-let player2_y = 250;
-let player2_dy = 4;
-const player2_y_speed = 4;
-const player2_high = 100;
-
-// 공에 대한 정보
-let play_ball_x = 200;
-let play_ball_y = 200;
-let play_ball_dx = 4;
-let play_ball_dy = 8;
 const play_ball_radius = 10;
-let play_ball_pause = 0;
 
 let roomNum = "";
 
@@ -45,41 +23,28 @@ window.addEventListener("load", function () {
 
   playBoard = document.getElementById('canvas').getContext('2d');
 
-
   socket.onAny((event, msg1, msg2) => {
     // console.log(event, msg1, msg2);
   });
 
-  socket.on('3', async () => {
+  socket.on('countDown', async () => {
     await countDown();
   });
 
 
-  socket.on('playboard', (a, b, c, d, e, f, g, h) => {
-    document.getElementsByClassName('test_obj')[0].style.display = 'none';
-    document.getElementsByClassName('test_obj2')[0].style.display = 'none';
+  socket.on('playboard', (player1_x, player1_y, player2_x, player2_y, play_ball_x, play_ball_y, player1_score, player2_score) => {
+    document.getElementsByClassName('playboard_play1_goal')[0].style.display = 'none';
+    document.getElementsByClassName('playboard_play2_goal')[0].style.display = 'none';
     WIDTH = document.querySelector('.playboard_canvas_area').offsetWidth;
     HEIGHT = document.querySelector('.playboard_canvas_area').offsetHeight;
     document.querySelector('#canvas').width = WIDTH;
     document.querySelector('#canvas').height = HEIGHT;
     screenClear();
-    screenDrawPlayer(Number(a * WIDTH / 100), Number(b * HEIGHT / 100), 20 * HEIGHT / 100);
-    screenDrawPlayer(Number(c * WIDTH / 100), Number(d * HEIGHT / 100), 20 * HEIGHT / 100);
-    screenDrawBall(Number(e * WIDTH / 100), Number(f * HEIGHT / 100));
-    document.getElementsByClassName('playboard_red_score')[0].innerHTML = g;
-    document.getElementsByClassName('playboard_blue_scord')[0].innerHTML = h;
-
-    player1_x = a;
-    player1_y = b;
-
-    player2_x = c;
-    player2_y = d;
-
-    play_ball_x = e;
-    play_ball_y = f;
-
-    // playAction = window.requestAnimationFrame(draw)
-
+    screenDrawPlayer(Number(player1_x * WIDTH / 1000), Number(player1_y * HEIGHT / 500), 20 * HEIGHT / 100);
+    screenDrawPlayer(Number(player2_x * WIDTH / 1000), Number(player2_y * HEIGHT / 500), 20 * HEIGHT / 100);
+    screenDrawBall(Number(play_ball_x * WIDTH / 1000), Number(play_ball_y * HEIGHT / 500));
+    document.getElementsByClassName('playboard_red_score')[0].innerHTML = player1_score;
+    document.getElementsByClassName('playboard_blue_scord')[0].innerHTML = player2_score;
   });
 
   socket.on('timeFlow', () => {
@@ -89,27 +54,27 @@ window.addEventListener("load", function () {
   });
 
   socket.on('player1_goal', () => {
-    document.getElementsByClassName('test_obj')[0].style.display = 'block';
+    document.getElementsByClassName('playboard_play1_goal')[0].style.display = 'block';
   });
 
   socket.on('player2_goal', () => {
-    document.getElementsByClassName('test_obj2')[0].style.display = 'block';
+    document.getElementsByClassName('playboard_play2_goal')[0].style.display = 'block';
   });
 
   // gameStart()
 });
 
 async function countDown() {
-  document.getElementsByClassName('test_obj')[0].style.display = 'none';
-  document.getElementsByClassName('test_obj2')[0].style.display = 'none';
-  const abcworld = document.getElementById('abcworld').children;
+  document.getElementsByClassName('playboard_play1_goal')[0].style.display = 'none';
+  document.getElementsByClassName('playboard_play2_goal')[0].style.display = 'none';
+  const countDown = document.getElementById('countDown').children;
   for (let x = 0; x < 3; x++) {
-    console.log(x, abcworld[x]);
-    abcworld[x].style.visibility = 'visible';
-    abcworld[x].classList.add('bbb');
+    console.log(x, countDown[x]);
+    countDown[x].style.visibility = 'visible';
+    countDown[x].classList.add('playboard_after_count');
     await sleep(1000);
-    abcworld[x].classList.remove('bbb');
-    abcworld[x].style.visibility = 'hidden';
+    countDown[x].classList.remove('playboard_after_count');
+    countDown[x].style.visibility = 'hidden';
   }
 }
 
