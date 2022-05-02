@@ -24,7 +24,7 @@ function reset() {
   const jebies = <HTMLCollectionOf<img>>jebiContainer.children;
   [...jebies].forEach((jebi) => {
     jebi.className = 'jebi-unopened';
-    jebi.src = '/images/jebi/jebi.png';
+    jebi.src = '/images/games/jebi/jebi.png';
   });
   ailen = randint(n);
   dog = 0;
@@ -57,11 +57,11 @@ function jebiMinus() {
 /* 제비 클릭, 결과 보여주기 */
 function jebiOpen(jebi: img) {
   if (parseInt(jebi.id) === ailen) {
-    jebi.src = '/images/jebi/ailen.jpg';
+    jebi.src = '/images/games/jebi/ailen.jpg';
     toastShow();
   } else {
     dog++;
-    jebi.src = '/images/jebi/haha.jpg';
+    jebi.src = '/images/games/jebi/haha.jpg';
   }
   jebi.removeAttribute('class');
 }
@@ -91,13 +91,13 @@ function toastShow() {
 document.addEventListener('mouseover', (e) => {
   if (!(e.target instanceof Image)) return;
   if (e.target.className === 'jebi-unopened') {
-    e.target.src = '/images/jebi/jebi_hover.png';
+    e.target.src = '/images/games/jebi/jebi_hover.png';
   }
 });
 document.addEventListener('mouseout', (e) => {
   if (!(e.target instanceof Image)) return;
   if (e.target.className === 'jebi-unopened') {
-    e.target.src = '/images/jebi/jebi.png';
+    e.target.src = '/images/games/jebi/jebi.png';
   }
 });
 document.addEventListener('click', (e) => {

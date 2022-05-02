@@ -240,7 +240,7 @@ function clickResultSubmit() {
     <div class="youtube_modal_result_list">
       <div class="youtube_modal_result">
         <div class="youtube_modal_rank">
-          <img class="youtube_modal_rank" src="/images/youtube/1st.png">
+          <img class="youtube_modal_rank" src="/images/games/youtube/1st.png">
         </div>"
         <div class="youtube_modal_info">
           ${g_youtubeResult[0].word}
@@ -267,7 +267,7 @@ function clickResultSubmit() {
     <div class="youtube_modal_result_list">
       <div class="youtube_modal_result">
         <div class="youtube_modal_rank">
-          <img class="youtube_modal_rank" src="/images/youtube/haha.png">
+          <img class="youtube_modal_rank" src="/images/games/youtube/haha.png">
         </div>
         <div class="youtube_modal_info">
           ${g_youtubeResult[g_youtubeResult.length - 1].word}
