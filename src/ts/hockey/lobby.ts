@@ -81,11 +81,11 @@ function alertJoinRequest(user) {
     title: '입장 요청',
     text: `${user}님이 입장을 요청하였습니다.`,
     allowOutsideClick: false,
-    showCancelButton: true,
+    showDenyButton: true,
     confirmButtonText: '수락',
-    cancelButtonText: '거절',
+    denyButtonText: '거절',
     confirmButtonColor: '#13a829',
-    cancelButtonColor: '#cc2121',
+    denyButtonColor: '#cc2121',
   });
 }
 

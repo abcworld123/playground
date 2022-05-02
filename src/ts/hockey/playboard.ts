@@ -2,69 +2,57 @@ import '@css/hockey/playboard.scss';
 import io from 'socket.io-client';
 
 const socket = io('/hockeyPlay');
-const sleep = (ms) => new Promise(resolve => setTimeout(resolve, ms));
+const sleep = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
 
 //canvas에 관한 정보
-let playBoard;
-let WIDTH = 0;
-let HEIGHT = 0;
 const play_ball_radius = 10;
+const canvas = document.querySelector('canvas');
+const playBoard = canvas.getContext('2d');
+const WIDTH = canvas.offsetWidth;
+const HEIGHT = canvas.offsetHeight;
+canvas.width = canvas.offsetWidth;
+canvas.height = canvas.offsetHeight;
 
 let roomNum = '';
 
 //todo 클래스 변경
-window.addEventListener('load', function () {
-  roomNum = window.location.href.split('/')[4];
-  socket.emit('connection', roomNum);
+roomNum = window.location.href.split('/')[4];
+socket.emit('connection', roomNum);
 
-  document.querySelector('canvas').width = document.querySelector('canvas').offsetWidth;
-  document.querySelector('canvas').height = document.querySelector('canvas').offsetHeight;
-  WIDTH = document.querySelector('canvas').offsetWidth;
-  HEIGHT = document.querySelector('canvas').offsetHeight;
+window.addEventListener('keypress', togleDirection);
 
-  window.addEventListener('keypress', togleDirection);
+socket.onAny((event, msg1, msg2) => {
+  // console.log(event, msg1, msg2);
+});
 
-  playBoard = document.querySelector('canvas').getContext('2d');
+socket.on('countDown', () => {
+  countDown();
+  // gameStart();
+});
 
-  socket.onAny((event, msg1, msg2) => {
-    // console.log(event, msg1, msg2);
-  });
+socket.on('playboard', (player1_x, player1_y, player2_x, player2_y, play_ball_x, play_ball_y, player1_score, player2_score) => {
+  document.querySelector<div>('.playboard_play1_goal').style.display = 'none';
+  document.querySelector<div>('.playboard_play2_goal').style.display = 'none';
+  screenClear();
+  screenDrawPlayer(Number(player1_x * WIDTH / 1000), Number(player1_y * HEIGHT / 500), 20 * HEIGHT / 100);
+  screenDrawPlayer(Number(player2_x * WIDTH / 1000), Number(player2_y * HEIGHT / 500), 20 * HEIGHT / 100);
+  screenDrawBall(Number(play_ball_x * WIDTH / 1000), Number(play_ball_y * HEIGHT / 500));
+  document.querySelector<div>('.playboard_red_score').innerHTML = player1_score;
+  document.querySelector<div>('.playboard_blue_scord').innerHTML = player2_score;
+});
 
-  socket.on('countDown', async () => {
-    await countDown();
-  });
+socket.on('timeFlow', () => {
+  const timeHtml = document.querySelector<div>('.playboard_time_area');
+  const nowTime = Number(timeHtml.innerHTML.trim());
+  timeHtml.innerHTML = String(nowTime - 1);
+});
 
+socket.on('player1_goal', () => {
+  document.querySelector<div>('.playboard_play1_goal').style.display = 'block';
+});
 
-  socket.on('playboard', (player1_x, player1_y, player2_x, player2_y, play_ball_x, play_ball_y, player1_score, player2_score) => {
-    document.querySelector<div>('.playboard_play1_goal').style.display = 'none';
-    document.querySelector<div>('.playboard_play2_goal').style.display = 'none';
-    WIDTH = document.querySelector<div>('.playboard_canvas_area').offsetWidth;
-    HEIGHT = document.querySelector<div>('.playboard_canvas_area').offsetHeight;
-    document.querySelector('canvas').width = WIDTH;
-    document.querySelector('canvas').height = HEIGHT;
-    screenClear();
-    screenDrawPlayer(Number(player1_x * WIDTH / 1000), Number(player1_y * HEIGHT / 500), 20 * HEIGHT / 100);
-    screenDrawPlayer(Number(player2_x * WIDTH / 1000), Number(player2_y * HEIGHT / 500), 20 * HEIGHT / 100);
-    screenDrawBall(Number(play_ball_x * WIDTH / 1000), Number(play_ball_y * HEIGHT / 500));
-    document.getElementsByClassName('playboard_red_score')[0].innerHTML = player1_score;
-    document.getElementsByClassName('playboard_blue_scord')[0].innerHTML = player2_score;
-  });
-
-  socket.on('timeFlow', () => {
-    const timeHtml = document.getElementsByClassName('playboard_time_area')[0];
-    const nowTime = Number(timeHtml.innerHTML.trim());
-    timeHtml.innerHTML = String(nowTime - 1);
-  });
-
-  socket.on('player1_goal', () => {
-    document.querySelector<div>('.playboard_play1_goal').style.display = 'block';
-  });
-
-  socket.on('player2_goal', () => {
-    document.querySelector<div>('.playboard_play2_goal').style.display = 'block';
-  });
-
-  // gameStart()
+socket.on('player2_goal', () => {
+  document.querySelector<div>('.playboard_play2_goal').style.display = 'block';
 });
 
 async function countDown() {
@@ -91,7 +79,7 @@ function screenClear() {
 // y : y좌표
 // h : 직사각형의 넓이
 // 넓이는 10으로 고정
-function screenDrawPlayer(x, y, h) {
+function screenDrawPlayer(x: number, y: number, h: number) {
   playBoard.fillStyle = '#334ea4';
   playBoard.beginPath();
   playBoard.fillRect(x, y, 10, h);
@@ -103,7 +91,7 @@ function screenDrawPlayer(x, y, h) {
 // x : x좌표
 // y : y좌표
 // 넓이는 play_ball_radius 으로 고정
-function screenDrawBall(x, y) {
+function screenDrawBall(x: number, y: number) {
   playBoard.fillStyle = 'rgb(33,40,33)';
   playBoard.beginPath();
   playBoard.arc(x, y, play_ball_radius, 0, Math.PI * 2, true);
@@ -114,7 +102,7 @@ function screenDrawBall(x, y) {
 // 키보드 입력 함수
 // w, s는 player_1 조종
 // 8, 2는 player_2 조종
-function togleDirection(e) {
+function togleDirection(e: KeyboardEvent) {
   if (e.keyCode === 119) {
     // w 클릭
     socket.emit('moveUp', roomNum);
