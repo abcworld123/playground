@@ -21,8 +21,9 @@ document.getElementsByClassName('youtube_submit_btn')[0].addEventListener('click
 // 참가자 추가
 function addMember() {
   const youtubeInput = document.querySelector<div>('.youtube_input_area');
-
-  youtubeInput.innerHTML = youtubeInput.innerHTML + '<input class="youtube_input_text">';
+  const newInput = document.createElement('input');
+  newInput.className = 'youtube_input_text';
+  youtubeInput.appendChild(newInput);
 }
 
 // 게임 종목 변경
@@ -35,8 +36,6 @@ function rotationCategory() {
 
 // 결과 창 변경
 function getResult() {
-  document.querySelector<div>('.youtube_loading_modal').style.display = 'flex';
-
   const youtubeCategory = document.getElementsByClassName('youtube_btn')[1].innerHTML.trim();
   const youtubeInputArea = document.querySelector<div>('.youtube_input_area');
   const youtubeInput = youtubeInputArea.querySelectorAll('input');
@@ -52,6 +51,7 @@ function getResult() {
 
     word.push(individuallyWord);
   }
+  document.querySelector<div>('.youtube_loading_modal').style.display = 'flex';
 
   // 유튜브 api로 결과를 받아온다
   fetch('/youtube/result', {
