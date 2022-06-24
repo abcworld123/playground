@@ -3,10 +3,11 @@
   "version": "1.2.0",
   "private": true,
   "scripts": {
-    "dev": "nodemon app.js",
-    "build": "webpack",
-    "start": "npm-run-all --parallel dev build",
-    "lint": "eslint **/*.ts **/*.js",
+    "start": "nodemon app.js",
+    "watch": "webpack --mode=development",
+    "dev": "npm-run-all --parallel start watch",
+    "build": "webpack --mode=production",
+    "lint": "eslint **/*.{js,ts}",
     "test": "jest"
   },
   "imports": {
