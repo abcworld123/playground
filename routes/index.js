@@ -17,4 +17,9 @@ router.use('/weather', weather);
 router.use('/wordle', wordle);
 router.use('/youtube', youtube);
 
+router.use((req, res, next) => {
+  res.status(404).render('cannotAccess');
+  console.warn(`not exists: ${req.url}`);
+});
+
 module.exports = router;

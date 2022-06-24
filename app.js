@@ -23,11 +23,6 @@ socket(server);
 app.use('/favicon.ico', express.static('public/images/favicon.ico'));
 app.use('/', require('./routes/index'));
 
-app.use((req, res, next) => {
-  res.status(404).render('cannotAccess');
-  console.warn(`not exists: ${req.url}`);
-});
-
 server.on('error', (err) => {
   console.error(err);
 });
