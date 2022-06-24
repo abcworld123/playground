@@ -6,21 +6,17 @@ const webpack = require('webpack');
 const srcPath = './src/ts';
 const outPath = './public';
 const tsPath = `${process.cwd()}/${srcPath}/**/*.ts`;
-const prelen = process.cwd().length + srcPath.length + 2;
+const prelen = process.cwd().length + srcPath.length;
 const entries = glob.sync(tsPath)
   .filter(name => !/\.d\.ts$/.test(name))
-  .map(name => name.slice(prelen, -3));
+  .map(name => name.replace('/./', '/').slice(prelen, -3));
 
-const mode = 'development';
-// const mode = 'production';
-
-const isDev = mode === 'development';
 console.log('\x1B[33mbuilding...\x1B[0m');
 
 /** @type {webpack.Configuration} */
-module.exports = {
-  watch: isDev,
-  devtool: isDev ? 'inline-source-map' : false,
+const config = {
+  watch: true,
+  devtool: 'inline-source-map',
   entry: Object.fromEntries(entries.map((path) => [path, `${srcPath}/${path}.ts`])),
   output: {
     filename: 'javascripts/[name].js',
@@ -52,22 +48,9 @@ module.exports = {
       },
     ],
   },
-  plugins: isDev ? [
+  plugins: [
     new MiniCssExtractPlugin({
       filename: 'stylesheets/[name].css',
-    }),
-  ] : [
-    new MiniCssExtractPlugin({
-      filename: 'stylesheets/[name].css',
-    }),
-    new ForkTsCheckerWebpackPlugin({
-      logger: {
-        log: () => {},
-        error: console.error,
-      },
-      typescript: {
-        configFile: `${srcPath}/tsconfig.json`,
-      },
     }),
   ],
   resolve: {
@@ -76,10 +59,28 @@ module.exports = {
       '@components': `${__dirname}/src/components`,
     },
   },
-  stats: isDev ? {
+  stats: {
     preset: 'minimal',
     assets: false,
     modules: false,
-  } : {},
-  mode,
+  },
+};
+
+module.exports = (env, args) => {
+  if (args.mode === 'production') {
+    config.watch = false;
+    config.devtool = false;
+    config.stats = {};
+    config.plugins.push(
+      new ForkTsCheckerWebpackPlugin({
+        logger: {
+          log: () => {},
+          error: console.error,
+        },
+        typescript: {
+          configFile: `${srcPath}/tsconfig.json`,
+        },
+      }));
+  }
+  return config;
 };
