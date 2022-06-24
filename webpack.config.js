@@ -52,7 +52,11 @@ module.exports = {
       },
     ],
   },
-  plugins: [
+  plugins: isDev ? [
+    new MiniCssExtractPlugin({
+      filename: 'stylesheets/[name].css',
+    }),
+  ] : [
     new MiniCssExtractPlugin({
       filename: 'stylesheets/[name].css',
     }),
