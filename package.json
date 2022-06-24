@@ -7,7 +7,7 @@
     "watch": "webpack --mode=development",
     "dev": "npm-run-all --parallel start watch",
     "build": "webpack --mode=production",
-    "lint": "eslint **/*.ts **/*.js",
+    "lint": "eslint **/*.{js,ts}",
     "test": "jest"
   },
   "imports": {

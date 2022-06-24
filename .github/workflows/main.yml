@@ -15,7 +15,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        node: ['16']
+        node: ['16', '18']
       fail-fast: false
 
     steps:
@@ -26,11 +26,19 @@ jobs:
         with:
           node-version: ${{ matrix.node }}
 
-      - name: npm ci, start and test
+      - name: Install packages
+        run: npm ci
+
+      - name: Check lint
+        run: npm run lint
+
+      - name: Production build
+        run: npm run build
+
+      - name: Run test
         run: |
-          npm ci
           npm start &
-          sleep 10 &&
+          sleep 5 &&
           npm test
         env:
           WEATHER_KEY: ${{ secrets.WEATHER_KEY }}
