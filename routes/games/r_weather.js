@@ -1,6 +1,7 @@
 const express = require('express');
-const router = express.Router();
 const weather = require('#modules/weather/m_weather');
+
+const router = express.Router();
 
 router.get('/', (req, res, next) => {
   res.render('weather/weather');

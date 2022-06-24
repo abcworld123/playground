@@ -10,7 +10,7 @@ exports.getWeatherDay = (req, res, next) => {
   const base_date = now.substring(0, 8);
   const base_time = now.substring(8, 12);
   const category = ['', 'TMP', 'REH', 'WSD', 'SKY'];
-  const {idx, nx, ny} = req.body;
+  const { idx, nx, ny } = req.body;
   let arr;
 
   axios.get(url, {

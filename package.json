@@ -6,6 +6,7 @@
     "dev": "nodemon app.js",
     "build": "webpack",
     "start": "npm-run-all --parallel dev build",
+    "lint": "eslint **/*.ts **/*.js",
     "test": "jest"
   },
   "imports": {
@@ -32,6 +33,8 @@
     "@typescript-eslint/eslint-plugin": "^5.29.0",
     "connect-livereload": "^0.6.1",
     "css-loader": "^6.7.1",
+    "eslint-plugin-import": "^2.26.0",
+    "eslint-plugin-only-warn": "^1.0.3",
     "fork-ts-checker-webpack-plugin": "^7.2.11",
     "jest": "^28.1.1",
     "livereload": "^0.9.3",

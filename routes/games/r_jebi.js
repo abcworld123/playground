@@ -1,6 +1,7 @@
 const express = require('express');
-const router = express.Router();
 const jebi = require('#modules/jebi/m_jebi');
+
+const router = express.Router();
 
 router.get('/', (req, res, next) => {
   res.render('jebi/jebi');

@@ -86,14 +86,14 @@ function start(i: number) {
     url = `/weather/getWeather${i <= 6 ? 'Ta' : 'Ml'}`;
     formdata = { idx: i, reg: regNums[i] };
   }
-  
+
   btnStart.disabled = true;
   btnStart.classList.replace('btn-success', 'btn-warning');
   btnStart.innerHTML = '<i class="fa-solid fa-hourglass"></i>';
-  
+
   fetch(url, {
     method: 'POST',
-    headers: {'Content-Type': 'application/json'},
+    headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(formdata),
   })
   .then((res) => res.json())
@@ -142,7 +142,7 @@ userContainer.forEach((container) => {
 document.addEventListener('click', (_e) => {
   const e = _e.target;
   if (!(e instanceof HTMLElement)) return;
-  
+
   const flag = e.parentElement?.classList.contains('closed');
   dropdown.forEach(e => e.classList.replace('open', 'closed'));
   if (flag) e.parentElement.classList.replace('closed', 'open');

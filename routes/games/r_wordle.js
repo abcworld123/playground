@@ -1,6 +1,7 @@
 const express = require('express');
-const router = express.Router();
 const wordle = require('#modules/wordle/m_wordle');
+
+const router = express.Router();
 
 router.get('/', (req, res, next) => {
   res.render('wordle/lobby');
