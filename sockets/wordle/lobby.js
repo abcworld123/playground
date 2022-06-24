@@ -14,7 +14,7 @@ module.exports = function (nsp) {
       hosts.set(room, socket.id);
       socket.broadcast.emit('create room', room);
     });
-    
+
     socket.on('room exist check', (room, callback) => {
       callback(hosts.has(room) || allRooms.has(room));
     });

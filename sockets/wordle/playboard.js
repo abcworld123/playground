@@ -5,24 +5,24 @@ module.exports = function (nsp) {
   const ended = new Map();
   const turns = new Map();
   const rooms = nsp.adapter.rooms;
-  
+
   nsp.on('connection', (socket) => {
     const room = socket.handshake.query.room;
     let rival;
     init();
-    
+
     socket.on('all entered', () => {
       rival = [...rooms.get(room)].filter(x => x !== socket.id)[0];
     });
-    
+
     socket.on('room config', (timelimit, numlen) => {
       nsp.to(room).emit('room config', timelimit, numlen);
     });
-    
+
     socket.on('set number', (num) => {
       setNumber(num);
     });
-    
+
     socket.on('keydown', (key) => {
       nsp.to(rival).emit('rival keydown', key);
     });
@@ -30,11 +30,11 @@ module.exports = function (nsp) {
     socket.on('submit', (num) => {
       submit(num);
     });
-    
+
     socket.on('disconnect', (reason) => {
       disconnectUser();
     });
-    
+
     function init() {
       socket.join(room);
       if (rooms.get(room).size === 2) {
@@ -43,7 +43,7 @@ module.exports = function (nsp) {
         nsp.to(room).emit('all entered');
       }
     }
-    
+
     function setNumber(num) {
       answers.set(rival, num);
       if (answers.has(socket.id)) {
@@ -52,14 +52,14 @@ module.exports = function (nsp) {
         nsp.to(rival).emit('game start', !isFirst);
       }
     }
-    
+
     function submit(num) {
       const win = ended.get(room);
       const turn = turns.get(room);
       scoring(win, turn, num);
       handleTurn(win, turn);
     }
-    
+
     function scoring(win, turn, num) {
       if (num) {
         let strike = 0, ball = 0;
@@ -72,7 +72,7 @@ module.exports = function (nsp) {
         nsp.to(room).emit('result', strike, ball);
       }
     }
-    
+
     function handleTurn(win, turn) {
       if (turn === 1 && (win[0] || win[1])) {
         if (win[0] && win[1]) {
@@ -88,14 +88,14 @@ module.exports = function (nsp) {
         nsp.to(room).emit('turn');
       }
     }
-    
+
     function closeRoom() {
       allRooms.delete(room);
       nsp.in(room).disconnectSockets();
       turns.delete(room);
       ended.delete(room);
     }
-    
+
     function disconnectUser() {
       answers.delete(socket.id);
       if (allRooms.has(room)) {

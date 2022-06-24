@@ -4,7 +4,6 @@ module.exports = (app) => {
 
   liveServer.watch([
     '/views',
-    '/src/css',
     '/public/stylesheets',
     '/public/javascripts',
   ].map(path => process.env.PWD + path));

@@ -1,13 +1,16 @@
 const express = require('express');
+const { submitRanking } = require('#modules/jebi/m_jebi');
+
 const router = express.Router();
-const jebi = require('#modules/jebi/m_jebi');
 
 router.get('/', (req, res, next) => {
   res.render('jebi/jebi');
 });
 
-router.post('/ranking', (req, res, next) => {
-  jebi.submitRanking(req, res, next);
+router.post('/ranking', async (req, res, next) => {
+  const { n, dog } = req.body;
+  const data = await submitRanking(n, dog);
+  res.json(data);
 });
 
 module.exports = router;

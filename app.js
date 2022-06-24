@@ -1,11 +1,12 @@
-const express = require('express');
 const http = require('http');
-const app = express();
 const compression = require('compression');
-const dbConnect = require('./config/mongoose');
-const liveServer = require('./config/liveserver');
-const socket = require('./sockets/socket');
+const express = require('express');
 const appLocals = require('./config/app.locals');
+const liveServer = require('./config/liveserver');
+const dbConnect = require('./config/mongoose');
+const socket = require('./sockets/socket');
+
+const app = express();
 const server = http.createServer(app);
 
 app.set('view engine', 'ejs');
@@ -21,11 +22,6 @@ socket(server);
 
 app.use('/favicon.ico', express.static('public/images/favicon.ico'));
 app.use('/', require('./routes/index'));
-
-app.use((req, res, next) => {
-  res.status(404).render('cannotAccess');
-  console.warn(`not exists: ${req.url}`);
-});
 
 server.on('error', (err) => {
   console.error(err);

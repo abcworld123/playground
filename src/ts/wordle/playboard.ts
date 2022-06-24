@@ -1,7 +1,7 @@
 import '@fortawesome/fontawesome-free/css/all.min.css';
 import '@css/wordle/playboard.scss';
 import 'animate.css';
-import io from 'socket.io-client';
+import { io } from 'socket.io-client';
 import Swal from 'sweetalert2';
 
 let myTurn: boolean;
@@ -232,7 +232,7 @@ function turn() {
 // [ALL] 한 줄 결과 보여주기
 function showResult(strike: number, ball: number) {
   console.log(strike, ball);
-  
+
   if (strike || ball) {
     const spanStrike = `<span class="result-strike">${strike}S</span>`;
     const spanBall = `<span class="result-ball">${ball}B</span>`;

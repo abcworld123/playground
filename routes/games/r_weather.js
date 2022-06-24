@@ -1,21 +1,28 @@
 const express = require('express');
+const { getWeatherDay, getWeatherTa, getWeatherMl } = require('#modules/weather/m_weather');
+
 const router = express.Router();
-const weather = require('#modules/weather/m_weather');
 
 router.get('/', (req, res, next) => {
   res.render('weather/weather');
 });
 
-router.post('/getWeatherDay', (req, res, next) => {
-  weather.getWeatherDay(req, res, next);
+router.post('/getWeatherDay', async (req, res, next) => {
+  const { idx, nx, ny } = req.body;
+  const data = await getWeatherDay(idx, nx, ny);
+  res.json(data);
 });
 
-router.post('/getWeatherTa', (req, res, next) => {
-  weather.getWeatherTa(req, res, next);
+router.post('/getWeatherTa', async (req, res, next) => {
+  const { idx, reg } = req.body;
+  const data = await getWeatherTa(idx, reg);
+  res.json(data);
 });
 
-router.post('/getWeatherMl', (req, res, next) => {
-  weather.getWeatherMl(req, res, next);
+router.post('/getWeatherMl', async (req, res, next) => {
+  const { idx, reg } = req.body;
+  const data = await getWeatherMl(idx, reg);
+  res.json(data);
 });
 
 module.exports = router;

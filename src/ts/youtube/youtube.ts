@@ -1,12 +1,12 @@
 import '@css/youtube/youtube.scss';
 
 interface response {
-  viewCount: string,
-  likeCount: string,
-  commentCount: string,
-  title: string,
-  thumbnails: string,
-  word: string,
+  viewCount: string;
+  likeCount: string;
+  commentCount: string;
+  title: string;
+  thumbnails: string;
+  word: string;
 }
 
 const g_youtubeRotation = ['조회수', '좋아요', '댓글수', '제목길이'];
@@ -56,7 +56,7 @@ function getResult() {
   // 유튜브 api로 결과를 받아온다
   fetch('/youtube/result', {
     method: 'POST',
-    headers: {'Content-Type': 'application/json'},
+    headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({
       word: word,
       type: youtubeCategory,
@@ -120,7 +120,7 @@ function getResult() {
     const views_area = document.querySelectorAll<div>('.youtube_result_views_area');
     const comment_area = document.querySelectorAll<div>('.youtube_result_comment_area');
     const like_area = document.querySelectorAll<div>('.youtube_result_like_area');
-    
+
     for (let x = 0; x < result.length; x++) {
       thumbnails_area[x].addEventListener('click', clickHiddenThumbnails.bind(this, x));
       title_area[x].addEventListener('click', clickHiddenTitle.bind(this, x));

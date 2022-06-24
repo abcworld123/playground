@@ -1,7 +1,7 @@
-const glob = require('glob');
-const webpack = require('webpack');
-const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin');
+const glob = require('glob');
+const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+const webpack = require('webpack');
 
 const srcPath = './src/ts';
 const outPath = './public';
@@ -52,7 +52,11 @@ module.exports = {
       },
     ],
   },
-  plugins: [
+  plugins: isDev ? [
+    new MiniCssExtractPlugin({
+      filename: 'stylesheets/[name].css',
+    }),
+  ] : [
     new MiniCssExtractPlugin({
       filename: 'stylesheets/[name].css',
     }),

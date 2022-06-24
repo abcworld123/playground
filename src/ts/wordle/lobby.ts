@@ -2,7 +2,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import '@fortawesome/fontawesome-free/css/all.min.css';
 import 'animate.css';
 import '@css/wordle/lobby.scss';
-import io from 'socket.io-client';
+import { io } from 'socket.io-client';
 import Swal from 'sweetalert2';
 
 const rooms = new Set();  // { lobby room list }
@@ -250,7 +250,7 @@ function addRoom(room: string) {
   roomContainer.appendChild(item);
   rooms.add(room);
 }
- 
+
 // socket.io
 const socket = io('/wordle', { transports: ['websocket'] });
 
