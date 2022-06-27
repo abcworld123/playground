@@ -1,17 +1,16 @@
-module.exports = function (nsp) {
-  const users = new Set();
-  const rooms = new Map();
-  const playBoard = new Map();
+import type { Namespace } from 'socket.io';
+import type { BallInfo, GameInfo, PlayBoard, PlayerInfo } from 'types/games/hockey';
+
+export default function initHockeyBoard(nsp: Namespace) {
+  const playBoard = new Map<string, PlayBoard>();
   const widthPixel = 1000;
   const heightPixel = 500;
 
   nsp.on('connection', (socket) => {
-    let p1, p2, ball, info;
-
-    users.add(socket.id);
-    socket.emit('user list', [...users]);
-    socket.emit('room list', [...rooms]);
-    socket.broadcast.emit('user enter', socket.id);
+    let p1: PlayerInfo;
+    let p2: PlayerInfo;
+    let ball: BallInfo;
+    let info: GameInfo;
 
     socket.onAny((event, msg) => {
       console.log(`${event}:  ${msg}`);
@@ -21,7 +20,7 @@ module.exports = function (nsp) {
       console.log('나감');
     });
 
-    socket.on('moveUp', (roomNum) => {
+    socket.on('moveUp', (roomNum: string) => {
       const userInfo = playBoard.get(roomNum);
       if (userInfo.p1._id === socket.id) {
         userInfo.p1.dy = -userInfo.p1.ySpeed;
@@ -31,7 +30,7 @@ module.exports = function (nsp) {
       playBoard.set(roomNum, userInfo);
     });
 
-    socket.on('moveDown', (roomNum) => {
+    socket.on('moveDown', (roomNum: string) => {
       const userInfo = playBoard.get(roomNum);
       if (userInfo.p1._id === socket.id) {
         userInfo.p1.dy = userInfo.p1.ySpeed;
@@ -41,7 +40,7 @@ module.exports = function (nsp) {
       playBoard.set(roomNum, userInfo);
     });
 
-    socket.on('connection', (roomNum) => {
+    socket.on('connection', (roomNum: string) => {
       if (!playBoard.has(roomNum)) {
         socket.join(roomNum);
         p1 = {
@@ -118,7 +117,7 @@ module.exports = function (nsp) {
       }
     });
 
-    function abc(p1, p2, num, roomNum) {
+    function abc(p1: string, p2: string, num: string, roomNum: string) {
       console.log(p1);
       console.log(p2);
       console.log(socket.id);
@@ -126,7 +125,7 @@ module.exports = function (nsp) {
       nsp.to(p2).emit(num, 2);
     }
 
-    function calPlay(roomNum) {
+    function calPlay(roomNum: string) {
       let userInfo = playBoard.get(roomNum);
       p1.y += p1.dy;
       p2.y += p2.dy;
@@ -191,7 +190,7 @@ module.exports = function (nsp) {
       nsp.to(roomNum).emit('playboard', p1.x, p1.y, p2.x, p2.y, Math.round(ball.x), Math.round(ball.y), p1.score, p2.score);
     }
 
-    function checkCrash(userInfo) {
+    function checkCrash(userInfo: PlayBoard) {
       if (p1.x < ball.x &&
         ball.x < p1.x + 20 &&
         p1.y < ball.y &&
@@ -217,7 +216,7 @@ module.exports = function (nsp) {
       return userInfo;
     }
 
-    function setInitialState(userInfo) {
+    function setInitialState(userInfo: PlayBoard) {
       p1.y = 240;
       p2.y = 240;
       ball.x = 500;
@@ -225,7 +224,7 @@ module.exports = function (nsp) {
       ball.dx = 5;
     }
 
-    function gameLoading(userInfo, roomNum) {
+    function gameLoading(userInfo: PlayBoard, roomNum: string) {
       setTimeout(function () {userInfo.gameBoard = setInterval(calPlay.bind(this, roomNum), 15 ); }, 6000);
     }
 
@@ -235,4 +234,4 @@ module.exports = function (nsp) {
       };
     }
   });
-};
+}

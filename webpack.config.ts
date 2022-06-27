@@ -57,6 +57,7 @@ const config: Configuration = {
   resolve: {
     alias: {
       '@css': `${__dirname}/src/css`,
+      '@img': `${__dirname}/public/images`,
     },
     modules: [
       `${__dirname}/src`,
