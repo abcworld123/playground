@@ -1,5 +1,5 @@
 import '@css/hockey/playboard.scss';
-import io from 'socket.io-client';
+import { io } from 'socket.io-client';
 
 const socket = io('/hockeyPlay');
 const sleep = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));

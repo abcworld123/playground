@@ -1,0 +1,21 @@
+{
+  "ts-node": {
+    "transpileOnly": true,
+  },
+  "compilerOptions": {
+    "target": "esnext",
+    "strict": false,
+    "moduleResolution": "node",
+    "noEmit": true,
+    "lib": ["esnext", "dom", "dom.iterable"],
+    "esModuleInterop": true,
+    "downlevelIteration": true,
+    "allowSyntheticDefaultImports": true,
+    "importsNotUsedAsValues": "error",
+    "isolatedModules": true,
+    "baseUrl": ".",
+    "paths": {
+      "config": ["./config/config.ts"],
+    }
+  },
+}

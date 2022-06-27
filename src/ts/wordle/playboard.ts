@@ -1,6 +1,7 @@
 import '@fortawesome/fontawesome-free/css/all.min.css';
 import '@css/wordle/playboard.scss';
-import io from 'socket.io-client';
+import 'animate.css';
+import { io } from 'socket.io-client';
 import Swal from 'sweetalert2';
 
 let myTurn: boolean;
@@ -19,13 +20,25 @@ const turnText = <div>document.getElementById('turn');
 
 /* ********  alert functions  ********** */
 
+function shakeOutsideClick() {
+  const popup = Swal.getPopup();
+  popup.classList.remove('swal2-show');
+  setTimeout(() => {
+    popup.classList.add('animate__animated', 'animate__headShake');
+  });
+  setTimeout(() => {
+    popup.classList.remove('animate__animated', 'animate__headShake');
+  }, 500);
+  return false;
+}
+
 function alertConfig() {
   return Swal.fire({
     icon: 'info',
     title: '게임 구성',
     html: `<input type="text" id="timelimit" class="swal2-input" autocomplete="off" placeholder="제한 시간 (초)">
     <input type="text" id="numlen" class="swal2-input" autocomplete="off" placeholder="자릿수">`,
-    allowOutsideClick: false,
+    allowOutsideClick: shakeOutsideClick,
     confirmButtonText: '확인',
     focusConfirm: false,
     allowEscapeKey: false,
@@ -55,9 +68,9 @@ function alertWaitConfig() {
   return Swal.fire({
     title: '방장이 게임을 구성하고 있습니다.',
     text: '잠시만 기다려 주세요...',
-    imageUrl: '/images/games/wordle/loading.gif',
+    imageUrl: '/images/games/wordle/gear.svg',
     imageWidth: 100,
-    allowOutsideClick: false,
+    allowOutsideClick: shakeOutsideClick,
     showConfirmButton: false,
     allowEscapeKey: false,
   });
@@ -68,7 +81,7 @@ function alertSetNumber() {
     icon: 'info',
     title: '정답 숫자를 입력해 주세요.',
     input: 'text',
-    allowOutsideClick: false,
+    allowOutsideClick: shakeOutsideClick,
     confirmButtonText: '확인',
     allowEscapeKey: false,
     preConfirm: (myAnswer: string) => {
@@ -90,9 +103,9 @@ function alertWaitSetNumber() {
   return Swal.fire({
     title: '상대방이 숫자를 정하고 있습니다.',
     text: '잠시만 기다려 주세요...',
-    imageUrl: '/images/games/wordle/loading.gif',
-    imageWidth: 100,
-    allowOutsideClick: false,
+    imageUrl: '/images/games/wordle/gear.svg',
+    imageWidth: 150,
+    allowOutsideClick: shakeOutsideClick,
     showConfirmButton: false,
     allowEscapeKey: false,
   });
@@ -219,7 +232,7 @@ function turn() {
 // [ALL] 한 줄 결과 보여주기
 function showResult(strike: number, ball: number) {
   console.log(strike, ball);
-  
+
   if (strike || ball) {
     const spanStrike = `<span class="result-strike">${strike}S</span>`;
     const spanBall = `<span class="result-ball">${ball}B</span>`;

@@ -1,11 +1,12 @@
 import 'bootstrap/dist/css/bootstrap.min.css';
 import '@fortawesome/fontawesome-free/css/all.min.css';
+import 'animate.css';
 import '@css/wordle/lobby.scss';
-import io from 'socket.io-client';
+import { io } from 'socket.io-client';
 import Swal from 'sweetalert2';
 
-const rooms = new Set();  // { lobby room list }
-const requestQueue = [];
+const rooms = new Set<string>();  // { lobby room list }
+const requestQueue: string[] = [];
 let requestFor = '';
 
 const roomContainer = <div>document.getElementById('roomContainer');
@@ -13,6 +14,18 @@ const roomTemplate = <template>document.getElementById('roomTemplate');
 const myId = <span>document.getElementById('myId');
 
 /* *********  alert functions  ********** */
+
+function shakeOutsideClick() {
+  const popup = Swal.getPopup();
+  popup.classList.remove('swal2-show');
+  setTimeout(() => {
+    popup.classList.add('animate__animated', 'animate__headShake');
+  });
+  setTimeout(() => {
+    popup.classList.remove('animate__animated', 'animate__headShake');
+  }, 500);
+  return false;
+}
 
 function alertCreateRoom() {
   return Swal.fire({
@@ -44,9 +57,8 @@ function alertCreateRoom() {
 function alertWaitUser() {
   return Swal.fire({
     title: '유저를 기다리는 중...',
-    imageUrl: 'images/games/wordle/loading.gif',
-    imageWidth: 100,
-    allowOutsideClick: false,
+    imageUrl: 'images/games/wordle/loading.svg',
+    allowOutsideClick: shakeOutsideClick,
     showCancelButton: true,
     showConfirmButton: false,
     cancelButtonText: '취소',
@@ -70,9 +82,9 @@ function alertWaitResponse() {
   return Swal.fire({
     title: '요청을 보냈습니다.',
     text: '수락을 기다리는 중...',
-    imageUrl: 'images/games/wordle/loading.gif',
+    imageUrl: 'images/games/wordle/loading.svg',
     imageWidth: 100,
-    allowOutsideClick: false,
+    allowOutsideClick: shakeOutsideClick,
     showCancelButton: true,
     showConfirmButton: false,
     cancelButtonText: '취소',
@@ -85,7 +97,7 @@ function alertJoinRequest(user: string) {
     icon: 'info',
     title: '입장 요청',
     text: `${user}님이 입장을 요청하였습니다.`,
-    allowOutsideClick: false,
+    allowOutsideClick: shakeOutsideClick,
     showDenyButton: true,
     confirmButtonText: '수락',
     denyButtonText: '거절',
@@ -238,7 +250,7 @@ function addRoom(room: string) {
   roomContainer.appendChild(item);
   rooms.add(room);
 }
- 
+
 // socket.io
 const socket = io('/wordle', { transports: ['websocket'] });
 

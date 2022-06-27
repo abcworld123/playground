@@ -2,6 +2,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import '@fortawesome/fontawesome-free/css/all.min.css';
 import '@css/jebi/jebi.scss';
 import Toast from 'bootstrap/js/dist/toast.js';
+import type { ResJebiSubmit } from 'types/games/jebi';
 
 const toast = new Toast(document.getElementById('toast'));
 const jebiContainer = <div>document.getElementById('jebiContainer');
@@ -24,7 +25,7 @@ function reset() {
   const jebies = <HTMLCollectionOf<img>>jebiContainer.children;
   [...jebies].forEach((jebi) => {
     jebi.className = 'jebi-unopened';
-    jebi.src = '/images/jebi/jebi.png';
+    jebi.src = '/images/games/jebi/jebi.png';
   });
   ailen = randint(n);
   dog = 0;
@@ -57,26 +58,26 @@ function jebiMinus() {
 /* 제비 클릭, 결과 보여주기 */
 function jebiOpen(jebi: img) {
   if (parseInt(jebi.id) === ailen) {
-    jebi.src = '/images/jebi/ailen.jpg';
+    jebi.src = '/images/games/jebi/ailen.jpg';
     toastShow();
   } else {
     dog++;
-    jebi.src = '/images/jebi/haha.jpg';
+    jebi.src = '/images/games/jebi/haha.jpg';
   }
   jebi.removeAttribute('class');
 }
 
 /* 랭킹 보여주기 */
 function toastShow() {
-  fetch('/jebi/ranking', {
+  fetch('/jebi/submit', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ n, dog }),
   })
-  .then((res) => res.json())
-  .then(({ success, body }) => {
+  .then<ResJebiSubmit>((res) => res.json())
+  .then(({ success, data }) => {
     if (!success) throw new Error('fetch failed');
-    const { rank, total, top } = body;
+    const { rank, total, top } = data;
     setTimeout(() => {
       toastText.innerHTML = `${total}회 중 <b>${rank}</b>위 (상위 <b>${top}%</b>)`;
     }, 150);
@@ -91,13 +92,13 @@ function toastShow() {
 document.addEventListener('mouseover', (e) => {
   if (!(e.target instanceof Image)) return;
   if (e.target.className === 'jebi-unopened') {
-    e.target.src = '/images/jebi/jebi_hover.png';
+    e.target.src = '/images/games/jebi/jebi_hover.png';
   }
 });
 document.addEventListener('mouseout', (e) => {
   if (!(e.target instanceof Image)) return;
   if (e.target.className === 'jebi-unopened') {
-    e.target.src = '/images/jebi/jebi.png';
+    e.target.src = '/images/games/jebi/jebi.png';
   }
 });
 document.addEventListener('click', (e) => {

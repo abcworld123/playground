@@ -2,11 +2,7 @@ import 'bootstrap3/dist/css/bootstrap.min.css';
 import '@fortawesome/fontawesome-free/css/all.min.css';
 import '@css/weather/weather.scss';
 import Swal from 'sweetalert2';
-
-interface response {
-  success: boolean;
-  data?: number[];
-}
+import type { ResWeather } from 'types/games/weather';
 
 const userNums = [0, 2, 2, 2, 2, 2, 2, 2];
 const regNums = [0, 0, 0, 0, 0, 0, 0, 0];
@@ -76,28 +72,28 @@ function start(i: number) {
       alertError('ny는 1 ~ 253 내의 숫자로 입력해주세요.');
       return;
     }
-    url = '/weather/getWeatherDay';
+    url = '/weather/weatherday';
     formdata = { idx: i, nx, ny };
   } else {
     if (!regNums[i]) {
       alertError('지역을 선택해주세요.');
       return;
     }
-    url = `/weather/getWeather${i <= 6 ? 'Ta' : 'Ml'}`;
+    url = `/weather/weather${i <= 6 ? 'Ta' : 'Ml'}`;
     formdata = { idx: i, reg: regNums[i] };
   }
-  
+
   btnStart.disabled = true;
   btnStart.classList.replace('btn-success', 'btn-warning');
   btnStart.innerHTML = '<i class="fa-solid fa-hourglass"></i>';
-  
+
   fetch(url, {
     method: 'POST',
-    headers: {'Content-Type': 'application/json'},
+    headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(formdata),
   })
-  .then((res) => res.json())
-  .then(({ success, data }: response) => {
+  .then<ResWeather>((res) => res.json())
+  .then(({ success, data }) => {
     if (!success) throw new Error('서버 오류');
     const userContainer = tab[idx].querySelector<div>('.user-container');
     const anss = userContainer.querySelectorAll<input>('.item-answer');
@@ -142,7 +138,7 @@ userContainer.forEach((container) => {
 document.addEventListener('click', (_e) => {
   const e = _e.target;
   if (!(e instanceof HTMLElement)) return;
-  
+
   const flag = e.parentElement?.classList.contains('closed');
   dropdown.forEach(e => e.classList.replace('open', 'closed'));
   if (flag) e.parentElement.classList.replace('closed', 'open');

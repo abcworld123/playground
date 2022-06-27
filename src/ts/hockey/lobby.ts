@@ -1,7 +1,7 @@
 import 'bootstrap/dist/css/bootstrap.min.css';
 import '@fortawesome/fontawesome-free/css/all.min.css';
 import '@css/hockey/lobby.scss';
-import io from 'socket.io-client';
+import { io } from 'socket.io-client';
 import Swal from 'sweetalert2';
 
 const socket = io('/hockey');

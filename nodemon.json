@@ -1,5 +1,6 @@
 {
   "restartable": "npm start",
   "ignore": ["public", "test", "webpack.config.js"],
-  "ext": "js"
+  "ext": "ts json",
+  "exec": "ts-node -r tsconfig-paths/register app.ts"
 }
