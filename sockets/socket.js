@@ -1,7 +1,7 @@
 module.exports = function (server) {
   const io = require('socket.io')(server);
-  const initHockey = require('./games/hockey');
-  const initHockeyBoard = require('./games/playboard');
+  const initHockey = require('./hockey/lobby');
+  const initHockeyBoard = require('./hockey/playboard');
   const initWordle = require('./wordle/lobby');
   const initWordleBoard = require('./wordle/playboard');
 
