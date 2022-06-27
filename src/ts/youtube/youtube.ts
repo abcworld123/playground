@@ -1,18 +1,10 @@
 import '@css/youtube/youtube.scss';
-
-interface response {
-  viewCount: string;
-  likeCount: string;
-  commentCount: string;
-  title: string;
-  thumbnails: string;
-  word: string;
-}
+import type { ResYoutubeSubmit, YoutubeItemInfo } from 'types/games/youtube';
 
 const g_youtubeRotation = ['조회수', '좋아요', '댓글수', '제목길이'];
 const g_youtubeResultCheck: Array<number[]> = [];
 let g_youtubeResultCount = 0;
-let g_youtubeResult: response[] = [];
+let g_youtubeResult: YoutubeItemInfo[] = [];
 
 document.getElementsByClassName('youtube_btn')[0].addEventListener('click', addMember);
 document.getElementsByClassName('youtube_btn')[1].addEventListener('click', rotationCategory);
@@ -39,7 +31,7 @@ function getResult() {
   const youtubeCategory = document.getElementsByClassName('youtube_btn')[1].innerHTML.trim();
   const youtubeInputArea = document.querySelector<div>('.youtube_input_area');
   const youtubeInput = youtubeInputArea.querySelectorAll('input');
-  const word = [];
+  const keywords = [];
   let individuallyWord = '';
 
   for (let x = 0; x < youtubeInput.length; x++) {
@@ -49,21 +41,20 @@ function getResult() {
       return;
     }
 
-    word.push(individuallyWord);
+    keywords.push(individuallyWord);
   }
   document.querySelector<div>('.youtube_loading_modal').style.display = 'flex';
 
   // 유튜브 api로 결과를 받아온다
-  fetch('/youtube/result', {
+  fetch('/youtube/submit', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({
-      word: word,
-      type: youtubeCategory,
+      keywords: keywords,
     }),
   })
-  .then(res => res.json())
-  .then((result: response[]) => {
+  .then<ResYoutubeSubmit>(res => res.json())
+  .then(({ success, data: result }) => {
     g_youtubeResult = result;
     document.querySelector<div>('.youtube_loading_modal').style.display = 'none';
     document.querySelector<div>('.youtube_contain').style.display = 'none';
@@ -280,7 +271,7 @@ function clickResultSubmit() {
 
 // 정렬 알고리즘
 function arrOrder(key: string) {
-  return function (a: response, b: response) {
+  return function (a: YoutubeItemInfo, b: YoutubeItemInfo) {
     if (Number(a[key]) > Number(b[key])) {
       return -1;
     } else if (Number(a[key]) < Number(b[key])) {
@@ -293,7 +284,7 @@ function arrOrder(key: string) {
 
 // 정렬 알고리즘 (세부)
 function arrTitleOrder(key: string) {
-  return function (a: response, b: response) {
+  return function (a: YoutubeItemInfo, b: YoutubeItemInfo) {
     if (a[key].length > b[key].length) {
       return -1;
     } else if (a[key].length < b[key].length) {
