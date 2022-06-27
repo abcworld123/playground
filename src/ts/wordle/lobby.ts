@@ -5,8 +5,8 @@ import '@css/wordle/lobby.scss';
 import { io } from 'socket.io-client';
 import Swal from 'sweetalert2';
 
-const rooms = new Set();  // { lobby room list }
-const requestQueue = [];
+const rooms = new Set<string>();  // { lobby room list }
+const requestQueue: string[] = [];
 let requestFor = '';
 
 const roomContainer = <div>document.getElementById('roomContainer');

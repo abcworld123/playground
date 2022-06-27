@@ -35,14 +35,14 @@ jobs:
       - name: Production build
         run: npm run build
 
-      - name: Run test
-        run: |
-          npm start &
-          sleep 5 &&
-          npm test
-        env:
-          WEATHER_KEY: ${{ secrets.WEATHER_KEY }}
-          DATABASE_URL: ${{ secrets.DATABASE_URL }}
-          MONGOOSE_AUTH: ${{ secrets.MONGOOSE_AUTH }}
-          MONGOOSE_ID: ${{ secrets.MONGOOSE_ID }}
-          MONGOOSE_PW: ${{ secrets.MONGOOSE_PW }}
+      # - name: Run test
+      #   run: |
+      #     npm start &
+      #     sleep 5 &&
+      #     npm test
+      #   env:
+      #     WEATHER_KEY: ${{ secrets.WEATHER_KEY }}
+      #     DATABASE_URL: ${{ secrets.DATABASE_URL }}
+      #     MONGOOSE_AUTH: ${{ secrets.MONGOOSE_AUTH }}
+      #     MONGOOSE_ID: ${{ secrets.MONGOOSE_ID }}
+      #     MONGOOSE_PW: ${{ secrets.MONGOOSE_PW }}
