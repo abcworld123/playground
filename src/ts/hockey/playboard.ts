@@ -25,8 +25,8 @@ socket.onAny((event, msg1, msg2) => {
   // console.log(event, msg1, msg2);
 });
 
-socket.on('countDown', () => {
-  countDown();
+socket.on('countDown', async (nowPlay) => {
+  await countDown(nowPlay);
   // gameStart();
 });
 
@@ -55,7 +55,12 @@ socket.on('player2_goal', () => {
   document.querySelector<div>('.playboard_play2_goal').style.display = 'block';
 });
 
-async function countDown() {
+async function countDown(nowPlay) {
+  if (nowPlay === 1) {
+    document.querySelector<div>('.playboard_play1_port').style.display = 'block';
+  } else {
+    document.querySelector<div>('.playboard_play2_port').style.display = 'block';
+  }
   document.querySelector<div>('.playboard_play1_goal').style.display = 'none';
   document.querySelector<div>('.playboard_play2_goal').style.display = 'none';
   const countDown = <HTMLCollectionOf<div>>document.getElementById('countDown').children;

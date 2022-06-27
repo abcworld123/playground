@@ -82,9 +82,26 @@ body{
 }
 
 .playboard_main_board{
+  display: flex;
+  justify-content: center;
+  align-items: center;
   width: 100%;
   height: 100%;
   background-color: #a288aa;
+}
+
+.playboard_main_board div:nth-child(1){
+  margin-right: 250px;
+  color: #b23c3c;
+}
+
+.playboard_main_board div:nth-child(2){
+  color: #333399;
+}
+
+.playboard_main_board > div{
+  font-size: 30px;
+  font-weight: bolder;
 }
 
 .playboard_before_count {
@@ -148,4 +165,19 @@ body{
   top: calc(50% - 100px);
   left: calc(50% - 380px);
   color: #333399;
+}
+
+.aaa{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.playboard_play1_port {
+  display: none;
+}
+
+.playboard_play2_port{
+  display: none;
+  margin-left: 250px;
 }
