@@ -1,3 +1,7 @@
+* {
+  touch-action: manipulation;
+}
+
 html {
   font-size: 2em;
 
@@ -19,11 +23,10 @@ body {
 
 .container {
   display: flex;
-  flex-direction: row;
   flex-wrap: wrap;
   justify-content: center;
   gap: 75px 30px;
-  max-width: max-content;
+  padding: 0;
   margin-bottom: 150px;
 
   & > img {
@@ -37,8 +40,6 @@ body {
 
 .control {
   display: flex;
-  flex-direction: row;
-  flex-wrap: wrap;
   gap: 30px;
   align-items: center;
   justify-content: center;
@@ -82,17 +83,23 @@ label {
   border: none;
 }
 
-@media (max-width: 1440px) {
+@media (max-width: 768px) {
+  .wrapper {
+    margin: 7%;
+    padding: 3%;
+  }
 
   .container {
-    margin-top: 100px;
+    gap: 35px 15px;
+    margin-top: 70px;
+    margin-bottom: 70px;
 
     & > img {
-      width: 190px;
+      width: 90px;
     }
   }
 
-  .btn {
-    scale: 1.25;
+  .control {
+    transform: scale(.5);
   }
 }
