@@ -1,4 +1,3 @@
-import '@fortawesome/fontawesome-free/css/all.min.css';
 import '@css/wordle/playboard.scss';
 import 'animate.css';
 import { io } from 'socket.io-client';

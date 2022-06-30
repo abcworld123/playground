@@ -1,5 +1,4 @@
 import 'bootstrap/dist/css/bootstrap.min.css';
-import '@fortawesome/fontawesome-free/css/all.min.css';
 import '@css/jebi/jebi.scss';
 import Toast from 'bootstrap/js/dist/toast.js';
 import type { ResJebiSubmit } from 'types/games/jebi';

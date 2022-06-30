@@ -44,7 +44,7 @@
                 <!-- 유저 반복 -->
                 <% for (let j = 0; j < 3; j++) { %>
                   <div class="user">
-                    <i class="fa-solid fa-user"></i>
+                    <img src="/images/icons/user.svg" width="20px" />
                     <!-- 입력폼 반복 -->
                     <% for (let k = 0; k < 7; k++) { %>
                       <input type="number" class="form-control item-input">
@@ -60,7 +60,7 @@
                 <% } %>
                 <!-- 정답 div -->
                 <div class="user user-ans" id="ansContainer<%= i %>">
-                  <i class="fa-solid fa-server"></i>
+                  <img src="/images/icons/server.svg" width="20px" />
                   <!-- 입력폼 반복 -->
                   <% for (let k = 0; k < 7; k++) { %>
                     <input type="text" class="form-control item-answer" value="?" disabled>
@@ -70,7 +70,7 @@
               </div>
               <!-- 컨트롤 div -->
               <div class="control">
-                <span class="control-label"><i class="fa-solid fa-user"></i> :</span>
+                <span class="control-label"><img src="/images/icons/user.svg" width="20px" /> :</span>
                 <button class="btn btn-secondary btn-user-minus" id="userMinus<%= i %>" onclick="userMinus(<%= i %>)">-</button>
                 <span class="user-num" id="userNum<%= i %>">2</span>
                 <button class="btn btn-secondary btn-user-plus" id="userPlus<%= i %>" onclick="userPlus(<%= i %>)">+</button>

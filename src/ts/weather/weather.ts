@@ -1,5 +1,4 @@
 import 'bootstrap3/dist/css/bootstrap.min.css';
-import '@fortawesome/fontawesome-free/css/all.min.css';
 import '@css/weather/weather.scss';
 import Swal from 'sweetalert2';
 import type { ResWeather } from 'types/games/weather';
@@ -85,7 +84,7 @@ function start(i: number) {
 
   btnStart.disabled = true;
   btnStart.classList.replace('btn-success', 'btn-warning');
-  btnStart.innerHTML = '<i class="fa-solid fa-hourglass"></i>';
+  btnStart.innerHTML = '<img src="/images/icons/hourglass.svg" width="15px" />';
 
   fetch(url, {
     method: 'POST',
