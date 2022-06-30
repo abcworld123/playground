@@ -1,6 +1,7 @@
 declare global {
   namespace NodeJS {
     interface ProcessEnv {
+      NODE_ENV: string;
       DATABASE_URL: string;
       MONGOOSE_AUTH: number;
       MONGOOSE_ID: string;
