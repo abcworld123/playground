@@ -75,7 +75,7 @@ const config: Configuration = {
 };
 
 const configWithMode: CallableOption = (env, argv) => {
-  if (argv.mode === 'production') {
+  if (process.env.NODE_ENV === 'production') {
     config.watch = false;
     config.devtool = false;
     config.stats = {};

@@ -1,6 +1,6 @@
 html {
   font-size: 2em;
-  
+
   &::-webkit-scrollbar {
     display: none;
   }
@@ -23,8 +23,9 @@ body {
   flex-wrap: wrap;
   justify-content: center;
   gap: 75px 30px;
+  max-width: max-content;
   margin-bottom: 150px;
-  
+
   & > img {
     width: 200px;
   }
@@ -50,7 +51,7 @@ label {
 .btn {
   height: 80px;
   line-height: 0;
-  
+
   &-jebinum {
     font-size: 1.5em;
     width: 80px;
@@ -85,12 +86,12 @@ label {
 
   .container {
     margin-top: 100px;
-    
+
     & > img {
       width: 190px;
     }
   }
-  
+
   .btn {
     scale: 1.25;
   }
