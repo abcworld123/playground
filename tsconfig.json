@@ -16,6 +16,7 @@
     "baseUrl": ".",
     "paths": {
       "config": ["./config/config.ts"],
+      "@css/*": ["./src/css/*"],
     }
   },
 }

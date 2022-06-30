@@ -3,7 +3,7 @@
   "version": "1.2.0",
   "private": true,
   "scripts": {
-    "start": "nodemon app.js",
+    "start": "nodemon",
     "watch": "webpack --mode=development",
     "dev": "npm-run-all --parallel start watch",
     "build": "webpack --mode=production",
