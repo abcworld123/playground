@@ -32,13 +32,9 @@ const htmls = pages.map(name => (
 ));
 
 const purgeExcludes = [
-  'swal2-popup',
-  'numlen-1',
-  'numlen-2',
-  'numlen-3',
-  'numlen-4',
-  'numlen-5',
-  'numlen-6',
+  /swal2-popup$/,
+  /toast$/,
+  /ver-line$/,
 ];
 
 console.log('\x1B[33mbuilding...\x1B[0m');
@@ -97,7 +93,9 @@ const config: Configuration = {
     }),
     new PurgecssPlugin({
       paths: glob.sync(`${srcPath}/**/*`, { nodir: true }),
-      safelist: purgeExcludes,
+      safelist: {
+        greedy: purgeExcludes,
+      },
       keyframes: true,
     }),
     new CopyPlugin({
