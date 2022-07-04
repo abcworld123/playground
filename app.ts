@@ -1,7 +1,7 @@
 import http from 'http';
 import compression from 'compression';
 import express from 'express';
-import { dbConnect, liveserver, socket } from 'libs';
+import { dbConnect, liveServer, socket } from 'libs';
 import router from 'routes';
 
 const app = express();
@@ -9,16 +9,15 @@ const server = http.createServer(app);
 
 app.set('view engine', 'ejs');
 app.use(compression());
-app.use(express.static('public'));
+app.use(express.static('dist'));
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
-app.locals = { views: process.cwd() + '/views/' };
+app.locals = { templates: process.cwd() + '/views/templates/' };
 
 dbConnect();
 socket(server);
-liveserver(app);
+liveServer(app);
 
-app.use('/favicon.ico', express.static('public/images/favicon.ico'));
 app.use('/', router);
 
 server.on('error', (err) => {

@@ -7,18 +7,12 @@
     "strict": false,
     "moduleResolution": "node",
     "noEmit": true,
-    "lib": ["esnext"],
+    "lib": ["esnext", "dom", "dom.iterable"],
     "esModuleInterop": true,
     "downlevelIteration": true,
     "allowSyntheticDefaultImports": true,
     "importsNotUsedAsValues": "error",
     "isolatedModules": true,
     "baseUrl": ".",
-    "paths": {
-      "config": ["./config/config.ts"],
-    }
   },
-  "exclude": [
-    "src",
-  ]
 }
