@@ -3,6 +3,7 @@ import ForkTsCheckerWebpackPlugin from 'fork-ts-checker-webpack-plugin';
 import glob from 'glob';
 import HtmlWebpackPlugin from 'html-webpack-plugin';
 import MiniCssExtractPlugin from 'mini-css-extract-plugin';
+import PurgecssPlugin from 'purgecss-webpack-plugin';
 import { TsconfigPathsPlugin } from 'tsconfig-paths-webpack-plugin';
 import type { Configuration } from 'webpack';
 
@@ -30,6 +31,16 @@ const htmls = pages.map(name => (
   })
 ));
 
+const purgeExcludes = [
+  'swal2-popup',
+  'numlen-1',
+  'numlen-2',
+  'numlen-3',
+  'numlen-4',
+  'numlen-5',
+  'numlen-6',
+];
+
 console.log('\x1B[33mbuilding...\x1B[0m');
 
 const config: Configuration = {
@@ -42,6 +53,12 @@ const config: Configuration = {
     filename: 'javascripts/[name].js',
     path: distPath,
     clean: true,
+  },
+  optimization: {
+    splitChunks: {
+      chunks: 'all',
+      maxSize: 25000,
+    },
   },
   module: {
     rules: [
@@ -77,6 +94,11 @@ const config: Configuration = {
     ...htmls,
     new MiniCssExtractPlugin({
       filename: 'stylesheets/[name].css',
+    }),
+    new PurgecssPlugin({
+      paths: glob.sync(`${srcPath}/**/*`, { nodir: true }),
+      safelist: purgeExcludes,
+      keyframes: true,
     }),
     new CopyPlugin({
       patterns: [

@@ -43,6 +43,12 @@ const config: Configuration = {
     path: distPath,
     clean: true,
   },
+  optimization: {
+    splitChunks: {
+      chunks: 'all',
+      maxSize: 25000,
+    },
+  },
   module: {
     rules: [
       {
