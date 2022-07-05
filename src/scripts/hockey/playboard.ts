@@ -1,4 +1,4 @@
-import '@css/hockey/playboard.scss';
+import 'styles/hockey/playboard.scss';
 import { io } from 'socket.io-client';
 const socket = io('/hockeyPlay');
 
@@ -13,7 +13,7 @@ const HEIGHT = canvas.offsetHeight;
 canvas.width = canvas.offsetWidth;
 canvas.height = canvas.offsetHeight;
 
-let roomNum = window.location.href.split('/')[4];
+const roomNum = window.location.href.split('/')[4];
 socket.emit('connection', roomNum);
 
 window.addEventListener('keypress', togleDirection);
@@ -25,8 +25,8 @@ socket.on('countDown', async (nowPlay) => {
 socket.on('timeFlow', () => {
   const timeHtml = document.querySelector<div>('.playboard_time_area');
   let nowTime = Number(timeHtml.innerHTML.trim());
-  nowTime -= 1
-  timeHtml.innerHTML = nowTime < 0 ? "Golden Goal!!" : String(nowTime);
+  nowTime -= 1;
+  timeHtml.innerHTML = nowTime < 0 ? 'Golden Goal!!' : String(nowTime);
 });
 
 socket.on('playboard', (player1_x, player1_y, player2_x, player2_y, play_ball_x, play_ball_y, player1_score, player2_score) => {
@@ -50,11 +50,11 @@ socket.on('player2_goal', () => {
 
 socket.on('gameSet', (winner) => {
   document.querySelector<div>('.modal').style.display = 'flex';
-  document.querySelector<div>('.hockey_modal_winner_text').style.color = winner == "1" ? '#b23c3c' : '#333399';
-  document.querySelector<div>('.hockey_modal_winner_text').innerHTML = winner + "P";
+  document.querySelector<div>('.hockey_modal_winner_text').style.color = winner == '1' ? '#b23c3c' : '#333399';
+  document.querySelector<div>('.hockey_modal_winner_text').innerHTML = winner + 'P';
   document.querySelector<div>('.hockey_modal_btn').addEventListener('click', function () {
-    location.replace('/')
-  })
+    location.replace('/');
+  });
 });
 
 async function countDown(nowPlay) {

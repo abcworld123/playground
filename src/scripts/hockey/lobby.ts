@@ -1,7 +1,7 @@
 import 'bootstrap/dist/css/bootstrap.min.css';
-import '@fortawesome/fontawesome-free/css/all.min.css';
 import 'animate.css';
-import '@css/hockey/lobby.scss';
+import 'styles/hockey/lobby.scss';
+import { imgLoading } from 'images/common';
 import { io } from 'socket.io-client';
 import Swal from 'sweetalert2';
 
@@ -57,7 +57,7 @@ function alertCreateRoom() {
 function alertWaitUser() {
   return Swal.fire({
     title: '유저를 기다리는 중...',
-    imageUrl: 'images/games/hockey/loading.svg',
+    imageUrl: imgLoading,
     allowOutsideClick: shakeOutsideClick,
     showCancelButton: true,
     showConfirmButton: false,
@@ -82,7 +82,7 @@ function alertWaitResponse() {
   return Swal.fire({
     title: '요청을 보냈습니다.',
     text: '수락을 기다리는 중...',
-    imageUrl: 'images/games/hockey/loading.svg',
+    imageUrl: imgLoading,
     imageWidth: 100,
     allowOutsideClick: shakeOutsideClick,
     showCancelButton: true,
@@ -222,6 +222,7 @@ function joinRejected() {
 function gameStart(room: string) {
   Swal.close();
   room = encodeURIComponent(room);
+  const host = Boolean(requestQueue.length);
   location.replace(`hockey/${room}`);
 }
 
