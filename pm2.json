@@ -1,0 +1,14 @@
+{
+  "apps": [
+      {
+          "name": "playground",
+          "script": "ts-node -r tsconfig-paths/register app.ts",
+          "env": {
+              "NODE_ENV": "production"
+          },
+          "env_development": {
+              "NODE_ENV": "development"
+          }
+      }
+  ]
+}

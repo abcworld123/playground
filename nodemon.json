@@ -1,6 +1,15 @@
 {
-  "restartable": "npm start",
-  "ignore": ["public", "test", "webpack.config.js"],
+  "exec": "ts-node -r tsconfig-paths/register app.ts",
   "ext": "ts json",
-  "exec": "ts-node -r tsconfig-paths/register app.ts"
+  "restartable": "npm run dev",
+  "ignore": [
+    "dist",
+    "src",
+    "test",
+    "webpack.config.dev.ts",
+    "webpack.config.prod.ts",
+    ".eslintrc.json",
+    "nodemon.json",
+    "tsconfig.json"
+  ]
 }

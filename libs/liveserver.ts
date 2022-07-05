@@ -2,13 +2,14 @@ import livereload from 'connect-livereload';
 import { createServer } from 'livereload';
 import type { Express } from 'express';
 
-export default function liveServer(app: Express) {
-  const liveServer = createServer({ exts: ['ejs', 'css', 'js'] });
-
+export function liveServer(app: Express) {
+  if (app.settings.env === 'production') return;
+  const liveServer = createServer({ exts: ['ejs', 'css', 'js'], delay: 200 });
+  
   liveServer.watch([
-    '/views',
-    '/public/stylesheets',
-    '/public/javascripts',
+    '/src/pages',
+    '/dist/stylesheets',
+    '/dist/javascripts',
   ].map(path => process.env.PWD + path));
 
   app.use(livereload());
