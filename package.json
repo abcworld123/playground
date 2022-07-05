@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "nodemon": "nodemon",
-    "start": "cross-env NODE_ENV=production nodemon",
+    "start": "pm2 start pm2.json",
     "dev": "cross-env NODE_ENV=development run-p nodemon watch",
     "watch": "webpack --config=webpack.config.dev.ts",
     "build": "webpack --config=webpack.config.prod.ts",
