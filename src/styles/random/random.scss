@@ -1,0 +1,70 @@
+html {
+  font-size: 2em;
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+body {
+  background: #e3ffdc;
+}
+
+.wrapper {
+  margin: 5% 10%;
+  padding: 5%;
+  border-radius: 1rem;
+  background: lightgray;
+}
+
+.container {
+  text-align: center;
+  font-size: 5em;
+  margin-bottom: 100px;
+}
+
+.control {
+  display: flex;
+  flex-direction: row;
+  gap: 30px;
+  align-items: center;
+  justify-content: center;
+  margin: 0 20%;
+}
+
+label {
+  min-width: 100px;
+}
+
+input {
+  min-width: 250px;
+
+  &[type="number"]::-webkit-inner-spin-button {
+    appearance: none;
+  }
+}
+
+.btn {
+  height: 80px;
+  min-width: 150px;
+  margin-left: 50px;
+}
+
+body .swal2-popup {
+  font-size: .75em;
+}
+
+@media (max-width: 1440px) {
+
+  .container {
+    margin-top: 100px;
+  }
+
+  .control {
+    gap: 10px;
+  }
+
+  .btn {
+    scale: 1.25;
+  }
+}

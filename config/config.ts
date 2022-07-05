@@ -2,9 +2,6 @@ import * as dotenv from 'dotenv';
 dotenv.config();
 
 const config = {
-  node: {
-    mode: process.env.NODE_ENV,
-  },
   database: {
     host: process.env.DATABASE_URL,
     authdb: process.env.MONGOOSE_AUTH,

@@ -8,7 +8,7 @@ export interface ResYoutubeSubmit extends ResDefault {
   data?: YoutubeItemInfo[];
 }
 
-export interface YoutubeItemInfo {
+interface YoutubeItemInfo {
   viewCount: string;
   likeCount: string;
   commentCount: string;
