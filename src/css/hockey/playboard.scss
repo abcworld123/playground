@@ -181,3 +181,91 @@ body{
   display: none;
   margin-left: 250px;
 }
+
+.modal {
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  background: rgba(0, 0, 0, 0.6);
+  overflow-y: scroll;
+  width: 100%;
+  display: none;
+  z-index: 2;
+  align-items: center;
+  justify-content: center;
+}
+
+.hockey_modal {
+  flex-direction: column;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 500px;
+  padding: 20px 0;
+  background-color: white;
+  position: absolute;
+  box-sizing: border-box;
+  border-radius: 10px;
+  margin: 150px auto;
+}
+
+.hockey_modal_result_text {
+  font-size: 50px;
+  font-weight: bold;
+  margin-bottom: 30px;
+}
+
+.hockey_modal_winner_text {
+  margin-right: 16px;
+}
+
+@keyframes ring {
+  0% {
+    width: 30px;
+    height: 30px;
+    opacity: 1;
+  }
+  100% {
+    width: 300px;
+    height: 300px;
+    opacity: 0;
+  }
+}
+
+.hockey_modal_btn {
+  position: relative;
+  border: none;
+  min-width: 60%;
+  min-height: 50px;
+  background: linear-gradient(
+                  90deg,
+                  rgba(129, 230, 217, 1) 0%,
+                  rgba(79, 209, 197, 1) 100%
+  );
+  border-radius: 1000px;
+  color: darkslategray;
+  cursor: pointer;
+  box-shadow: 12px 12px 24px rgba(79, 209, 197, 0.64);
+  font-weight: 700;
+  transition: 0.3s;
+}
+
+.hockey_modal_btn:hover {
+  transform: scale(1.2);
+}
+
+.hockey_modal_btn:hover::after {
+  content: "";
+  width: 30px;
+  height: 30px;
+  border-radius: 100%;
+  border: 6px solid #00ffcb;
+  position: absolute;
+  z-index: -1;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  animation: ring 1.5s infinite;
+}

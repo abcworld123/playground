@@ -1,7 +1,7 @@
 import '@css/hockey/playboard.scss';
 import { io } from 'socket.io-client';
-
 const socket = io('/hockeyPlay');
+
 const sleep = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
 
 //canvas에 관한 정보
@@ -13,21 +13,20 @@ const HEIGHT = canvas.offsetHeight;
 canvas.width = canvas.offsetWidth;
 canvas.height = canvas.offsetHeight;
 
-let roomNum = '';
-
-//todo 클래스 변경
-roomNum = window.location.href.split('/')[4];
+let roomNum = window.location.href.split('/')[4];
 socket.emit('connection', roomNum);
 
 window.addEventListener('keypress', togleDirection);
 
-socket.onAny((event, msg1, msg2) => {
-  // console.log(event, msg1, msg2);
-});
-
 socket.on('countDown', async (nowPlay) => {
   await countDown(nowPlay);
-  // gameStart();
+});
+
+socket.on('timeFlow', () => {
+  const timeHtml = document.querySelector<div>('.playboard_time_area');
+  let nowTime = Number(timeHtml.innerHTML.trim());
+  nowTime -= 1
+  timeHtml.innerHTML = nowTime < 0 ? "Golden Goal!!" : String(nowTime);
 });
 
 socket.on('playboard', (player1_x, player1_y, player2_x, player2_y, play_ball_x, play_ball_y, player1_score, player2_score) => {
@@ -41,18 +40,21 @@ socket.on('playboard', (player1_x, player1_y, player2_x, player2_y, play_ball_x,
   document.querySelector<div>('.playboard_blue_scord').innerHTML = player2_score;
 });
 
-socket.on('timeFlow', () => {
-  const timeHtml = document.querySelector<div>('.playboard_time_area');
-  const nowTime = Number(timeHtml.innerHTML.trim());
-  timeHtml.innerHTML = String(nowTime - 1);
-});
-
 socket.on('player1_goal', () => {
   document.querySelector<div>('.playboard_play1_goal').style.display = 'block';
 });
 
 socket.on('player2_goal', () => {
   document.querySelector<div>('.playboard_play2_goal').style.display = 'block';
+});
+
+socket.on('gameSet', (winner) => {
+  document.querySelector<div>('.modal').style.display = 'flex';
+  document.querySelector<div>('.hockey_modal_winner_text').style.color = winner == "1" ? '#b23c3c' : '#333399';
+  document.querySelector<div>('.hockey_modal_winner_text').innerHTML = winner + "P";
+  document.querySelector<div>('.hockey_modal_btn').addEventListener('click', function () {
+    location.replace('/')
+  })
 });
 
 async function countDown(nowPlay) {
@@ -72,6 +74,10 @@ async function countDown(nowPlay) {
     countDown[x].classList.remove('playboard_after_count');
     countDown[x].style.visibility = 'hidden';
   }
+
+  document.querySelector<div>('.playboard_play1_port').style.display = 'none';
+  document.querySelector<div>('.playboard_play2_port').style.display = 'none';
+
 }
 
 // canvas를 지우는 함수
@@ -97,7 +103,7 @@ function screenDrawPlayer(x: number, y: number, h: number) {
 // y : y좌표
 // 넓이는 play_ball_radius 으로 고정
 function screenDrawBall(x: number, y: number) {
-  playBoard.fillStyle = 'rgb(33,40,33)';
+  playBoard.fillStyle = '#382741';
   playBoard.beginPath();
   playBoard.arc(x, y, play_ball_radius, 0, Math.PI * 2, true);
   playBoard.closePath();

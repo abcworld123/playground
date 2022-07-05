@@ -11,20 +11,24 @@ export default function initHockeyBoard(nsp: Namespace) {
     let p2: PlayerInfo;
     let ball: BallInfo;
     let info: GameInfo;
+    let t_roomNum: string;
 
     socket.onAny((event, msg) => {
       console.log(`${event}:  ${msg}`);
     });
 
     socket.on('disconnect', (reason) => {
-      console.log('나감');
+      const userInfo = playBoard.get(t_roomNum);
+      if(userInfo && userInfo.gameBoard){
+        clearInterval(userInfo.gameBoard);
+      }
     });
 
     socket.on('moveUp', (roomNum: string) => {
       const userInfo = playBoard.get(roomNum);
-      if (userInfo.p1._id === socket.id) {
+      if (userInfo.p1._id === socket.id && p1.y > 0) {
         userInfo.p1.dy = -userInfo.p1.ySpeed;
-      } else {
+      } else if(userInfo.p2._id === socket.id && p2.y > 0) {
         userInfo.p2.dy = -userInfo.p2.ySpeed;
       }
       playBoard.set(roomNum, userInfo);
@@ -32,9 +36,9 @@ export default function initHockeyBoard(nsp: Namespace) {
 
     socket.on('moveDown', (roomNum: string) => {
       const userInfo = playBoard.get(roomNum);
-      if (userInfo.p1._id === socket.id) {
+      if (userInfo.p1._id === socket.id && p1.y < heightPixel - 100) {
         userInfo.p1.dy = userInfo.p1.ySpeed;
-      } else {
+      } else if(userInfo.p2._id === socket.id && p2.y < heightPixel - 100) {
         userInfo.p2.dy = userInfo.p2.ySpeed;
       }
       playBoard.set(roomNum, userInfo);
@@ -43,6 +47,7 @@ export default function initHockeyBoard(nsp: Namespace) {
     socket.on('connection', (roomNum: string) => {
       if (!playBoard.has(roomNum)) {
         socket.join(roomNum);
+        t_roomNum = roomNum
         p1 = {
           '_id': socket.id,
           'x': 100,
@@ -68,7 +73,7 @@ export default function initHockeyBoard(nsp: Namespace) {
         };
         info = {
           'time': 66,
-          'left_time': 50,
+          'left_time': 5,
         };
 
         playBoard.set(roomNum, {
@@ -97,12 +102,13 @@ export default function initHockeyBoard(nsp: Namespace) {
           },
           'info': {
             'time': 66,
-            'left_time': 50,
+            'left_time': 5,
           },
         });
       } else {
         const userInfo = playBoard.get(roomNum);
-        if (!userInfo.p2._id) {
+        if (userInfo.p1._id != socket.id && !userInfo.p2._id) {
+          t_roomNum = roomNum
           userInfo.p2._id = socket.id;
           socket.join(roomNum);
           playBoard.set(roomNum, userInfo);
@@ -111,18 +117,15 @@ export default function initHockeyBoard(nsp: Namespace) {
           ball = userInfo.ball;
           info = userInfo.info;
 
-          abc(userInfo.p1._id, userInfo.p2._id, 'countDown', roomNum);
+          countDown(userInfo.p1._id, userInfo.p2._id);
           setTimeout(function () {userInfo.gameBoard = setInterval(calPlay.bind(this, roomNum), 15 ); }, 3000);
         }
       }
     });
 
-    function abc(p1: string, p2: string, num: string, roomNum: string) {
-      console.log(p1);
-      console.log(p2);
-      console.log(socket.id);
-      nsp.to(p1).emit(num, 1);
-      nsp.to(p2).emit(num, 2);
+    function countDown(p1: string, p2: string) {
+      nsp.to(p1).emit("countDown", 1);
+      nsp.to(p2).emit("countDown", 2);
     }
 
     function calPlay(roomNum: string) {
@@ -146,7 +149,7 @@ export default function initHockeyBoard(nsp: Namespace) {
 
         setTimeout(function () {
           nsp.to(roomNum).emit('playboard', p1.x, p1.y, p2.x, p2.y, Math.round(ball.x), Math.round(ball.y), p1.score, p2.score);
-          nsp.to(roomNum).emit('countDown');
+          countDown(p1._id, p2._id)
         }, 3000);
 
         clearInterval(userInfo.gameBoard);
@@ -163,7 +166,7 @@ export default function initHockeyBoard(nsp: Namespace) {
 
         setTimeout(function () {
           nsp.to(roomNum).emit('playboard', p1.x, p1.y, p2.x, p2.y, Math.round(ball.x), Math.round(ball.y), p1.score, p2.score);
-          nsp.to(roomNum).emit('countDown');
+          countDown(p1._id, p2._id)
         }, 3000);
 
         clearInterval(userInfo.gameBoard);
@@ -175,8 +178,9 @@ export default function initHockeyBoard(nsp: Namespace) {
       }
       if (info.time < 1) {
         nsp.to(roomNum).emit('timeFlow');
-        if (info.left_time < 2) {
+        if (info.left_time < 2 && p1.score != p2.score) {
           clearInterval(userInfo.gameBoard);
+          nsp.to(roomNum).emit('gameSet', p1.score > p2.score ? "1" : "2");
         }
         ball.dx = ball.dx > 0 ? ball.dx + 1 : ball.dx - 1;
         info.left_time -= 1;
