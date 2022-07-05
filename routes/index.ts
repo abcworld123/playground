@@ -13,9 +13,4 @@ router.use('/weather', weather);
 router.use('/wordle', wordle);
 router.use('/youtube', youtube);
 
-router.use((req, res, next) => {
-  res.status(404).render('404');
-  console.warn(`not exists: ${req.url}`);
-});
-
 export default router;
