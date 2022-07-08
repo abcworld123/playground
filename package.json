@@ -49,7 +49,7 @@
     "jest": "^28.1.2",
     "livereload": "^0.9.3",
     "mini-css-extract-plugin": "^2.6.1",
-    "nodemon": "^2.0.18",
+    "nodemon": "^2.0.19",
     "npm-run-all": "^4.1.5",
     "postcss": "^8.4.14",
     "postcss-fail-on-warn": "^0.2.1",
