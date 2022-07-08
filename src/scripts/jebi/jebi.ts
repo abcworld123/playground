@@ -3,6 +3,7 @@ import 'styles/jebi/jebi.scss';
 import Toast from 'bootstrap/js/dist/toast.js';
 import { imgAilen, imgHaHa, imgJebi, imgJebiHover } from 'images/games/jebi';
 import type { ResJebiSubmit } from 'types/games/jebi';
+import { randint } from 'utils/tools';
 
 const toast = new Toast(document.getElementById('toast'));
 const jebiContainer = <div>document.getElementById('jebiContainer');
@@ -11,14 +12,7 @@ const jebiNum = <span>document.getElementById('jebiNum');
 const toastText = <span>document.getElementById('toastText');
 
 let n = 5, dog = 0;
-let ailen = randint(n);
-
-/* 난수 생성 */
-function randint(n: number) {
-  const num = Math.ceil(Math.random() * n);
-  console.log(`외계인: ${num}`);  // 주작 방지용으로 미리 번호 확인 가능
-  return num;
-}
+let ailen = randint(1, n);
 
 /* 제비 초기화 */
 function reset() {
@@ -27,7 +21,7 @@ function reset() {
     jebi.className = 'jebi-unopened';
     jebi.src = imgJebi;
   });
-  ailen = randint(n);
+  ailen = randint(1, n);
   dog = 0;
 }
 
