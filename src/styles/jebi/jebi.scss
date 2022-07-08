@@ -41,13 +41,16 @@ body {
 
 .control {
   display: flex;
-  gap: 30px;
-  align-items: center;
+  flex-wrap: wrap;
+  gap: 40px 50px;
   justify-content: center;
-}
 
-label {
-  min-width: 120px;
+  & > * {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 30px;
+    align-items: center;
+  }
 }
 
 .btn {
@@ -64,9 +67,9 @@ label {
   font-size: 1.2em;
 }
 
-#jebiReset {
-  min-width: 200px;
-  margin-left: 50px;
+#jebiReset,
+#showAilen {
+  min-width: 170px;
 }
 
 .toast-container {
@@ -84,7 +87,7 @@ label {
   border: none;
 }
 
-@media (max-width: 768px) {
+@media (max-width: 960px) {
   .wrapper {
     margin: 7%;
     padding: 3%;
@@ -96,11 +99,13 @@ label {
     margin-bottom: 70px;
 
     & > img {
-      width: 90px;
+      width: 85px;
     }
   }
 
   .control {
-    transform: scale(.5);
+    margin-left: -15%;
+    margin-right: -15%;
+    transform: scale(.7);
   }
 }

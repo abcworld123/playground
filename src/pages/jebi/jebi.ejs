@@ -16,11 +16,16 @@
   </div>
   <!-- 제비 수 컨트롤 div -->
   <div class="control">
-    <label>제비 수:</label>
-    <button class="btn btn-secondary btn-jebinum" id="jebiMinus" onclick="jebiMinus()">-</button>
-    <span id="jebiNum">5</span>
-    <button class="btn btn-secondary btn-jebinum" id="jebiPlus" onclick="jebiPlus()">+</button>
-    <button class="btn btn-danger btn-reset" id="jebiReset" onclick="reset()">초기화</button>
+    <div>
+      <label>제비 수:</label>
+      <button class="btn btn-secondary btn-jebinum" id="jebiMinus" onclick="jebiMinus()">-</button>
+      <span id="jebiNum">5</span>
+      <button class="btn btn-secondary btn-jebinum" id="jebiPlus" onclick="jebiPlus()">+</button>
+    </div>
+    <div>
+      <button class="btn btn-danger btn-reset" id="jebiReset" onclick="reset()">초기화</button>
+      <button class="btn btn-primary btn-reset" id="showAilen" onpointerdown="toggleAilen(true)" onpointerup="toggleAilen(false)">꽝 확인</button>
+    </div>
   </div>
 </div>
 <!-- toast -->
