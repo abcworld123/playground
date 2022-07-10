@@ -120,8 +120,8 @@ export default function initHockeyBoard(nsp: Namespace) {
     }
 
     function resetState(goalPlayer: PlayerInfo) {
-      p1.y = 240;
-      p2.y = 240;
+      p1.y = 200;
+      p2.y = 200;
       p1.dy = 0;
       p2.dy = 0;
       ball.x = 500;
@@ -146,7 +146,7 @@ export default function initHockeyBoard(nsp: Namespace) {
         p1: {
           id: null,
           x: 100,
-          y: 250,
+          y: 200,
           dy: 0,
           ySpeed: 5,
           score: 0,
@@ -154,7 +154,7 @@ export default function initHockeyBoard(nsp: Namespace) {
         p2: {
           id: null,
           x: 900,
-          y: 250,
+          y: 200,
           dy: 0,
           ySpeed: 5,
           score: 0,
