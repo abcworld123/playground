@@ -1,5 +1,5 @@
 export interface PlayerInfo {
-  _id: string;
+  id: string;
   x: number;
   y: number;
   dy: number;
@@ -18,6 +18,7 @@ export interface BallInfo {
 export interface GameInfo {
   time: number;
   left_time: number;
+  interval: NodeJS.Timer;
 }
 
 export interface PlayBoard {

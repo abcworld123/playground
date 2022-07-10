@@ -18,8 +18,8 @@ socket.emit('connection', roomNum);
 
 window.addEventListener('keypress', togleDirection);
 
-socket.on('countDown', async (nowPlay) => {
-  await countDown(nowPlay);
+socket.on('countDown', (nowPlay) => {
+  countDown(nowPlay);
 });
 
 socket.on('timeFlow', () => {
@@ -111,14 +111,11 @@ function screenDrawBall(x: number, y: number) {
 }
 
 // 키보드 입력 함수
-// w, s는 player_1 조종
-// 8, 2는 player_2 조종
+// w, s로 조종
 function togleDirection(e: KeyboardEvent) {
-  if (e.keyCode === 119) {
-    // w 클릭
-    socket.emit('moveUp', roomNum);
-  } else if (e.keyCode === 115) {
-    // s 클릭
-    socket.emit('moveDown', roomNum);
+  if (e.key === 'w') {
+    socket.emit('moveUp');
+  } else if (e.key === 's') {
+    socket.emit('moveDown');
   }
 }

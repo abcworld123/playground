@@ -2,205 +2,174 @@ import type { Namespace } from 'socket.io';
 import type { BallInfo, GameInfo, PlayBoard, PlayerInfo } from 'types/games/hockey';
 
 export default function initHockeyBoard(nsp: Namespace) {
-  const playBoard = new Map<string, PlayerInfo>();
+  const playBoard = new Map<string, PlayBoard>();
   const widthPixel = 1000;
   const heightPixel = 500;
+  const refreshInterval = 15;
+  const playTime = 50;
+  const tick = Math.round(1000 / refreshInterval);
 
   nsp.on('connection', (socket) => {
-    let p1: PlayerInfo = {
-      '_id': '',
-      'x': 100,
-      'y': 250,
-      'dy': 5,
-      'ySpeed': 5,
-      'score': 0,
-    };
-    let p2: PlayerInfo = {
-      '_id': '',
-      'x': 900,
-      'y': 250,
-      'dy': 5,
-      'ySpeed': 5,
-      'score': 0,
-    };
-    let ball: BallInfo = {
-      'x': 500,
-      'y': 250,
-      'dx': 5,
-      'dy': 2,
-      'pause': 0,
-    };
-    let info: GameInfo = {
-      'time': 66,
-      'left_time': 50,
-    };
-    let t_roomNum: string;
-    let gameBoard: any
+    let p1: PlayerInfo;
+    let p2: PlayerInfo;
+    let ball: BallInfo;
+    let info: GameInfo;
+    let roomNum: string;
 
-    socket.onAny((event, msg) => {
-      console.log(`${event}:  ${msg}`);
+    socket.on('connection', (t_roomNum: string) => {
+      roomNum = t_roomNum;
+      socket.join(roomNum);
+      if (!playBoard.has(roomNum)) {
+        const gameState = getInitialState();
+        playBoard.set(roomNum, gameState);
+        ({ p1, p2, ball, info } = gameState);
+        p1.id = socket.id;
+      } else {
+        ({ p1, p2, ball, info } = playBoard.get(roomNum));
+        p2.id = socket.id;
+        gameLoading();
+      }
+    });
+
+    socket.on('moveUp', () => {
+      const player = p1.id === socket.id ? p1 : p2;
+      if (player.y > 0) {
+        player.dy = -player.ySpeed;
+      }
+    });
+
+    socket.on('moveDown', () => {
+      const player = p1.id === socket.id ? p1 : p2;
+      if (player.y < heightPixel - 100) {
+        player.dy = player.ySpeed;
+      }
     });
 
     socket.on('disconnect', (reason) => {
-      const userInfo = playBoard.get(t_roomNum);
-      if(userInfo && gameBoard){
-        clearInterval(gameBoard);
+      if (playBoard.has(roomNum)) {
+        closeRoom();
       }
     });
 
-    socket.on('moveUp', (roomNum: string) => {
-      if (p1._id === socket.id && p1.y > 0) {
-        p1.dy = -p1.ySpeed;
-      } else if(p2._id === socket.id && p2.y > 0) {
-        p2.dy = -p2.ySpeed;
-      }
-      playBoard.set(roomNum, p1);
-    });
-
-    socket.on('moveDown', (roomNum: string) => {
-      if (p1._id === socket.id && p1.y < heightPixel - 100) {
-        p1.dy = p1.ySpeed;
-      } else if(p2._id === socket.id && p2.y < heightPixel - 100) {
-        p2.dy = p2.ySpeed;
-      }
-      playBoard.set(roomNum, p1);
-    });
-
-    socket.on('connection', (roomNum: string) => {
-      if (!playBoard.has(roomNum)) {
-        socket.join(roomNum);
-        t_roomNum = roomNum
-        p1._id = socket.id
-
-        playBoard.set(roomNum, p1);
-      } else {
-        const userInfo = playBoard.get(roomNum);
-        if (p1._id != socket.id && !p2._id) {
-          p1 = userInfo
-          t_roomNum = roomNum
-          p2._id = socket.id;
-          socket.join(roomNum);
-          playBoard.set(roomNum, userInfo);
-
-          countDown(p1._id, p2._id);
-          setTimeout(function () {gameBoard = setInterval(calPlay.bind(this, roomNum), 15 ); }, 3000);
-        }
-      }
-    });
-
-    function countDown(p1: string, p2: string) {
-      nsp.to(p1).emit("countDown", 1);
-      nsp.to(p2).emit("countDown", 2);
+    function gameLoading() {
+      countDown(p1, p2);
+      setTimeout(() => {
+        info.interval = setInterval(calPlay, refreshInterval);
+      }, 3000);
     }
 
-    function calPlay(roomNum: string) {
-      let userInfo = playBoard.get(roomNum);
-      p1 = userInfo
+    function countDown(p1: PlayerInfo, p2: PlayerInfo) {
+      nsp.to(p1.id).emit('countDown', 1);
+      nsp.to(p2.id).emit('countDown', 2);
+    }
+
+    function calPlay() {
       p1.y += p1.dy;
       p2.y += p2.dy;
       ball.x += ball.dx;
       ball.y += ball.dy;
-      ball.pause = ball.pause < 1 ? ball.pause : ball.pause - 1;
-      info.time = info.time - 1;
+      ball.pause -= ball.pause && 1;
+      info.time -= 1;
+      if (p1.y >= heightPixel * 0.8 || p1.y <= 0) p1.dy = 0;
+      if (p2.y >= heightPixel * 0.8 || p2.y <= 0) p2.dy = 0;
 
-      if ( p1.y >= heightPixel * 0.8 || p1.y <= 0) {p1.dy = 0; }
-      if ( p2.y >= heightPixel * 0.8 || p2.y <= 0) {p2.dy = 0; }
-      if (ball.x >= widthPixel && ball.pause < 1) {
-        ball.dx = -ball.dx;
-        p1.score = p1.score + 1;
-        nsp.to(roomNum).emit('playboard', p1.x, p1.y, p2.x, p2.y, Math.round(ball.x), Math.round(ball.y), p1.score, p2.score);
-        setInitialState(0);
-
-        nsp.to(roomNum).emit('player1_goal');
-
-        setTimeout(function () {
-          nsp.to(roomNum).emit('playboard', p1.x, p1.y, p2.x, p2.y, Math.round(ball.x), Math.round(ball.y), p1.score, p2.score);
-          countDown(p1._id, p2._id)
-        }, 3000);
-
-        clearInterval(gameBoard);
-        setTimeout(function () {gameBoard = setInterval(calPlay.bind(this, roomNum), 15 ); }, 6000);
-        return;
-      } else if (ball.x <= 0 && ball.pause < 1) {
-        ball.dx = -ball.dx;
-        p2.score = p2.score + 1;
-        nsp.to(roomNum).emit('playboard', p1.x, p1.y, p2.x, p2.y, Math.round(ball.x), Math.round(ball.y), p1.score, p2.score);
-
-        setInitialState(1);
-
-        nsp.to(roomNum).emit('player2_goal');
-
-        setTimeout(function () {
-          nsp.to(roomNum).emit('playboard', p1.x, p1.y, p2.x, p2.y, Math.round(ball.x), Math.round(ball.y), p1.score, p2.score);
-          countDown(p1._id, p2._id)
-        }, 3000);
-
-        clearInterval(gameBoard);
-        setTimeout(function () {gameBoard = setInterval(calPlay.bind(this, roomNum), 15 ); }, 6000);
-        return;
-      }
-      if ( ball.y >= heightPixel || ball.y <= 0) {
-        ball.dy = -ball.dy;
-      }
-      if (info.time < 1) {
-        nsp.to(roomNum).emit('timeFlow');
-        if (info.left_time < 2 && p1.score != p2.score) {
-          clearInterval(gameBoard);
-          nsp.to(roomNum).emit('gameSet', p1.score > p2.score ? "1" : "2");
+      if (widthPixel <= ball.x && ball.pause < 1) goal(p1);
+      else if (ball.x <= 0 && ball.pause < 1) goal(p2);
+      else {
+        if (info.time < 1) {
+          nsp.to(roomNum).emit('timeFlow');
+          if (--info.left_time <= 0 && p1.score !== p2.score) gameEnd();
+          ball.dx += ball.dx > 0 ? 1 : -1;
+          info.time = tick;
         }
-        ball.dx = ball.dx > 0 ? ball.dx + 1 : ball.dx - 1;
-        info.left_time -= 1;
-        info.time = 66;
-      }
-
-      playBoard.set(roomNum, userInfo);
-
-      checkCrash();
-
-      nsp.to(roomNum).emit('playboard', p1.x, p1.y, p2.x, p2.y, Math.round(ball.x), Math.round(ball.y), p1.score, p2.score);
-    }
-
-    function checkCrash() {
-      if (p1.x < ball.x &&
-        ball.x < p1.x + 20 &&
-        p1.y < ball.y &&
-        ball.y < p1.y + heightPixel * 0.2) {
-        ball.dx *= -1;
-        let dy = Math.floor(Math.random() * 200);
-        dy = p1.dy < 0 ? -dy : dy;
-        dy /= 20;
-        ball.dy = dy;
-        ball.pause = 5;
-      } else if (p2.x < ball.x &&
-        ball.x < p2.x + 20 &&
-        p2.y < ball.y &&
-        ball.y < p2.y + heightPixel * 0.2) {
-        ball.dx *= -1;
-        let dy = Math.floor(Math.random() * 400);
-        dy -= 200;
-        dy = p2.dy < 0 ? -dy : dy;
-        dy /= 20;
-        ball.dy = dy;
-        ball.pause = 5;
+        if (ball.y >= heightPixel || ball.y <= 0) {
+          ball.dy = -ball.dy;
+        }
+        handleCrash();
+        nsp.to(roomNum).emit('playboard', p1.x, p1.y, p2.x, p2.y, ball.x, ball.y, p1.score, p2.score);
       }
     }
 
-    function setInitialState(user: Number) {
+    function handleCrash() {
+      for (const player of [p1, p2]) {
+        if (
+          player.x < ball.x &&
+          ball.x < player.x + 20 &&
+          player.y < ball.y &&
+          ball.y < player.y + heightPixel * 0.2
+        ) {
+          let dy = Math.floor(Math.random() * 10);
+          dy = player.dy < 0 ? -dy : dy;
+          ball.dx *= -1;
+          ball.dy = dy;
+          ball.pause = 5;
+        }
+      }
+    }
+
+    function goal(player: PlayerInfo) {
+      const n = player === p1 ? 1 : 2;
+      player.score += 1;
+      nsp.to(roomNum).emit(`player${n}_goal`);
+      clearInterval(info.interval);
+      setTimeout(() => {
+        resetState(player);
+        nsp.to(roomNum).emit('playboard', p1.x, p1.y, p2.x, p2.y, ball.x, ball.y, p1.score, p2.score);
+        gameLoading();
+      }, 3000);
+    }
+
+    function resetState(goalPlayer: PlayerInfo) {
       p1.y = 240;
       p2.y = 240;
+      p1.dy = 0;
+      p2.dy = 0;
       ball.x = 500;
       ball.y = 250;
-      ball.dy = 5;
-      ball.dx = user ? 5 : -5;
+      ball.dx = goalPlayer === p1 ? -5 : 5;
     }
 
-    function gameLoading(userInfo: PlayBoard, roomNum: string) {
-      setTimeout(function () {gameBoard = setInterval(calPlay.bind(this, roomNum), 15 ); }, 6000);
+    function gameEnd() {
+      nsp.to(roomNum).emit('gameSet', p1.score > p2.score ? '1' : '2');
+      closeRoom();
     }
 
-    function setGameInfo() {
+    function closeRoom() {
+      clearInterval(info.interval);
+      playBoard.delete(roomNum);
+      nsp.in(roomNum).disconnectSockets();
+    }
+
+    function getInitialState(): PlayBoard {
       return {
-
+        p1: {
+          id: null,
+          x: 100,
+          y: 250,
+          dy: 0,
+          ySpeed: 5,
+          score: 0,
+        },
+        p2: {
+          id: null,
+          x: 900,
+          y: 250,
+          dy: 0,
+          ySpeed: 5,
+          score: 0,
+        },
+        ball: {
+          x: 500,
+          y: 250,
+          dx: 5,
+          dy: 2,
+          pause: 0,
+        },
+        info: {
+          time: tick,
+          left_time: playTime,
+          interval: null,
+        },
       };
     }
   });
