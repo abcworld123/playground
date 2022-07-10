@@ -42,7 +42,7 @@ socket.on('playboard', (p1_y, p2_y, ball_x, ball_y) => {
 
 socket.on('goal', (player, score) => {
   const color = player === 1 ? 'red' : 'blue';
-  document.querySelector<div>(`.playboard_play${player}_goal`).style.display = 'block';
+  document.querySelector<div>(`.playboard_play${player}_goal`).style.display = 'grid';
   document.querySelector<div>(`.playboard_${color}_score`).innerHTML = score;
 });
 

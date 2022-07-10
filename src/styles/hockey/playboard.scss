@@ -1,6 +1,9 @@
 body{
+  margin: 0;
+  overflow: hidden;
   background: url("images/games/hockey/hockeyBackground.png");
-  background-size: cover;
+  background-size: 100vw 100vh;
+  background-repeat: no-repeat;
 }
 .playboard_body{
   width: 100%;
@@ -28,13 +31,13 @@ body{
 }
 
 .playboard_red_score{
-  font-size: 90px;
+  font-size: 9vh;
   font-weight: bold;
   color: #b23c3c;
 }
 
 .playboard_blue_score{
-  font-size: 90px;
+  font-size: 9vh;
   font-weight: bold;
   color: #333399;
 }
@@ -45,7 +48,7 @@ body{
 }
 
 .playboard_time_area{
-  font-size: 90px;
+  font-size: 9vh;
   font-weight: bold;
   color: #cbb2b2;
 }
@@ -90,17 +93,8 @@ body{
   background-color: #a288aa;
 }
 
-.playboard_main_board div:nth-child(1){
-  margin-right: 250px;
-  color: #b23c3c;
-}
-
-.playboard_main_board div:nth-child(2){
-  color: #333399;
-}
-
 .playboard_main_board > div{
-  font-size: 30px;
+  font-size: min(5vh, 4vw);
   font-weight: bolder;
 }
 
@@ -109,7 +103,7 @@ body{
   position: absolute;
   top: 50%;
   left: 50%;
-  font-size: 100px;
+  font-size: min(10vh, 7vw);
 }
 
 .playboard_after_count {
@@ -120,7 +114,7 @@ body{
   transform: translate(-50%, -50%);
   transition-property: font-size;
   transition-duration: 1.5s;
-  font-size: 300px;
+  font-size: min(30vh, 21vw);
 }
 
 @keyframes fadeInLeft {
@@ -145,25 +139,24 @@ body{
   }
 }
 
-.playboard_play1_goal {
+.playboard_play1_goal,
+.playboard_play2_goal {
   display: none;
   position: absolute;
-  animation: fadeInLeft 1s;
-  font-size: 100px;
+  font-size: min(10vh, 7vw);
   font-weight: bold;
-  top: calc(50% - 100px);
-  left: calc(50% - 380px);
+  place-items: center;
+  width: 100vw;
+  height: 100vh;
+}
+
+.playboard_play1_goal {
+  animation: fadeInLeft 1s;
   color: #b23c3c;
 }
 
 .playboard_play2_goal {
-  display: none;
-  position: absolute;
   animation: fadeInRight 1s;
-  font-size: 100px;
-  font-weight: bold;
-  top: calc(50% - 100px);
-  left: calc(50% - 380px);
   color: #333399;
 }
 
@@ -175,11 +168,14 @@ body{
 
 .playboard_play1_port {
   display: none;
+  color: #b23c3c;
+  margin-right: 50%;
 }
 
 .playboard_play2_port{
   display: none;
-  margin-left: 250px;
+  color: #333399;
+  margin-left: 50%;
 }
 
 .modal {
@@ -197,6 +193,7 @@ body{
   justify-content: center;
 }
 
+// todo 작은창 모달 크기
 .hockey_modal {
   flex-direction: column;
   display: flex;
