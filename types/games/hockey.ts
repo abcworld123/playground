@@ -19,6 +19,7 @@ export interface GameInfo {
   time: number;
   left_time: number;
   interval: NodeJS.Timer;
+  timeout: NodeJS.Timeout;
 }
 
 export interface PlayBoard {
