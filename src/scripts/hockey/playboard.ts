@@ -5,6 +5,8 @@ const socket = io('/hockeyPlay');
 const sleep = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
 
 //canvas에 관한 정보
+const p1_x = 100;
+const p2_x = 900;
 const play_ball_radius = 10;
 const canvas = document.querySelector('canvas');
 const playBoard = canvas.getContext('2d');
@@ -29,23 +31,19 @@ socket.on('timeFlow', () => {
   timeHtml.innerHTML = nowTime < 0 ? 'Golden Goal!!' : String(nowTime);
 });
 
-socket.on('playboard', (player1_x, player1_y, player2_x, player2_y, play_ball_x, play_ball_y, player1_score, player2_score) => {
+socket.on('playboard', (p1_y, p2_y, ball_x, ball_y) => {
   document.querySelector<div>('.playboard_play1_goal').style.display = 'none';
   document.querySelector<div>('.playboard_play2_goal').style.display = 'none';
   screenClear();
-  screenDrawPlayer(Number(player1_x * WIDTH / 1000), Number(player1_y * HEIGHT / 500), 20 * HEIGHT / 100);
-  screenDrawPlayer(Number(player2_x * WIDTH / 1000), Number(player2_y * HEIGHT / 500), 20 * HEIGHT / 100);
-  screenDrawBall(Number(play_ball_x * WIDTH / 1000), Number(play_ball_y * HEIGHT / 500));
-  document.querySelector<div>('.playboard_red_score').innerHTML = player1_score;
-  document.querySelector<div>('.playboard_blue_scord').innerHTML = player2_score;
+  screenDrawPlayer(Number(p1_x * WIDTH / 1000), Number(p1_y * HEIGHT / 500), 20 * HEIGHT / 100);
+  screenDrawPlayer(Number(p2_x * WIDTH / 1000), Number(p2_y * HEIGHT / 500), 20 * HEIGHT / 100);
+  screenDrawBall(Number(ball_x * WIDTH / 1000), Number(ball_y * HEIGHT / 500));
 });
 
-socket.on('player1_goal', () => {
-  document.querySelector<div>('.playboard_play1_goal').style.display = 'block';
-});
-
-socket.on('player2_goal', () => {
-  document.querySelector<div>('.playboard_play2_goal').style.display = 'block';
+socket.on('goal', (player, score) => {
+  const color = player === 1 ? 'red' : 'blue';
+  document.querySelector<div>(`.playboard_play${player}_goal`).style.display = 'block';
+  document.querySelector<div>(`.playboard_${color}_score`).innerHTML = score;
 });
 
 socket.on('gameSet', (winner) => {

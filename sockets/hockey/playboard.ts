@@ -52,6 +52,7 @@ export default function initHockeyBoard(nsp: Namespace) {
     });
 
     function gameLoading() {
+      sendState();
       countDown(p1, p2);
       info.timeout = setTimeout(() => {
         info.interval = setInterval(calPlay, refreshInterval);
@@ -86,8 +87,12 @@ export default function initHockeyBoard(nsp: Namespace) {
           ball.dy = -ball.dy;
         }
         handleCrash();
-        nsp.to(roomNum).emit('playboard', p1.x, p1.y, p2.x, p2.y, ball.x, ball.y, p1.score, p2.score);
+        sendState();
       }
+    }
+
+    function sendState() {
+      nsp.to(roomNum).emit('playboard', p1.y, p2.y, ball.x, ball.y);
     }
 
     function handleCrash() {
@@ -110,11 +115,10 @@ export default function initHockeyBoard(nsp: Namespace) {
     function goal(player: PlayerInfo) {
       const n = player === p1 ? 1 : 2;
       player.score += 1;
-      nsp.to(roomNum).emit(`player${n}_goal`);
+      nsp.to(roomNum).emit('goal', n, player.score);
       clearInterval(info.interval);
       info.timeout = setTimeout(() => {
         resetState(player);
-        nsp.to(roomNum).emit('playboard', p1.x, p1.y, p2.x, p2.y, ball.x, ball.y, p1.score, p2.score);
         gameLoading();
       }, 3000);
     }
