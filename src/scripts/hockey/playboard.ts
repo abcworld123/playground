@@ -1,8 +1,8 @@
 import 'styles/hockey/playboard.scss';
 import { io } from 'socket.io-client';
-const socket = io('/hockeyPlay');
+import { sleep } from 'utils/tools';
 
-const sleep = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
+const socket = io('/hockeyPlay');
 
 //canvas에 관한 정보
 const p1_x = 100;

@@ -2,12 +2,12 @@ import 'bootstrap3/dist/css/bootstrap.min.css';
 import 'styles/weather/weather.scss';
 import { imgHourglass } from 'images/icons';
 import Swal from 'sweetalert2';
+import { sleep } from 'utils/tools';
 import type { ResWeather } from 'types/games/weather';
 
 const userNums = [0, 2, 2, 2, 2, 2, 2, 2];
 const regNums = [0, 0, 0, 0, 0, 0, 0, 0];
 const regNames = ['서울', '부산', '대구', '인천', '대전', '광주', '울산'];
-const sleep = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
 
 const tab = document.querySelectorAll<div>('.tab-game');
 const userContainer = document.querySelectorAll<div>('.user-container');
