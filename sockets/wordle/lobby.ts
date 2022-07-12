@@ -1,4 +1,4 @@
-import { allRooms } from 'modules/games/m_wordle';
+import { wordleRooms } from 'modules/rooms';
 import type { Namespace } from 'socket.io';
 
 export default function initWordle(nsp: Namespace) {
@@ -17,7 +17,7 @@ export default function initWordle(nsp: Namespace) {
     });
 
     socket.on('room exist check', (room: string, callback: (isExist: boolean) => void) => {
-      callback(hosts.has(room) || allRooms.has(room));
+      callback(hosts.has(room) || wordleRooms.has(room));
     });
 
     socket.on('remove room', () => {
@@ -39,7 +39,7 @@ export default function initWordle(nsp: Namespace) {
     });
 
     socket.on('join room accept', (user: string) => {
-      allRooms.set(myRoom, 0);
+      wordleRooms.set(myRoom, 0);
       socket.emit('join room accept', myRoom);
       nsp.to(user).emit('join room accept', myRoom);
     });

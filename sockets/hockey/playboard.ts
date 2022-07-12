@@ -1,3 +1,4 @@
+import { hockeyRooms } from 'modules/rooms';
 import type { Namespace } from 'socket.io';
 import type { BallInfo, GameInfo, PlayBoard, PlayerInfo } from 'types/games/hockey';
 
@@ -42,7 +43,7 @@ export default function initHockeyBoard(nsp: Namespace) {
     });
 
     socket.on('disconnect', (reason) => {
-      if (playBoard.has(roomNum)) {
+      if (hockeyRooms.has(roomNum)) {
         closeRoom();
       }
     });
@@ -144,6 +145,7 @@ export default function initHockeyBoard(nsp: Namespace) {
     function closeRoom() {
       clearTimeout(info.timeout);
       clearInterval(info.interval);
+      hockeyRooms.delete(roomNum);
       playBoard.delete(roomNum);
       nsp.in(roomNum).disconnectSockets();
     }

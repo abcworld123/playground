@@ -1,4 +1,5 @@
 import express from 'express';
+import { enterRoom, hockeyRooms } from 'modules/rooms';
 
 const router = express.Router();
 
@@ -7,7 +8,10 @@ router.get('/', (req, res, next) => {
 });
 
 router.get('/:roomname', (req, res, next) => {
-  res.render('hockey/playboard');
+  const room = req.params.roomname;
+  const { success } = enterRoom(hockeyRooms, room);
+  if (success) res.render('hockey/playboard');
+  else next();
 });
 
 export default router;

@@ -222,7 +222,6 @@ function joinRejected() {
 function gameStart(room: string) {
   Swal.close();
   room = encodeURIComponent(room);
-  const host = Boolean(requestQueue.length);
   location.replace(`hockey/${room}`);
 }
 

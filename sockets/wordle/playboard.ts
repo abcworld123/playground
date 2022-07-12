@@ -1,4 +1,4 @@
-import { allRooms } from 'modules/games/m_wordle';
+import { wordleRooms } from 'modules/rooms';
 import type { Namespace } from 'socket.io';
 
 export default function initWordleBoard(nsp: Namespace) {
@@ -91,7 +91,7 @@ export default function initWordleBoard(nsp: Namespace) {
     }
 
     function closeRoom() {
-      allRooms.delete(room);
+      wordleRooms.delete(room);
       nsp.in(room).disconnectSockets();
       turns.delete(room);
       ended.delete(room);
@@ -99,7 +99,7 @@ export default function initWordleBoard(nsp: Namespace) {
 
     function disconnectUser() {
       answers.delete(socket.id);
-      if (allRooms.has(room)) {
+      if (wordleRooms.has(room)) {
         nsp.to(room).emit('user leave');
         closeRoom();
       }
