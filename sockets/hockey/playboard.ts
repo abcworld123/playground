@@ -43,7 +43,8 @@ export default function initHockeyBoard(nsp: Namespace) {
     });
 
     socket.on('disconnect', (reason) => {
-      if (hockeyRooms.has(roomNum)) {
+      // if (hockeyRooms.has(roomNum)) {
+      if (playBoard.has(roomNum)) {
         closeRoom();
       }
     });
