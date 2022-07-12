@@ -33,16 +33,12 @@ export default function initHockeyBoard(nsp: Namespace) {
 
     socket.on('moveUp', () => {
       const player = p1.id === socket.id ? p1 : p2;
-      if (player.y > 0) {
-        player.dy = -player.ySpeed;
-      }
+      player.dy = -player.ySpeed;
     });
 
     socket.on('moveDown', () => {
       const player = p1.id === socket.id ? p1 : p2;
-      if (player.y < heightPixel - 100) {
-        player.dy = player.ySpeed;
-      }
+      player.dy = player.ySpeed;
     });
 
     socket.on('disconnect', (reason) => {

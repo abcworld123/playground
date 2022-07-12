@@ -14,6 +14,9 @@ let sizeUnit = canvas.offsetHeight / 75;
 canvas.width = canvas.offsetWidth;
 canvas.height = canvas.offsetHeight;
 
+let movable = false;
+let dir = '';
+
 const roomNum = window.location.href.split('/')[4];
 socket.emit('connection', roomNum);
 
@@ -22,6 +25,7 @@ window.addEventListener('resize', resizeCanvas);
 
 socket.on('countDown', (nowPlay: number) => {
   countDown(nowPlay);
+  dir = '';
 });
 
 socket.on('timeFlow', () => {
@@ -45,6 +49,7 @@ socket.on('goal', (player: number, score: number) => {
   const color = player === 1 ? 'red' : 'blue';
   document.querySelector<div>(`.playboard_play${player}_goal`).style.display = 'grid';
   document.querySelector<div>(`.playboard_${color}_score`).innerHTML = String(score);
+  movable = false;
 });
 
 socket.on('gameSet', (winner: string) => {
@@ -54,6 +59,7 @@ socket.on('gameSet', (winner: string) => {
   document.querySelector<div>('.hockey_modal_btn').addEventListener('click', function () {
     location.replace('/');
   });
+  movable = false;
 });
 
 async function countDown(nowPlay: number) {
@@ -72,7 +78,7 @@ async function countDown(nowPlay: number) {
     countDown[x].classList.remove('playboard_after_count');
     countDown[x].style.visibility = 'hidden';
   }
-
+  movable = true;
   document.querySelector<div>('.playboard_play1_port').style.display = 'none';
   document.querySelector<div>('.playboard_play2_port').style.display = 'none';
 
@@ -118,10 +124,13 @@ function screenDrawBall(x: number, y: number) {
 // 키보드 입력 함수
 // w, s로 조종
 function togleDirection(e: KeyboardEvent) {
-  if (e.key === 'w') {
+  if (!movable) return;
+  if (e.key === 'w' && dir !== 'w') {
     socket.emit('moveUp');
-  } else if (e.key === 's') {
+    dir = 'w';
+  } else if (e.key === 's' && dir !== 's') {
     socket.emit('moveDown');
+    dir = 's';
   }
 }
 
