@@ -98,11 +98,13 @@ export default function initHockeyBoard(nsp: Namespace) {
 
     function handleCrash() {
       for (const player of [p1, p2]) {
+        const lb = player === p1 ? player.x : player.x - 10;
+        const rb = player === p1 ? player.x + 20 : player.x + 10;
+        const ub = player.y;
+        const db = player.y + heightPixel * 0.2;
         if (
-          player.x < ball.x &&
-          ball.x < player.x + 20 &&
-          player.y < ball.y &&
-          ball.y < player.y + heightPixel * 0.2
+          lb < ball.x && ball.x < rb &&
+          ub < ball.y && ball.y < db
         ) {
           let dy = Math.floor(Math.random() * 10);
           dy = player.dy < 0 ? -dy : dy;
