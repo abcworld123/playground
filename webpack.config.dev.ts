@@ -41,7 +41,6 @@ const config: Configuration = {
   output: {
     filename: 'javascripts/[name].js',
     path: distPath,
-    clean: true,
   },
   optimization: {
     splitChunks: {
