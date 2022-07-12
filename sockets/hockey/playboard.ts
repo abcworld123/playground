@@ -75,7 +75,10 @@ export default function initHockeyBoard(nsp: Namespace) {
       else {
         if (info.time < 1) {
           nsp.to(roomNum).emit('timeFlow');
-          if (--info.left_time <= 0 && p1.score !== p2.score) gameEnd();
+          if (--info.left_time <= 0 && p1.score !== p2.score) {
+            gameEnd();
+            return;
+          }
           ball.dx += ball.dx > 0 ? 1 : -1;
           info.time = tick;
         }
@@ -114,8 +117,12 @@ export default function initHockeyBoard(nsp: Namespace) {
       nsp.to(roomNum).emit('goal', n, player.score);
       clearInterval(info.interval);
       info.timeout = setTimeout(() => {
-        resetState(player);
-        gameLoading();
+        if (info.left_time > 0) {
+          resetState(player);
+          gameLoading();
+        } else {
+          gameEnd();
+        }
       }, 3000);
     }
 

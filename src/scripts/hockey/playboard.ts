@@ -14,6 +14,7 @@ let sizeUnit = canvas.offsetHeight / 75;
 canvas.width = canvas.offsetWidth;
 canvas.height = canvas.offsetHeight;
 
+let remainedTime = 50;
 let movable = false;
 let dir = '';
 
@@ -29,10 +30,10 @@ socket.on('countDown', (nowPlay: number) => {
 });
 
 socket.on('timeFlow', () => {
+  if (remainedTime < 0) return;
   const timeHtml = document.querySelector<div>('.playboard_time_area');
-  let nowTime = Number(timeHtml.innerHTML.trim());
-  nowTime -= 1;
-  timeHtml.innerHTML = nowTime < 0 ? 'Golden Goal!!' : String(nowTime);
+  remainedTime -= 1;
+  timeHtml.innerHTML = remainedTime < 0 ? 'Golden Goal!!' : String(remainedTime);
 });
 
 socket.on('playboard', (p1_y: number, p2_y: number, ball_x: number, ball_y: number) => {
