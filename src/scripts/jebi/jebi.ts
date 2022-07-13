@@ -5,20 +5,24 @@ import { imgAilen, imgHaHa, imgJebi, imgJebiHover } from 'images/games/jebi';
 import { randSample } from 'utils/tools';
 import type { ResJebiSubmit } from 'types/games/jebi';
 
-const toast = new Toast(document.getElementById('toast'));
-const jebiContainer = <div>document.getElementById('jebiContainer');
-const btnHahaMinus = <button>document.getElementById('hahaMinus');
-const jebiHahaNum = <span>document.getElementById('hahaNum');
-const btnAilenMinus = <button>document.getElementById('ailenMinus');
-const jebiAilenNum = <span>document.getElementById('ailenNum');
-const btnShowAilen = <button>document.getElementById('showAilen');
-const settings = <div>document.getElementById('settings');
 const toastText = <span>document.getElementById('toastText');
-const jebies = <HTMLCollectionOf<img>>jebiContainer.children;
+const jebiContainer = <div>document.getElementById('jebiContainer');
+const jebiHahaNum = <span>document.getElementById('hahaNum');
+const jebiAilenNum = <span>document.getElementById('ailenNum');
+const btnHahaPlus = <button>document.getElementById('hahaPlus');
+const btnHahaMinus = <button>document.getElementById('hahaMinus');
+const btnAilenPlus = <button>document.getElementById('ailenPlus');
+const btnAilenMinus = <button>document.getElementById('ailenMinus');
+const btnReset = <button>document.getElementById('jebiReset');
+const btnShowAilen = <button>document.getElementById('showAilen');
+const btnShowSettings = <img>document.getElementById('showSettings');
+const settings = <div>document.getElementById('settings');
 
 let dog = 4, ailen = 1;
 let openedDog = 0, openedAilen = 0;
 let ailens = randSample(1, dog + ailen, ailen);
+const toast = new Toast(document.getElementById('toast'));
+const jebies = <HTMLCollectionOf<img>>jebiContainer.children;
 
 /* 제비 초기화 */
 function reset() {
@@ -149,10 +153,11 @@ document.addEventListener('click', (e) => {
   }
 });
 
-global.hahaMinus = hahaMinus;
-global.hahaPlus = hahaPlus;
-global.ailenMinus = ailenMinus;
-global.ailenPlus = ailenPlus;
-global.reset = reset;
-global.showAilen = showAilen;
-global.showSettings = showSettings;
+btnHahaMinus.addEventListener('click', hahaMinus);
+btnHahaPlus.addEventListener('click', hahaPlus);
+btnAilenMinus.addEventListener('click', ailenMinus);
+btnAilenPlus.addEventListener('click', ailenPlus);
+btnReset.addEventListener('click', reset);
+btnShowAilen.addEventListener('pointerdown', () => showAilen(true));
+btnShowAilen.addEventListener('pointerup', () => showAilen(false));
+btnShowSettings.addEventListener('click', showSettings);

@@ -76,12 +76,12 @@ body {
   min-width: 170px;
 }
 
-#btnSettings {
+#showSettings {
   display: none;
   cursor: pointer;
 }
 
-.label-haha {
+.label-jebi {
   width: 60px;
 }
 
@@ -105,7 +105,7 @@ body {
     display: none;
   }
 
-  #btnSettings {
+  #showSettings {
     display: inline;
   }
 }
