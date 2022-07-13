@@ -41,13 +41,19 @@ body {
   flex-wrap: wrap;
   gap: 40px 50px;
   justify-content: center;
+}
 
-  & > * {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 30px;
-    align-items: center;
-  }
+#settings {
+  justify-content: center;
+  gap: 50px;
+}
+
+.control > *,
+#settings > * {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 30px;
+  align-items: center;
 }
 
 .btn {
@@ -60,7 +66,7 @@ body {
   }
 }
 
-#jebiNum {
+.label-jebinum {
   font-size: 1.2em;
 }
 
@@ -72,6 +78,10 @@ body {
 #btnSettings {
   display: none;
   cursor: pointer;
+}
+
+.label-haha {
+  width: 60px;
 }
 
 .toast-container {
@@ -87,6 +97,16 @@ body {
   font-size: .6em;
   width: auto;
   border: none;
+}
+
+@media (max-width: 1670px) {
+  #settings {
+    display: none;
+  }
+
+  #btnSettings {
+    display: inline;
+  }
 }
 
 @media (max-width: 960px) {
@@ -109,16 +129,14 @@ body {
   }
 
   .control {
-    margin-left: -15%;
-    margin-right: -15%;
+    margin-left: -25%;
+    margin-right: -25%;
     transform: scale(.7);
   }
+}
 
-  #settings {
-    display: none;
-  }
-
-  #btnSettings {
-    display: inline;
+@media (max-width: 400px) {
+  .control {
+    transform: scale(.6);
   }
 }

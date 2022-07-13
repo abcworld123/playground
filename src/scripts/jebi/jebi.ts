@@ -2,20 +2,23 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import 'styles/jebi/jebi.scss';
 import Toast from 'bootstrap/js/dist/toast.js';
 import { imgAilen, imgHaHa, imgJebi, imgJebiHover } from 'images/games/jebi';
-import { randint } from 'utils/tools';
+import { randSample } from 'utils/tools';
 import type { ResJebiSubmit } from 'types/games/jebi';
 
 const toast = new Toast(document.getElementById('toast'));
 const jebiContainer = <div>document.getElementById('jebiContainer');
-const btnMinus = <button>document.getElementById('jebiMinus');
-const jebiNum = <span>document.getElementById('jebiNum');
+const btnHahaMinus = <button>document.getElementById('hahaMinus');
+const jebiHahaNum = <span>document.getElementById('hahaNum');
+const btnAilenMinus = <button>document.getElementById('ailenMinus');
+const jebiAilenNum = <span>document.getElementById('ailenNum');
 const btnShowAilen = <button>document.getElementById('showAilen');
 const settings = <div>document.getElementById('settings');
 const toastText = <span>document.getElementById('toastText');
 const jebies = <HTMLCollectionOf<img>>jebiContainer.children;
 
-let n = 5, dog = 0;
-let ailen = randint(1, n);
+let dog = 4, ailen = 1;
+let openedDog = 0, openedAilen = 0;
+let ailens = randSample(1, dog + ailen, ailen);
 
 /* 제비 초기화 */
 function reset() {
@@ -23,43 +26,64 @@ function reset() {
     jebi.className = 'jebi-unopened';
     jebi.src = imgJebi;
   }
-  ailen = randint(1, n);
+  ailens = randSample(1, dog + ailen, ailen);
+  console.log(ailens);
   btnShowAilen.disabled = false;
-  dog = 0;
+  openedDog = 0;
+  openedAilen = 0;
 }
 
-/* [+] 버튼 클릭 */
-function jebiPlus() {
-  n++;
+/* 제비 1개 추가 */
+function jebiPlus(n: number, numText: span, btnMinus: button) {
   reset();
   const newJebi = <img>jebies[0].cloneNode();
-  newJebi.id = String(n);
+  newJebi.id = String(dog + ailen);
   jebiContainer.appendChild(newJebi);
-  jebiNum.innerText = String(n);
-  if (n === 3) {
+  numText.innerText = String(n);
+  if (n === 2) {
     btnMinus.disabled = false;
   }
 }
 
-/* [-] 버튼 클릭 */
-function jebiMinus() {
-  n--;
+/* 제비 1개 제거 */
+function jebiMinus(n: number, numText: span, btnMinus: button) {
   reset();
-  jebies[n].remove();
-  jebiNum.innerText = String(n);
-  if (n === 2) {
+  jebies[dog + ailen].remove();
+  numText.innerText = String(n);
+  if (n === 1) {
     btnMinus.disabled = true;
   }
 }
 
+/* 개그림 [+] 버튼 클릭 */
+function hahaPlus() {
+  jebiPlus(++dog, jebiHahaNum, btnHahaMinus);
+}
+
+/* 개그림 [-] 버튼 클릭 */
+function hahaMinus() {
+  jebiMinus(--dog, jebiHahaNum, btnHahaMinus);
+}
+
+/* 외계인 [+] 버튼 클릭 */
+function ailenPlus() {
+  jebiPlus(++ailen, jebiAilenNum, btnAilenMinus);
+}
+
+/* 외계인 [-] 버튼 클릭 */
+function ailenMinus() {
+  jebiMinus(--ailen, jebiAilenNum, btnAilenMinus);
+}
+
 /* 제비 클릭, 결과 보여주기 */
 function jebiOpen(jebi: img) {
-  if (parseInt(jebi.id) === ailen) {
+  if (ailens.includes(parseInt(jebi.id))) {
+    openedAilen++;
     jebi.src = imgAilen;
-    btnShowAilen.disabled = true;
-    toastShow();
+    if (openedAilen === ailen) btnShowAilen.disabled = true;
+    if (ailen === 1) toastShow();
   } else {
-    dog++;
+    openedDog++;
     jebi.src = imgHaHa;
   }
   jebi.removeAttribute('class');
@@ -70,7 +94,7 @@ function toastShow() {
   fetch('/jebi/submit', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ n, dog }),
+    body: JSON.stringify({ n: dog + ailen, dog: openedDog }),
   })
   .then<ResJebiSubmit>((res) => res.json())
   .then(({ success, data }) => {
@@ -86,11 +110,16 @@ function toastShow() {
   });
 }
 
+/* 꽝 확인 */
 function showAilen(show: boolean) {
-  const jebiAilen = <img>jebies[ailen - 1];
-  jebiAilen.src = show ? imgAilen : imgJebi;
+  for (const i of ailens) {
+    if (jebies[i - 1].className === 'jebi-unopened') {
+      jebies[i - 1].src = show ? imgAilen : imgJebi;
+    }
+  }
 }
 
+/* 설정 열기 (모바일) */
 function showSettings() {
   console.log(settings.style.display);
   if (settings.style.display === '') {
@@ -120,8 +149,10 @@ document.addEventListener('click', (e) => {
   }
 });
 
-global.jebiMinus = jebiMinus;
-global.jebiPlus = jebiPlus;
+global.hahaMinus = hahaMinus;
+global.hahaPlus = hahaPlus;
+global.ailenMinus = ailenMinus;
+global.ailenPlus = ailenPlus;
 global.reset = reset;
 global.showAilen = showAilen;
 global.showSettings = showSettings;

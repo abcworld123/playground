@@ -6,7 +6,6 @@
 </head>
 <body>
 <div class="wrapper">
-  <!-- 제비 컨테이너 div -->
   <div class="container" id="jebiContainer">
     <img class="jebi-unopened" src="/images/games/jebi/jebi.png" id="1">
     <img class="jebi-unopened" src="/images/games/jebi/jebi.png" id="2">
@@ -14,13 +13,20 @@
     <img class="jebi-unopened" src="/images/games/jebi/jebi.png" id="4">
     <img class="jebi-unopened" src="/images/games/jebi/jebi.png" id="5">
   </div>
-  <!-- 제비 수 컨트롤 div -->
   <div class="control">
     <div id="settings">
-      <label>제비 수:</label>
-      <button class="btn btn-secondary btn-jebinum" id="jebiMinus" onclick="jebiMinus()">-</button>
-      <span id="jebiNum">5</span>
-      <button class="btn btn-secondary btn-jebinum" id="jebiPlus" onclick="jebiPlus()">+</button>
+      <div>
+        <label><img class="label-haha" src="/images/games/jebi/haha_small.png"> :</label>
+        <button class="btn btn-secondary btn-jebinum" id="hahaMinus" onclick="hahaMinus()">-</button>
+        <span class="label-jebinum" id="hahaNum">4</span>
+        <button class="btn btn-secondary btn-jebinum" id="hahaPlus" onclick="hahaPlus()">+</button>
+      </div>
+      <div>
+        <label><img class="label-haha" src="/images/games/jebi/ailen_small.png"> :</label>
+        <button class="btn btn-secondary btn-jebinum" id="ailenMinus" onclick="ailenMinus()">-</button>
+        <span class="label-jebinum" id="ailenNum">1</span>
+        <button class="btn btn-secondary btn-jebinum" id="ailenPlus" onclick="ailenPlus()">+</button>
+      </div>
     </div>
     <div>
       <button class="btn btn-danger btn-reset" id="jebiReset" onclick="reset()">초기화</button>
