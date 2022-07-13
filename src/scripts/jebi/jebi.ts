@@ -9,6 +9,7 @@ const toast = new Toast(document.getElementById('toast'));
 const jebiContainer = <div>document.getElementById('jebiContainer');
 const btnMinus = <button>document.getElementById('jebiMinus');
 const jebiNum = <span>document.getElementById('jebiNum');
+const btnShowAilen = <button>document.getElementById('showAilen');
 const toastText = <span>document.getElementById('toastText');
 
 let n = 5, dog = 0;
@@ -22,6 +23,7 @@ function reset() {
     jebi.src = imgJebi;
   });
   ailen = randint(1, n);
+  btnShowAilen.disabled = false;
   dog = 0;
 }
 
@@ -53,6 +55,7 @@ function jebiMinus() {
 function jebiOpen(jebi: img) {
   if (parseInt(jebi.id) === ailen) {
     jebi.src = imgAilen;
+    btnShowAilen.disabled = true;
     toastShow();
   } else {
     dog++;
@@ -82,6 +85,11 @@ function toastShow() {
   });
 }
 
+function toggleAilen(show: boolean) {
+  const jebies = <img>jebiContainer.children[ailen - 1];
+  jebies.src = show ? imgAilen : imgJebi;
+}
+
 /* live eventListener for '.jebi-unopened' */
 document.addEventListener('mouseover', (e) => {
   if (!(e.target instanceof Image)) return;
@@ -105,3 +113,4 @@ document.addEventListener('click', (e) => {
 global.jebiMinus = jebiMinus;
 global.jebiPlus = jebiPlus;
 global.reset = reset;
+global.toggleAilen = toggleAilen;
