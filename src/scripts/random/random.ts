@@ -1,13 +1,14 @@
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'styles/random/random.scss';
 import Swal from 'sweetalert2';
+import { randint } from 'utils/tools';
 
 function start() {
   const range = <input>document.getElementById('range');
-  const randint = <p>document.getElementById('randint');
+  const randintText = <p>document.getElementById('randint');
   const n = range.value;
   if (!n) alertError();
-  else randint.innerText = String(Math.floor(Math.random() * (parseInt(n) + 1)));
+  else randintText.innerText = String(randint(0, parseInt(n)));
 }
 
 function alertError() {
