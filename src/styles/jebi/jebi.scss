@@ -4,10 +4,6 @@
 
 html {
   font-size: 2em;
-
-  &::-webkit-scrollbar {
-    display: none;
-  }
 }
 
 body {
@@ -27,6 +23,7 @@ body {
   justify-content: center;
   gap: 75px 30px;
   padding: 0;
+  margin-top: 70px;
   margin-bottom: 150px;
   max-width: inherit;
 
@@ -72,6 +69,11 @@ body {
   min-width: 170px;
 }
 
+#btnSettings {
+  display: none;
+  cursor: pointer;
+}
+
 .toast-container {
   z-index: 11;
 }
@@ -88,6 +90,10 @@ body {
 }
 
 @media (max-width: 960px) {
+  html::-webkit-scrollbar {
+    display: none;
+  }
+
   .wrapper {
     margin: 7%;
     padding: 3%;
@@ -95,7 +101,6 @@ body {
 
   .container {
     gap: 35px 15px;
-    margin-top: 70px;
     margin-bottom: 70px;
 
     & > img {
@@ -107,5 +112,13 @@ body {
     margin-left: -15%;
     margin-right: -15%;
     transform: scale(.7);
+  }
+
+  #settings {
+    display: none;
+  }
+
+  #btnSettings {
+    display: inline;
   }
 }

@@ -10,18 +10,19 @@ const jebiContainer = <div>document.getElementById('jebiContainer');
 const btnMinus = <button>document.getElementById('jebiMinus');
 const jebiNum = <span>document.getElementById('jebiNum');
 const btnShowAilen = <button>document.getElementById('showAilen');
+const settings = <div>document.getElementById('settings');
 const toastText = <span>document.getElementById('toastText');
+const jebies = <HTMLCollectionOf<img>>jebiContainer.children;
 
 let n = 5, dog = 0;
 let ailen = randint(1, n);
 
 /* 제비 초기화 */
 function reset() {
-  const jebies = <HTMLCollectionOf<img>>jebiContainer.children;
-  [...jebies].forEach((jebi) => {
+  for (const jebi of jebies) {
     jebi.className = 'jebi-unopened';
     jebi.src = imgJebi;
-  });
+  }
   ailen = randint(1, n);
   btnShowAilen.disabled = false;
   dog = 0;
@@ -31,7 +32,7 @@ function reset() {
 function jebiPlus() {
   n++;
   reset();
-  const newJebi = <img>jebiContainer.children[0].cloneNode();
+  const newJebi = <img>jebies[0].cloneNode();
   newJebi.id = String(n);
   jebiContainer.appendChild(newJebi);
   jebiNum.innerText = String(n);
@@ -44,7 +45,7 @@ function jebiPlus() {
 function jebiMinus() {
   n--;
   reset();
-  jebiContainer.children[n].remove();
+  jebies[n].remove();
   jebiNum.innerText = String(n);
   if (n === 2) {
     btnMinus.disabled = true;
@@ -85,9 +86,18 @@ function toastShow() {
   });
 }
 
-function toggleAilen(show: boolean) {
-  const jebies = <img>jebiContainer.children[ailen - 1];
-  jebies.src = show ? imgAilen : imgJebi;
+function showAilen(show: boolean) {
+  const jebiAilen = <img>jebies[ailen - 1];
+  jebiAilen.src = show ? imgAilen : imgJebi;
+}
+
+function showSettings() {
+  console.log(settings.style.display);
+  if (settings.style.display === '') {
+    settings.style.display = 'flex';
+  } else {
+    settings.style.display = '';
+  }
 }
 
 /* live eventListener for '.jebi-unopened' */
@@ -113,4 +123,5 @@ document.addEventListener('click', (e) => {
 global.jebiMinus = jebiMinus;
 global.jebiPlus = jebiPlus;
 global.reset = reset;
-global.toggleAilen = toggleAilen;
+global.showAilen = showAilen;
+global.showSettings = showSettings;
