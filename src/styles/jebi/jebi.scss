@@ -4,10 +4,6 @@
 
 html {
   font-size: 2em;
-
-  &::-webkit-scrollbar {
-    display: none;
-  }
 }
 
 body {
@@ -27,11 +23,13 @@ body {
   justify-content: center;
   gap: 75px 30px;
   padding: 0;
+  margin-top: 70px;
   margin-bottom: 150px;
   max-width: inherit;
 
   & > img {
     width: 200px;
+    height: 200px;
   }
 }
 
@@ -41,13 +39,22 @@ body {
 
 .control {
   display: flex;
-  gap: 30px;
-  align-items: center;
+  flex-wrap: wrap;
+  gap: 40px 50px;
   justify-content: center;
 }
 
-label {
-  min-width: 120px;
+#settings {
+  justify-content: center;
+  gap: 50px;
+}
+
+.control > *,
+#settings > * {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 30px;
+  align-items: center;
 }
 
 .btn {
@@ -60,13 +67,22 @@ label {
   }
 }
 
-#jebiNum {
+.label-jebinum {
   font-size: 1.2em;
 }
 
-#jebiReset {
-  min-width: 200px;
-  margin-left: 50px;
+#jebiReset,
+#showAilen {
+  min-width: 170px;
+}
+
+#showSettings {
+  display: none;
+  cursor: pointer;
+}
+
+.label-jebi {
+  width: 60px;
 }
 
 .toast-container {
@@ -84,7 +100,21 @@ label {
   border: none;
 }
 
-@media (max-width: 768px) {
+@media (max-width: 1670px) {
+  #settings {
+    display: none;
+  }
+
+  #showSettings {
+    display: inline;
+  }
+}
+
+@media (max-width: 960px) {
+  html::-webkit-scrollbar {
+    display: none;
+  }
+
   .wrapper {
     margin: 7%;
     padding: 3%;
@@ -92,15 +122,27 @@ label {
 
   .container {
     gap: 35px 15px;
-    margin-top: 70px;
     margin-bottom: 70px;
 
     & > img {
-      width: 90px;
+      width: 85px;
+      height: 85px;
     }
   }
 
   .control {
-    transform: scale(.5);
+    margin-left: -25%;
+    margin-right: -25%;
+    transform: scale(.7);
+  }
+
+  #settings {
+    margin-top: -10%;
+  }
+}
+
+@media (max-width: 400px) {
+  .control {
+    transform: scale(.6);
   }
 }
