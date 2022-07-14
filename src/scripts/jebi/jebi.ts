@@ -31,7 +31,6 @@ function reset() {
     jebi.src = imgJebi;
   }
   ailens = randSample(1, dog + ailen, ailen);
-  console.log(ailens);
   btnShowAilen.disabled = false;
   openedDog = 0;
   openedAilen = 0;
@@ -125,7 +124,6 @@ function showAilen(show: boolean) {
 
 /* 설정 열기 (모바일) */
 function showSettings() {
-  console.log(settings.style.display);
   if (settings.style.display === '') {
     settings.style.display = 'flex';
   } else {
