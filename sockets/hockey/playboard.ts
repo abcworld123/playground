@@ -81,13 +81,16 @@ export default function initHockeyBoard(nsp: Namespace) {
             gameEnd();
             return;
           }
-          ball.dx += ball.dx > 0 ? 1 : -1;
+          if (ball.speed < 15) ball.speed += 0.8
+          ball.dx = Math.cos(ball.angle) * ball.speed;
+          ball.dy = Math.sin(ball.angle) * ball.speed;
           info.time = tick;
         }
         if (ball.y >= heightPixel || ball.y <= 0) {
-          ball.dy = -ball.dy;
+          ball.angle = -ball.angle;
+          ball.dy = Math.sin(ball.angle) * ball.speed;
         }
-        handleCrash();
+        if(ball.pause < 1) handleCrash();
         sendState();
       }
     }
@@ -106,11 +109,12 @@ export default function initHockeyBoard(nsp: Namespace) {
           lb < ball.x && ball.x < rb &&
           ub < ball.y && ball.y < db
         ) {
-          let dy = Math.floor(Math.random() * 10);
-          dy = player.dy < 0 ? -dy : dy;
-          ball.dx *= -1;
-          ball.dy = dy;
-          ball.pause = 5;
+          let angle = Math.random() * 2.6 - 1.3
+          angle += ball.dx < 0 ? 0 : 3
+          ball.angle = angle
+          ball.dx = Math.cos(angle) * ball.speed;
+          ball.dy = Math.sin(angle) * ball.speed;
+          ball.pause = 20;
         }
       }
     }
@@ -131,13 +135,19 @@ export default function initHockeyBoard(nsp: Namespace) {
     }
 
     function resetState(goalPlayer: PlayerInfo) {
+      let angle = Math.random() * 2.6 - 1.3
+      angle += goalPlayer === p1 ? 3 : 0
+
       p1.y = 200;
       p2.y = 200;
       p1.dy = 0;
       p2.dy = 0;
       ball.x = 500;
       ball.y = 250;
-      ball.dx = goalPlayer === p1 ? -5 : 5;
+      ball.speed = 6
+      ball.angle = angle;
+      ball.dx = Math.cos(ball.angle) * ball.speed;
+      ball.dy = Math.sin(ball.angle) * ball.speed;
     }
 
     function gameEnd() {
@@ -154,6 +164,10 @@ export default function initHockeyBoard(nsp: Namespace) {
     }
 
     function getInitialState(): PlayBoard {
+      let angle = Math.random() * 2.6 - 1.3
+      angle += Math.random() < 0.5 ? 0 : 3
+      let dx = Math.cos(angle) * 6;
+      let dy = Math.sin(angle) * 6;
       return {
         p1: {
           id: null,
@@ -174,8 +188,10 @@ export default function initHockeyBoard(nsp: Namespace) {
         ball: {
           x: 500,
           y: 250,
-          dx: 5,
-          dy: 2,
+          dx: dx,
+          dy: dy,
+          speed: 6,
+          angle: angle,
           pause: 0,
         },
         info: {

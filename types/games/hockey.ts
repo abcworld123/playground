@@ -12,6 +12,8 @@ export interface BallInfo {
   y: number;
   dx: number;
   dy: number;
+  speed: number;
+  angle: number;
   pause: number;
 }
 
