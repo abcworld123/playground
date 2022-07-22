@@ -41,6 +41,7 @@
     "connect-livereload": "^0.6.1",
     "copy-webpack-plugin": "^11.0.0",
     "css-loader": "^6.7.1",
+    "eslint-import-resolver-typescript": "^3.3.0",
     "eslint-plugin-import": "^2.26.0",
     "eslint-plugin-only-warn": "^1.0.3",
     "fork-ts-checker-webpack-plugin": "^7.2.13",

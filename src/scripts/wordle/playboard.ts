@@ -1,8 +1,8 @@
 import 'styles/wordle/playboard.scss';
 import 'animate.css';
-import { imgGear } from 'images/common';
 import { io } from 'socket.io-client';
 import Swal from 'sweetalert2';
+import { imgGear } from 'images/common';
 
 let myTurn: boolean;
 let myAnswer: string;

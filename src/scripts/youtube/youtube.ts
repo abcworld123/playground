@@ -29,7 +29,6 @@ function rotationCategory() {
 
 // 결과 창 변경
 function getResult() {
-  const youtubeCategory = document.getElementsByClassName('youtube_btn')[1].innerHTML.trim();
   const youtubeInputArea = document.querySelector<div>('.youtube_input_area');
   const youtubeInput = youtubeInputArea.querySelectorAll('input');
   const keywords = [];

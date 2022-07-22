@@ -18,59 +18,49 @@
   ],
   "plugins": ["only-warn"],
   "rules": {
-    "semi": ["warn", "always"],
-    "no-extra-semi": "warn",
     "no-spaced-func": "warn",
     "prefer-const": "warn",
-    "space-before-blocks": ["warn", "always"],
-    "space-infix-ops": ["warn", { "int32Hint": false }],
     "semi-spacing": ["warn", { "before": false, "after": true }],
-    "keyword-spacing": ["warn", { "before": true, "after": true }],
-    "comma-spacing": ["warn", { "before": false, "after": true }],
     "key-spacing": ["warn", { "beforeColon": false, "afterColon": true }],
     "space-unary-ops": ["warn", { "words": true, "nonwords": false }],
     "no-trailing-spaces": ["warn", { "ignoreComments": true }],
     "no-multi-spaces": ["warn", { "ignoreEOLComments": true, "exceptions": { "Property": true } }],
-    "space-before-function-paren": ["warn", { "anonymous": "always", "named": "never", "asyncArrow": "always" }],
     "prefer-object-spread": "warn",
     "prefer-spread": "warn",
     "prefer-exponentiation-operator": "warn",
     "no-useless-return": "warn",
     "no-var": "error",
-    "indent": ["warn", 2, { "MemberExpression": "off" }],
-    "comma-dangle": ["warn", "always-multiline"],
     "arrow-spacing": ["warn", { "before": true, "after": true }],
-    "quotes": ["warn", "single"],
-    "no-undef": "off",
     "no-multiple-empty-lines": ["error", { "max": 2, "maxEOF": 0 }],
-    "jsx-quotes": ["error", "prefer-double"],
-    "object-curly-spacing": ["error", "always", { "objectsInObjects": true }],
-    "no-constant-condition": "off",
 
-    // toggle
-    "no-unused-vars": "off",
-    // "no-unused-vars": "error",
-
-    "@typescript-eslint/no-explicit-any": "off",
     "@typescript-eslint/semi": ["warn", "always"],
-    "@typescript-eslint/type-annotation-spacing": "warn",
-    "@typescript-eslint/space-infix-ops": ["warn", { "int32Hint": false }],
-    "@typescript-eslint/ban-ts-comment": ["error", { "ts-ignore": "allow-with-description" }],
-    "@typescript-eslint/no-unused-vars": "off",
+    "@typescript-eslint/no-extra-semi": "warn",
+    "@typescript-eslint/no-undef": "off",
+    "@typescript-eslint/quotes": ["warn", "single"],
+    "@typescript-eslint/space-before-blocks": ["warn", "always"],
     "@typescript-eslint/indent": ["warn", 2, { "MemberExpression": "off" }],
+    "@typescript-eslint/keyword-spacing": ["warn", { "before": true, "after": true }],
+    "@typescript-eslint/comma-spacing": ["warn", { "before": false, "after": true }],
+    "@typescript-eslint/space-before-function-paren": ["warn", { "anonymous": "always", "named": "never", "asyncArrow": "always" }],
+    "@typescript-eslint/comma-dangle": ["warn", "always-multiline"],
+    "@typescript-eslint/object-curly-spacing": ["error", "always", { "objectsInObjects": true }],
+    "@typescript-eslint/no-constant-condition": "off",
+    "@typescript-eslint/type-annotation-spacing": "warn",
+    "@typescript-eslint/no-unused-vars": ["error", { "args": "none" }],
+    "@typescript-eslint/space-infix-ops": ["warn", { "int32Hint": false }],
+    "@typescript-eslint/no-explicit-any": "off",
+    "@typescript-eslint/ban-ts-comment": ["error", { "ts-ignore": "allow-with-description" }],
     "@typescript-eslint/no-empty-function": "off",
-    "@typescript-eslint/no-var-requires": "off",
     "@typescript-eslint/member-delimiter-style": ["error", {
       "multiline": {
         "delimiter": "semi",
         "requireLast": true
       },
       "singleline": {
-        "delimiter": "semi",
+        "delimiter": "comma",
         "requireLast": false
       }
     }],
-
     "import/order": [
       "error",
       {
@@ -81,5 +71,15 @@
         }
       }
     ]
+  },
+  "settings": {
+    "import/resolver": {
+      "typescript": {
+        "project": [
+          "tsconfig.json",
+          "src/tsconfig.json"
+        ]
+      }
+    }
   }
 }
