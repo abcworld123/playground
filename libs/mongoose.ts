@@ -1,5 +1,6 @@
-import config from 'config';
 import mongoose from 'mongoose';
+import config from 'config';
+
 const { host, authdb, user, pass } = config.database;
 
 export function dbConnect() {
