@@ -63,6 +63,7 @@ export default function initHockeyBoard(nsp: Namespace) {
     }
 
     function calPlay() {
+      console.log(ball.angle)
       p1.y += p1.dy;
       p2.y += p2.dy;
       ball.x += ball.dx;
@@ -109,7 +110,8 @@ export default function initHockeyBoard(nsp: Namespace) {
           lb < ball.x && ball.x < rb &&
           ub < ball.y && ball.y < db
         ) {
-          let angle = Math.random() * 2.6 - 1.3
+
+          let angle = (Math.random()*0.8 + 0.4) * (Math.random() < 0.5 ? 1 : -1)
           angle += ball.dx < 0 ? 0 : 3
           ball.angle = angle
           ball.dx = Math.cos(angle) * ball.speed;
@@ -135,7 +137,7 @@ export default function initHockeyBoard(nsp: Namespace) {
     }
 
     function resetState(goalPlayer: PlayerInfo) {
-      let angle = Math.random() * 2.6 - 1.3
+      let angle = (Math.random()*0.8 + 0.4) * (Math.random() < 0.5 ? 1 : -1)
       angle += goalPlayer === p1 ? 3 : 0
 
       p1.y = 200;
@@ -164,7 +166,7 @@ export default function initHockeyBoard(nsp: Namespace) {
     }
 
     function getInitialState(): PlayBoard {
-      let angle = Math.random() * 2.6 - 1.3
+      let angle = (Math.random()*0.8 + 0.4) * (Math.random() < 0.5 ? 1 : -1)
       angle += Math.random() < 0.5 ? 0 : 3
       let dx = Math.cos(angle) * 6;
       let dy = Math.sin(angle) * 6;
