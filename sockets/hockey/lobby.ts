@@ -1,7 +1,7 @@
-import { wordleRooms } from 'modules/rooms';
+import { hockeyRooms } from 'modules/rooms';
 import type { Namespace } from 'socket.io';
 
-export default function initWordle(nsp: Namespace) {
+export default function initHockey(nsp: Namespace) {
   const users = new Set<string>();  // { all users }
   const hosts = new Map<string, string>();  // { room: id }
 
@@ -17,7 +17,7 @@ export default function initWordle(nsp: Namespace) {
     });
 
     socket.on('room exist check', (room: string, callback: (isExist: boolean) => void) => {
-      callback(hosts.has(room) || wordleRooms.has(room));
+      callback(hosts.has(room) || hockeyRooms.has(room));
     });
 
     socket.on('remove room', () => {
@@ -39,7 +39,7 @@ export default function initWordle(nsp: Namespace) {
     });
 
     socket.on('join room accept', (user: string) => {
-      wordleRooms.set(myRoom, 0);
+      hockeyRooms.set(myRoom, 0);
       socket.emit('join room accept', myRoom);
       nsp.to(user).emit('join room accept', myRoom);
     });
