@@ -63,7 +63,6 @@ export default function initHockeyBoard(nsp: Namespace) {
     }
 
     function calPlay() {
-      console.log(ball.angle)
       p1.y += p1.dy;
       p2.y += p2.dy;
       ball.x += ball.dx;
