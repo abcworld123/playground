@@ -9,8 +9,7 @@ router.get('/', (req, res, next) => {
 
 router.get('/:roomname', (req, res, next) => {
   const room = req.params.roomname;
-  // const { success } = enterRoom(hockeyRooms, room);
-  const success = true;
+  const { success } = enterRoom(hockeyRooms, room);
   if (success) res.render('hockey/playboard');
   else next();
 });

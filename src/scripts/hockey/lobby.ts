@@ -1,9 +1,9 @@
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'animate.css';
 import 'styles/hockey/lobby.scss';
-import { imgLoading } from 'images/common';
 import { io } from 'socket.io-client';
 import Swal from 'sweetalert2';
+import { imgLoading } from 'images/common';
 
 const rooms = new Set<string>();  // { lobby room list }
 const requestQueue: string[] = [];
