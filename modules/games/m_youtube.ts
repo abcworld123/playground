@@ -1,5 +1,5 @@
-import config from 'config';
 import { google } from 'googleapis';
+import config from 'config';
 import response from 'modules/response';
 
 const service = google.youtube('v3');

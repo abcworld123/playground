@@ -1,7 +1,7 @@
 import 'bootstrap3/dist/css/bootstrap.min.css';
 import 'styles/weather/weather.scss';
-import { imgHourglass } from 'images/icons';
 import Swal from 'sweetalert2';
+import { imgHourglass } from 'images/icons';
 import { sleep } from 'utils/tools';
 import type { ResWeather } from 'types/games/weather';
 

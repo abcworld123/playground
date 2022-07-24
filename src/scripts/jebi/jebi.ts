@@ -2,66 +2,91 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import 'styles/jebi/jebi.scss';
 import Toast from 'bootstrap/js/dist/toast.js';
 import { imgAilen, imgHaHa, imgJebi, imgJebiHover } from 'images/games/jebi';
+import { randSample } from 'utils/tools';
 import type { ResJebiSubmit } from 'types/games/jebi';
 
-const toast = new Toast(document.getElementById('toast'));
-const jebiContainer = <div>document.getElementById('jebiContainer');
-const btnMinus = <button>document.getElementById('jebiMinus');
-const jebiNum = <span>document.getElementById('jebiNum');
 const toastText = <span>document.getElementById('toastText');
+const jebiContainer = <div>document.getElementById('jebiContainer');
+const jebiHahaNum = <span>document.getElementById('hahaNum');
+const jebiAilenNum = <span>document.getElementById('ailenNum');
+const btnHahaPlus = <button>document.getElementById('hahaPlus');
+const btnHahaMinus = <button>document.getElementById('hahaMinus');
+const btnAilenPlus = <button>document.getElementById('ailenPlus');
+const btnAilenMinus = <button>document.getElementById('ailenMinus');
+const btnReset = <button>document.getElementById('jebiReset');
+const btnShowAilen = <button>document.getElementById('showAilen');
+const btnShowSettings = <img>document.getElementById('showSettings');
+const settings = <div>document.getElementById('settings');
 
-let n = 5, dog = 0;
-let ailen = randint(n);
-
-/* 난수 생성 */
-function randint(n: number) {
-  const num = Math.ceil(Math.random() * n);
-  console.log(`외계인: ${num}`);  // 주작 방지용으로 미리 번호 확인 가능
-  return num;
-}
+let dog = 4, ailen = 1;
+let openedDog = 0, openedAilen = 0;
+let ailens = randSample(1, dog + ailen, ailen);
+const toast = new Toast(document.getElementById('toast'));
+const jebies = <HTMLCollectionOf<img>>jebiContainer.children;
 
 /* 제비 초기화 */
 function reset() {
-  const jebies = <HTMLCollectionOf<img>>jebiContainer.children;
-  [...jebies].forEach((jebi) => {
+  for (const jebi of jebies) {
     jebi.className = 'jebi-unopened';
     jebi.src = imgJebi;
-  });
-  ailen = randint(n);
-  dog = 0;
+  }
+  ailens = randSample(1, dog + ailen, ailen);
+  btnShowAilen.disabled = false;
+  openedDog = 0;
+  openedAilen = 0;
 }
 
-/* [+] 버튼 클릭 */
-function jebiPlus() {
-  n++;
+/* 제비 1개 추가 */
+function jebiPlus(n: number, numText: span, btnMinus: button) {
   reset();
-  const newJebi = <img>jebiContainer.children[0].cloneNode();
-  newJebi.id = String(n);
+  const newJebi = <img>jebies[0].cloneNode();
+  newJebi.id = String(dog + ailen);
   jebiContainer.appendChild(newJebi);
-  jebiNum.innerText = String(n);
-  if (n === 3) {
+  numText.innerText = String(n);
+  if (n === 2) {
     btnMinus.disabled = false;
   }
 }
 
-/* [-] 버튼 클릭 */
-function jebiMinus() {
-  n--;
+/* 제비 1개 제거 */
+function jebiMinus(n: number, numText: span, btnMinus: button) {
   reset();
-  jebiContainer.children[n].remove();
-  jebiNum.innerText = String(n);
-  if (n === 2) {
+  jebies[dog + ailen].remove();
+  numText.innerText = String(n);
+  if (n === 1) {
     btnMinus.disabled = true;
   }
 }
 
+/* 개그림 [+] 버튼 클릭 */
+function hahaPlus() {
+  jebiPlus(++dog, jebiHahaNum, btnHahaMinus);
+}
+
+/* 개그림 [-] 버튼 클릭 */
+function hahaMinus() {
+  jebiMinus(--dog, jebiHahaNum, btnHahaMinus);
+}
+
+/* 외계인 [+] 버튼 클릭 */
+function ailenPlus() {
+  jebiPlus(++ailen, jebiAilenNum, btnAilenMinus);
+}
+
+/* 외계인 [-] 버튼 클릭 */
+function ailenMinus() {
+  jebiMinus(--ailen, jebiAilenNum, btnAilenMinus);
+}
+
 /* 제비 클릭, 결과 보여주기 */
 function jebiOpen(jebi: img) {
-  if (parseInt(jebi.id) === ailen) {
+  if (ailens.includes(parseInt(jebi.id))) {
+    openedAilen++;
     jebi.src = imgAilen;
-    toastShow();
+    if (openedAilen === ailen) btnShowAilen.disabled = true;
+    if (ailen === 1) toastShow();
   } else {
-    dog++;
+    openedDog++;
     jebi.src = imgHaHa;
   }
   jebi.removeAttribute('class');
@@ -72,7 +97,7 @@ function toastShow() {
   fetch('/jebi/submit', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ n, dog }),
+    body: JSON.stringify({ n: dog + ailen, dog: openedDog }),
   })
   .then<ResJebiSubmit>((res) => res.json())
   .then(({ success, data }) => {
@@ -86,6 +111,24 @@ function toastShow() {
   .catch((err) => {
     console.error(err);
   });
+}
+
+/* 꽝 확인 */
+function showAilen(show: boolean) {
+  for (const i of ailens) {
+    if (jebies[i - 1].className === 'jebi-unopened') {
+      jebies[i - 1].src = show ? imgAilen : imgJebi;
+    }
+  }
+}
+
+/* 설정 열기 (모바일) */
+function showSettings() {
+  if (settings.style.display === '') {
+    settings.style.display = 'flex';
+  } else {
+    settings.style.display = '';
+  }
 }
 
 /* live eventListener for '.jebi-unopened' */
@@ -108,6 +151,11 @@ document.addEventListener('click', (e) => {
   }
 });
 
-global.jebiMinus = jebiMinus;
-global.jebiPlus = jebiPlus;
-global.reset = reset;
+btnHahaMinus.addEventListener('click', hahaMinus);
+btnHahaPlus.addEventListener('click', hahaPlus);
+btnAilenMinus.addEventListener('click', ailenMinus);
+btnAilenPlus.addEventListener('click', ailenPlus);
+btnReset.addEventListener('click', reset);
+btnShowAilen.addEventListener('pointerdown', () => showAilen(true));
+btnShowAilen.addEventListener('pointerup', () => showAilen(false));
+btnShowSettings.addEventListener('click', showSettings);

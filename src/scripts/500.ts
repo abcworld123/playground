@@ -1,5 +1,5 @@
-import { imgSandsand } from 'images/common';
 import Swal from 'sweetalert2';
+import { imgSandsand } from 'images/common';
 
 Swal.fire({
   imageUrl: imgSandsand,
