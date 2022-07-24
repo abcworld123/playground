@@ -1,0 +1,28 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <%- include(templates + 'header') %>
+  <title>하키 로비</title>
+</head>
+<body>
+  <div class="wrapper">
+    <div class="header">
+      <span class="title">방 목록</span>
+      <span class="my-id" id="myId">ID:</span>
+    </div>
+    <div class="room-tab"><span>입장 가능</span></div>
+    <div class="room-container" id="roomContainer"></div>
+    <div class="control">
+      <button class="btn btn-primary btn-room-create" onclick="createRoom()">방 만들기</button>
+    </div>
+  </div>
+  <template id="roomTemplate">
+    <div class="room">
+      <div class="room-title"></div>
+      <button class="btn btn-success btn-start room-enter">
+        <img src="/images/icons/arrow-right-to-bracket.svg" width="20px" />
+      </button>
+    </div>
+  </template>
+</body>
+</html>

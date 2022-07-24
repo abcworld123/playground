@@ -1,0 +1,148 @@
+* {
+  touch-action: manipulation;
+}
+
+html {
+  font-size: 2em;
+}
+
+body {
+  background: #343A40;
+}
+
+.wrapper {
+  margin: 5% 10%;
+  padding: 5%;
+  border-radius: 1rem;
+  background: lightgray;
+}
+
+.container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 75px 30px;
+  padding: 0;
+  margin-top: 70px;
+  margin-bottom: 150px;
+  max-width: inherit;
+
+  & > img {
+    width: 200px;
+    height: 200px;
+  }
+}
+
+.jebi-unopened {
+  cursor: pointer;
+}
+
+.control {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 40px 50px;
+  justify-content: center;
+}
+
+#settings {
+  justify-content: center;
+  gap: 50px;
+}
+
+.control > *,
+#settings > * {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 30px;
+  align-items: center;
+}
+
+.btn {
+  height: 80px;
+  line-height: 0;
+
+  &-jebinum {
+    font-size: 1.5em;
+    width: 80px;
+  }
+}
+
+.label-jebinum {
+  font-size: 1.2em;
+}
+
+#jebiReset,
+#showAilen {
+  min-width: 170px;
+}
+
+#showSettings {
+  display: none;
+  cursor: pointer;
+}
+
+.label-jebi {
+  width: 60px;
+}
+
+.toast-container {
+  z-index: 11;
+}
+
+.toast {
+  display: flex;
+  gap: 20px;
+  align-items: center;
+  margin-bottom: 30px;
+  padding: 15px;
+  font-size: .6em;
+  width: auto;
+  border: none;
+}
+
+@media (max-width: 1670px) {
+  #settings {
+    display: none;
+  }
+
+  #showSettings {
+    display: inline;
+  }
+}
+
+@media (max-width: 960px) {
+  html::-webkit-scrollbar {
+    display: none;
+  }
+
+  .wrapper {
+    margin: 7%;
+    padding: 3%;
+  }
+
+  .container {
+    gap: 35px 15px;
+    margin-bottom: 70px;
+
+    & > img {
+      width: 85px;
+      height: 85px;
+    }
+  }
+
+  .control {
+    margin-left: -25%;
+    margin-right: -25%;
+    transform: scale(.7);
+  }
+
+  #settings {
+    margin-top: -10%;
+  }
+}
+
+@media (max-width: 400px) {
+  .control {
+    transform: scale(.6);
+  }
+}
