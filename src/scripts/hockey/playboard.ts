@@ -18,7 +18,7 @@ let remainedTime = 50;
 let movable = false;
 let dir = '';
 
-const roomNum = window.location.href.split('/')[4];
+const roomNum = window.location.href.split('/')[4].split('?')[0];
 socket.emit('connection', roomNum);
 
 window.addEventListener('keypress', togleDirection);

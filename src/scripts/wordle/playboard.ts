@@ -3,6 +3,7 @@ import 'animate.css';
 import { io } from 'socket.io-client';
 import Swal from 'sweetalert2';
 import { imgGear } from 'images/common';
+import { shakeOutsideClick } from 'utils/alerts';
 
 let myTurn: boolean;
 let myAnswer: string;
@@ -19,18 +20,6 @@ const timerText = <div>document.getElementById('timer');
 const turnText = <div>document.getElementById('turn');
 
 /* ********  alert functions  ********** */
-
-function shakeOutsideClick() {
-  const popup = Swal.getPopup();
-  popup.classList.remove('swal2-show');
-  setTimeout(() => {
-    popup.classList.add('animate__animated', 'animate__headShake');
-  });
-  setTimeout(() => {
-    popup.classList.remove('animate__animated', 'animate__headShake');
-  }, 500);
-  return false;
-}
 
 function alertConfig() {
   return Swal.fire({

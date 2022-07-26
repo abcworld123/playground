@@ -1,9 +1,10 @@
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'animate.css';
-import 'styles/hockey/lobby.scss';
+import 'styles/templates/lobby.scss';
 import { io } from 'socket.io-client';
 import Swal from 'sweetalert2';
 import { imgLoading } from 'images/common';
+import { shakeOutsideClick } from 'utils/alerts';
 
 const rooms = new Set<string>();  // { lobby room list }
 const requestQueue: string[] = [];
@@ -12,20 +13,9 @@ let requestFor = '';
 const roomContainer = <div>document.getElementById('roomContainer');
 const roomTemplate = <template>document.getElementById('roomTemplate');
 const myId = <span>document.getElementById('myId');
+const nsp = <input>document.getElementById('nsp');
 
 /* *********  alert functions  ********** */
-
-function shakeOutsideClick() {
-  const popup = Swal.getPopup();
-  popup.classList.remove('swal2-show');
-  setTimeout(() => {
-    popup.classList.add('animate__animated', 'animate__headShake');
-  });
-  setTimeout(() => {
-    popup.classList.remove('animate__animated', 'animate__headShake');
-  }, 500);
-  return false;
-}
 
 function alertCreateRoom() {
   return Swal.fire({
@@ -222,7 +212,8 @@ function joinRejected() {
 function gameStart(room: string) {
   Swal.close();
   room = encodeURIComponent(room);
-  location.replace(`hockey/${room}`);
+  const host = Boolean(requestQueue.length);
+  location.replace(`${nsp.value}/${room}?host=${host}`);
 }
 
 // [ALL] 삭제된 방 새로고침
@@ -251,7 +242,7 @@ function addRoom(room: string) {
 }
 
 // socket.io
-const socket = io('/hockey', { transports: ['websocket'] });
+const socket = io(`/${nsp.value}`, { transports: ['websocket'] });
 
 socket.on('connect', () => {
   myId.innerText = `ID: ${socket.id}`;
