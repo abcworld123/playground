@@ -151,11 +151,11 @@ document.addEventListener('click', (e) => {
   }
 });
 
-btnHahaMinus.addEventListener('click', hahaMinus);
-btnHahaPlus.addEventListener('click', hahaPlus);
-btnAilenMinus.addEventListener('click', ailenMinus);
-btnAilenPlus.addEventListener('click', ailenPlus);
-btnReset.addEventListener('click', reset);
+btnHahaMinus.addEventListener('pointerup', hahaMinus);
+btnHahaPlus.addEventListener('pointerup', hahaPlus);
+btnAilenMinus.addEventListener('pointerup', ailenMinus);
+btnAilenPlus.addEventListener('pointerup', ailenPlus);
+btnReset.addEventListener('pointerup', reset);
 btnShowAilen.addEventListener('pointerdown', () => showAilen(true));
 btnShowAilen.addEventListener('pointerup', () => showAilen(false));
-btnShowSettings.addEventListener('click', showSettings);
+btnShowSettings.addEventListener('pointerup', showSettings);

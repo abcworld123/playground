@@ -3,6 +3,8 @@ import 'styles/random/random.scss';
 import Swal from 'sweetalert2';
 import { randint } from 'utils/tools';
 
+const btnStart = document.getElementById('start');
+
 function start() {
   const range = <input>document.getElementById('range');
   const randintText = <p>document.getElementById('randint');
@@ -18,4 +20,4 @@ function alertError() {
   });
 }
 
-global.start = start;
+btnStart.addEventListener('pointerup', start);
