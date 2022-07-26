@@ -1,9 +1,5 @@
 html {
   font-size: 2em;
-
-  &::-webkit-scrollbar {
-    display: none;
-  }
 }
 
 body {
@@ -25,29 +21,18 @@ body {
 
 .control {
   display: flex;
-  flex-direction: row;
-  gap: 30px;
-  align-items: center;
+  gap: 100px;
   justify-content: center;
-  margin: 0 20%;
+  margin: 0 5%;
 }
 
-label {
-  min-width: 100px;
-}
-
-input {
-  min-width: 250px;
-
-  &[type="number"]::-webkit-inner-spin-button {
-    appearance: none;
-  }
+.input {
+  max-width: 500px;
 }
 
 .btn {
-  height: 80px;
   min-width: 150px;
-  margin-left: 50px;
+  transform: scale(1.25);
 }
 
 body .swal2-popup {
@@ -55,16 +40,28 @@ body .swal2-popup {
 }
 
 @media (max-width: 1440px) {
-
   .container {
     margin-top: 100px;
   }
+}
+
+@media (max-width: 768px) {
+  .wrapper {
+    margin-top: 25%;
+  }
 
   .control {
-    gap: 10px;
+    gap: 5vw;
+  }
+
+  .input {
+    font-size: 0.75em;
+    min-width: 35vw;
   }
 
   .btn {
-    scale: 1.25;
+    font-size: 5vw;
+    min-width: 25vw;
+    transform: none;
   }
 }
