@@ -1,6 +1,7 @@
 import response from 'modules/response';
 
 export const hockeyRooms = new Map<string, number>();
+export const moleRooms = new Map<string, number>();
 export const wordleRooms = new Map<string, number>();
 
 export function enterRoom(rooms: Map<string, number>, room: string) {

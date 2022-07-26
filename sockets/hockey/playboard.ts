@@ -1,8 +1,7 @@
-import { hockeyRooms } from 'modules/rooms';
 import type { Namespace } from 'socket.io';
 import type { BallInfo, GameInfo, PlayBoard, PlayerInfo } from 'types/games/hockey';
 
-export default function initHockeyBoard(nsp: Namespace) {
+export function initHockeyBoard(nsp: Namespace, hockeyRooms: Map<string, number>) {
   const playBoard = new Map<string, PlayBoard>();
   const widthPixel = 1000;
   const heightPixel = 500;

@@ -1,7 +1,6 @@
-import { wordleRooms } from 'modules/rooms';
 import type { Namespace } from 'socket.io';
 
-export default function initWordleBoard(nsp: Namespace) {
+export function initWordleBoard(nsp: Namespace, wordleRooms: Map<string, number>) {
   const answers = new Map();
   const ended = new Map();
   const turns = new Map();
