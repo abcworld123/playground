@@ -1,9 +1,8 @@
 import express from 'express';
+import { randomController } from 'controllers/games';
 
 const router = express.Router();
 
-router.get('/', (req, res, next) => {
-  res.render('random/random');
-});
+router.get('/', randomController.render);
 
 export default router;

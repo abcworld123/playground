@@ -1,18 +1,20 @@
 import type { ResDefault } from 'types/apis';
 
+export interface YoutubeItemInfo {
+  viewCount: number;
+  likeCount: number;
+  commentCount: number;
+  title: string;
+  thumbnails: string;
+  word: string;
+}
+
 export interface ReqYoutubeSubmit {
-  keywords: string[];
+  body: {
+    keywords: string[];
+  };
 }
 
 export interface ResYoutubeSubmit extends ResDefault {
   data?: YoutubeItemInfo[];
-}
-
-interface YoutubeItemInfo {
-  viewCount: string;
-  likeCount: string;
-  commentCount: string;
-  title: string;
-  thumbnails: string;
-  word: string;
 }

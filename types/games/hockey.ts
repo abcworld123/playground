@@ -1,3 +1,9 @@
+export interface ReqHockeyPlayboard {
+  params: {
+    roomname: string;
+  };
+}
+
 export interface PlayerInfo {
   id: string;
   x: number;
