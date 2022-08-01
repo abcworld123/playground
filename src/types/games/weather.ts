@@ -1,5 +1,1 @@
-import type { ResDefault } from 'types/apis';
-
-export interface ResWeather extends ResDefault {
-  data?: number[];
-}
+export type { ResWeather } from '@backend/types/games/weather';

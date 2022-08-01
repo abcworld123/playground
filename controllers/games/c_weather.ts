@@ -1,5 +1,4 @@
 import { getWeatherDay, getWeatherMl, getWeatherTa } from 'modules/games/m_weather';
-import type { NextFunction, Request, Response } from 'types/apis';
 import type { ReqWeatherDay, ReqWeatherWeek, ResWeather } from 'types/games/weather';
 
 export function render(req: Request, res: Response, next: NextFunction) {

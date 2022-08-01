@@ -1,5 +1,4 @@
 import { enterRoom, hockeyRooms } from 'modules/rooms';
-import type { NextFunction, Request, Response } from 'types/apis';
 import type { ReqHockeyPlayboard } from 'types/games/hockey';
 
 export function renderLobby(req: Request, res: Response, next: NextFunction) {

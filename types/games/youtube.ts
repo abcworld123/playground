@@ -1,9 +1,9 @@
-import type { ResDefault } from 'types/apis';
+import type { ResDefault } from '../apis';
 
 export interface YoutubeItemInfo {
-  viewCount: number;
-  likeCount: number;
-  commentCount: number;
+  viewCount: string;
+  likeCount: string;
+  commentCount: string;
   title: string;
   thumbnails: string;
   word: string;

@@ -1,5 +1,5 @@
-import { img1st, imgHaHa } from 'images/games/youtube';
 import 'styles/youtube/youtube.scss';
+import { img1st, imgHaHa } from 'images/games/youtube';
 import type { ResYoutubeSubmit, YoutubeItemInfo } from 'types/games/youtube';
 
 const g_youtubeRotation = ['조회수', '좋아요', '댓글수', '제목길이'];

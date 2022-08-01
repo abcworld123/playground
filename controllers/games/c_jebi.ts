@@ -1,5 +1,4 @@
 import { submitRanking } from 'modules/games/m_jebi';
-import type { NextFunction, Request, Response } from 'types/apis';
 import type { ReqJebiSubmit, ResJebiSubmit } from 'types/games/jebi';
 
 export function render(req: Request, res: Response, next: NextFunction) {

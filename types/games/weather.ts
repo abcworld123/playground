@@ -1,4 +1,4 @@
-import type { ResDefault } from 'types/apis';
+import type { ResDefault } from '../apis';
 
 // backend apis
 export interface ReqWeatherDay {
