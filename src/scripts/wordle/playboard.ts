@@ -1,9 +1,9 @@
 import 'styles/wordle/playboard.scss';
 import 'animate.css';
-import { io } from 'socket.io-client';
 import Swal from 'sweetalert2';
 import { imgGear } from 'images/common';
 import { shakeOutsideClick } from 'utils/alerts';
+import { io } from 'utils/socket';
 
 let myTurn: boolean;
 let myAnswer: string;
@@ -31,6 +31,7 @@ function alertConfig() {
     confirmButtonText: '확인',
     focusConfirm: false,
     allowEscapeKey: false,
+    backdrop: true,
     preConfirm: () => {
       const inputs = Swal.getPopup().querySelectorAll('input');
       let timelimit: string | number = inputs[0].value;
@@ -63,6 +64,7 @@ function alertWaitConfig() {
     allowOutsideClick: shakeOutsideClick,
     showConfirmButton: false,
     allowEscapeKey: false,
+    backdrop: true,
   });
 }
 
@@ -74,6 +76,7 @@ function alertSetNumber() {
     allowOutsideClick: shakeOutsideClick,
     confirmButtonText: '확인',
     allowEscapeKey: false,
+    backdrop: true,
     preConfirm: (myAnswer: string) => {
       if (!myAnswer) {
         Swal.showValidationMessage('숫자를 입력해주세요.');
@@ -98,6 +101,7 @@ function alertWaitSetNumber() {
     allowOutsideClick: shakeOutsideClick,
     showConfirmButton: false,
     allowEscapeKey: false,
+    backdrop: true,
   });
 }
 
@@ -108,6 +112,7 @@ function alertWin() {
     confirmButtonText: '확인',
     allowOutsideClick: false,
     allowEscapeKey: false,
+    backdrop: true,
   });
 }
 
@@ -118,6 +123,7 @@ function alertLose() {
     confirmButtonText: '확인',
     allowOutsideClick: false,
     allowEscapeKey: false,
+    backdrop: true,
   });
 }
 
@@ -128,6 +134,7 @@ function alertDraw() {
     confirmButtonText: '확인',
     allowOutsideClick: false,
     allowEscapeKey: false,
+    backdrop: true,
   });
 }
 
@@ -138,6 +145,7 @@ function alertUserLeft() {
     confirmButtonText: '확인',
     allowOutsideClick: false,
     allowEscapeKey: false,
+    backdrop: true,
   });
 }
 
@@ -221,8 +229,6 @@ function turn() {
 
 // [ALL] 한 줄 결과 보여주기
 function showResult(strike: number, ball: number) {
-  console.log(strike, ball);
-
   if (strike || ball) {
     const spanStrike = `<span class="result-strike">${strike}S</span>`;
     const spanBall = `<span class="result-ball">${ball}B</span>`;
@@ -306,7 +312,7 @@ divMyAnswer.addEventListener('mouseleave', (e) => {
 });
 
 // socket.io
-const socket = io(`/wordle/playboard?room=${room}`, { transports: ['websocket'] });
+const socket = io(`/wordle/playboard?room=${room}`);
 
 socket.on('all entered', () => {
   allEntered(isHost);
@@ -334,3 +340,5 @@ socket.on('user leave', () => {
   clearInterval(timer);
   alertUserLeft();
 });
+
+socket.connect();

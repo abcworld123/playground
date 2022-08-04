@@ -10,26 +10,12 @@ export function initHockeyBoard(nsp: Namespace, hockeyRooms: Map<string, number>
   const tick = Math.round(1000 / refreshInterval);
 
   nsp.on('connection', (socket) => {
+    const roomNum = socket.handshake.query.roomNum as string;
     let p1: PlayerInfo;
     let p2: PlayerInfo;
     let ball: BallInfo;
     let info: GameInfo;
-    let roomNum: string;
-
-    socket.on('connection', (t_roomNum: string) => {
-      roomNum = t_roomNum;
-      socket.join(roomNum);
-      if (!playBoard.has(roomNum)) {
-        const gameState = getInitialState();
-        playBoard.set(roomNum, gameState);
-        ({ p1, p2, ball, info } = gameState);
-        p1.id = socket.id;
-      } else {
-        ({ p1, p2, ball, info } = playBoard.get(roomNum));
-        p2.id = socket.id;
-        gameLoading();
-      }
-    });
+    init();
 
     socket.on('moveUp', () => {
       const player = p1.id === socket.id ? p1 : p2;
@@ -46,6 +32,24 @@ export function initHockeyBoard(nsp: Namespace, hockeyRooms: Map<string, number>
         closeRoom();
       }
     });
+
+    function init() {
+      if (!hockeyRooms.get(roomNum)) {
+        socket.disconnect();
+        return;
+      }
+      socket.join(roomNum);
+      if (!playBoard.has(roomNum)) {
+        const gameState = getInitialState();
+        playBoard.set(roomNum, gameState);
+        ({ p1, p2, ball, info } = gameState);
+        p1.id = socket.id;
+      } else {
+        ({ p1, p2, ball, info } = playBoard.get(roomNum));
+        p2.id = socket.id;
+        gameLoading();
+      }
+    }
 
     function gameLoading() {
       sendState();

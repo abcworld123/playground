@@ -1,11 +1,10 @@
 import express from 'express';
+import { homeController } from 'controllers';
 import { hockey, jebi, mole, random, weather, wordle, youtube } from './games';
 
 const router = express.Router();
 
-router.get('/', (req, res, next) => {
-  res.render('home');
-});
+router.get('/', homeController.render);
 
 router.use('/hockey', hockey);
 router.use('/jebi', jebi);

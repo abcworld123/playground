@@ -1,4 +1,12 @@
+import type { RequestData, ResponseData } from './apis';
+import type {
+  Request as ExpressRequest,
+  Response as ExpressResponse,
+  NextFunction as ExpressNextFunction,
+} from 'express';
+
 declare global {
+  // env
   namespace NodeJS {
     interface ProcessEnv {
       NODE_ENV: string;
@@ -10,6 +18,8 @@ declare global {
       WEATHER_KEY: string;
     }
   }
+  // express
+  type Request<T extends RequestData = any> = ExpressRequest<T['params'], null, T['body'], T['query']>;
+  type Response<T extends ResponseData = any> = ExpressResponse<T>;
+  type NextFunction = ExpressNextFunction;
 }
-
-export {};

@@ -36,6 +36,10 @@ export function initWordleBoard(nsp: Namespace, wordleRooms: Map<string, number>
     });
 
     function init() {
+      if (!wordleRooms.get(room)) {
+        socket.disconnect();
+        return;
+      }
       socket.join(room);
       if (rooms.get(room).size === 2) {
         ended.set(room, [false, false]);

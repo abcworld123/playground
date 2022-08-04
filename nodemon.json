@@ -6,10 +6,12 @@
     "dist",
     "src",
     "test",
+    "types",
     "webpack.config.dev.ts",
     "webpack.config.prod.ts",
     ".eslintrc.json",
     "nodemon.json",
+    "pm2.json",
     "tsconfig.json"
   ]
 }

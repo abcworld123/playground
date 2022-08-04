@@ -1,17 +1,9 @@
 import express from 'express';
-import { enterRoom, moleRooms } from 'modules/rooms';
+import { moleController } from 'controllers/games';
 
 const router = express.Router();
 
-router.get('/', (req, res, next) => {
-  res.render('mole/lobby');
-});
-
-router.get('/:roomname', (req, res, next) => {
-  const room = req.params.roomname;
-  const { success } = enterRoom(moleRooms, room);
-  if (success) res.render('mole/playboard');
-  else next();
-});
+router.get('/', moleController.renderLobby);
+router.get('/:roomname', moleController.renderPlayboard);
 
 export default router;

@@ -1,15 +1,19 @@
-import type { ResDefault } from 'types/apis';
+import type { ResDefault } from '../apis';
 
 // backend apis
 export interface ReqWeatherDay {
-  idx: number;
-  nx: number;
-  ny: number;
+  body: {
+    idx: number;
+    nx: number;
+    ny: number;
+  };
 }
 
 export interface ReqWeatherWeek {
-  idx: number;
-  reg: number;
+  body: {
+    idx: number;
+    reg: number;
+  };
 }
 
 export interface ResWeather extends ResDefault {
