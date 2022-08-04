@@ -1,9 +1,9 @@
 import 'styles/wordle/playboard.scss';
 import 'animate.css';
-import { io } from 'socket.io-client';
 import Swal from 'sweetalert2';
 import { imgGear } from 'images/common';
 import { shakeOutsideClick } from 'utils/alerts';
+import { io } from 'utils/socket';
 
 let myTurn: boolean;
 let myAnswer: string;
@@ -306,7 +306,7 @@ divMyAnswer.addEventListener('mouseleave', (e) => {
 });
 
 // socket.io
-const socket = io(`/wordle/playboard?room=${room}`, { transports: ['websocket'] });
+const socket = io(`/wordle/playboard?room=${room}`);
 
 socket.on('all entered', () => {
   allEntered(isHost);
@@ -334,3 +334,5 @@ socket.on('user leave', () => {
   clearInterval(timer);
   alertUserLeft();
 });
+
+socket.connect();
