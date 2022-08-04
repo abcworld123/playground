@@ -7,6 +7,7 @@
     "strict": false,
     "moduleResolution": "node",
     "noEmit": true,
+    "skipLibCheck": true,
     "lib": ["esnext", "dom", "dom.iterable"],
     "esModuleInterop": true,
     "downlevelIteration": true,
@@ -14,5 +15,8 @@
     "importsNotUsedAsValues": "error",
     "isolatedModules": true,
     "baseUrl": ".",
+    "paths": {
+      "@backend/types/*": ["../types/*"],
+    }
   },
 }

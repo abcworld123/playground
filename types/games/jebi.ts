@@ -1,8 +1,10 @@
-import type { ResDefault } from 'types/apis';
+import type { ResDefault } from '../apis';
 
 export interface ReqJebiSubmit {
-  n: number;
-  dog: number;
+  body: {
+    n: number;
+    dog: number;
+  };
 }
 
 export interface ResJebiSubmit extends ResDefault {
