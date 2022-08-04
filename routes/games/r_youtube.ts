@@ -1,17 +1,9 @@
 import express from 'express';
-import { getResult } from 'modules/games/m_youtube';
-import type { ReqYoutubeSubmit, ResYoutubeSubmit } from 'types/games/youtube';
+import { youtubeController } from 'controllers/games';
 
 const router = express.Router();
 
-router.get('/', (req, res, next) => {
-  res.render('youtube/youtube');
-});
-
-router.post<null, ResYoutubeSubmit, ReqYoutubeSubmit>('/submit', async (req, res, next) => {
-  const keywords = req.body.keywords;
-  const data = await getResult(keywords);
-  res.json(data);
-});
+router.get('/', youtubeController.render);
+router.post('/submit', youtubeController.submit);
 
 export default router;

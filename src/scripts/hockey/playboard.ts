@@ -1,8 +1,9 @@
 import 'styles/hockey/playboard.scss';
-import { io } from 'socket.io-client';
+import { io } from 'utils/socket';
 import { sleep } from 'utils/tools';
 
-const socket = io('/hockeyPlay', { transports: ['websocket'] });
+const roomNum = window.location.href.split('/')[4].split('?')[0];
+const socket = io(`/hockeyPlay?roomNum=${roomNum}`);
 
 //canvas에 관한 정보
 const p1 = { x: 100, y: 0 };
@@ -17,9 +18,6 @@ canvas.height = canvas.offsetHeight;
 let remainedTime = 50;
 let movable = false;
 let dir = '';
-
-const roomNum = window.location.href.split('/')[4].split('?')[0];
-socket.emit('connection', roomNum);
 
 window.addEventListener('keypress', togleDirection);
 window.addEventListener('resize', resizeCanvas);
@@ -62,6 +60,8 @@ socket.on('gameSet', (winner: string) => {
   });
   movable = false;
 });
+
+socket.connect();
 
 async function countDown(nowPlay: number) {
   if (nowPlay === 1) {

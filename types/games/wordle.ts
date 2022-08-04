@@ -1,7 +1,8 @@
-export interface ReqWordleParams {
-  roomname: string;
-}
-
-export interface ReqWordleQuery {
-  host: string;
+export interface ReqWordlePlayboard {
+  params: {
+    roomname: string;
+  };
+  query: {
+    host: string;
+  };
 }
