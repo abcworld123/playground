@@ -11,6 +11,7 @@ const p2 = { x: 900, y: 0 };
 const ball = { x: 0, y: 0 };
 const canvas = document.querySelector('canvas');
 const playBoard = canvas.getContext('2d');
+let midHeight = window.innerHeight / 2;
 let sizeUnit = canvas.offsetHeight / 75;
 canvas.width = canvas.offsetWidth;
 canvas.height = canvas.offsetHeight;
@@ -19,7 +20,8 @@ let remainedTime = 50;
 let movable = false;
 let dir = '';
 
-window.addEventListener('keypress', togleDirection);
+window.addEventListener('keypress', keyboardListener);
+window.addEventListener('pointerdown', touchListener);
 window.addEventListener('resize', resizeCanvas);
 
 socket.on('countDown', (nowPlay: number) => {
@@ -124,7 +126,7 @@ function screenDrawBall(x: number, y: number) {
 
 // 키보드 입력 함수
 // w, s로 조종
-function togleDirection(e: KeyboardEvent) {
+function keyboardListener(e: KeyboardEvent) {
   if (!movable) return;
   if (e.key === 'w' && dir !== 'w') {
     socket.emit('moveUp');
@@ -135,9 +137,23 @@ function togleDirection(e: KeyboardEvent) {
   }
 }
 
+// 터치 입력 함수
+// 화면 위, 아래 터치로 조종
+function touchListener(e: PointerEvent) {
+  if (!movable) return;
+  if (e.y < midHeight && dir !== 'w') {
+    socket.emit('moveUp');
+    dir = 'w';
+  } else if (e.y >= midHeight / 2 && dir !== 's') {
+    socket.emit('moveDown');
+    dir = 's';
+  }
+}
+
 function resizeCanvas(e: UIEvent) {
   sizeUnit = canvas.offsetHeight / 75;
   canvas.width = canvas.offsetWidth;
   canvas.height = canvas.offsetHeight;
+  midHeight = window.innerHeight / 2;
   draw();
 }
