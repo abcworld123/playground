@@ -97,7 +97,9 @@ const config: Configuration = {
     ],
     extensions: ['.ts', '.js'],
     plugins: [
-      new TsconfigPathsPlugin(),
+      new TsconfigPathsPlugin({
+        baseUrl: './src',
+      }),
     ],
   },
   stats: {
