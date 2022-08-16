@@ -20,7 +20,8 @@ export function initMoleBoard(nsp: Namespace, moleRooms: Map<string, number>) {
     socket.on('click', click);
 
     socket.on('disconnect', (reason) => {
-      if (moleRooms.has(room)) {
+      // if (moleRooms.has(room)) {
+      if (rooms.has(room)) {
         closeRoom();
       }
     });
