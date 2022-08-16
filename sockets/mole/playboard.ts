@@ -34,10 +34,10 @@ export function initMoleBoard(nsp: Namespace, moleRooms: Map<string, number>) {
       if (!rooms.has(room)) {
         const gameState = getInitialState();
         rooms.set(room, gameState);
-        ({ p1, p2, board } = gameState);
+        ({ p1, p2, info, board } = gameState);
         p1.id = socket.id;
       } else {
-        ({ p1, p2, board } = rooms.get(room));
+        ({ p1, p2, info, board } = rooms.get(room));
         p2.id = socket.id;
         gameLoading();
       }
@@ -45,8 +45,8 @@ export function initMoleBoard(nsp: Namespace, moleRooms: Map<string, number>) {
 
     async function gameLoading() {
       await countdown();
-      start();
       timeFlow();
+      start();
     }
 
     async function countdown() {
@@ -166,8 +166,8 @@ export function initMoleBoard(nsp: Namespace, moleRooms: Map<string, number>) {
 
     function closeRoom() {
       if (info.time) {
-        clearInterval(info.time);
-        info.time = null;
+        clearInterval(info.timer);
+        info.timer = null;
       }
       info.timeouts.forEach(x => clearTimeout(x));
       moleRooms.delete(room);
@@ -193,7 +193,7 @@ export function initMoleBoard(nsp: Namespace, moleRooms: Map<string, number>) {
         timer: null,
         timeouts: [],
       },
-      board: Array(height).map(_ => Array(width).fill(0)),
+      board: [...Array(height + 1)].map(_ => Array(width + 1).fill(0)),
     };
   }
 }
