@@ -1,3 +1,5 @@
+import type { Mutex } from 'async-mutex';
+
 export interface ReqMolePlayboard {
   params: {
     roomname: string;
@@ -18,9 +20,11 @@ export interface MoleInfo {
 export interface GameInfo {
   moles: MoleInfo[];
   moleCnt: number;
+  isEnd: boolean;
   time: number;
   timer: NodeJS.Timer;
   timeouts: NodeJS.Timeout[];
+  mutex: Mutex;
 }
 
 export interface PlayBoard {

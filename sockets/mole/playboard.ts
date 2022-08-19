@@ -1,3 +1,4 @@
+import { Mutex } from 'async-mutex';
 import { Cell } from 'types/games/mole';
 import { randint, sleep } from 'utils/tools';
 import type { Namespace } from 'socket.io';
@@ -45,22 +46,19 @@ export function initMoleBoard(nsp: Namespace, moleRooms: Map<string, number>) {
     }
 
     async function gameLoading() {
-      await countdown();
+      for (let i = 3; i; --i) {
+        nsp.to(room).emit('countdown', i);
+        await sleep(1000);
+        if (info.isEnd) return;
+      }
       timeFlow();
       start();
     }
 
-    async function countdown() {
-      for (let i = 3; i; i--) {
-        nsp.to(room).emit('countdown', i);
-        await sleep(1000);
-      }
-    }
-
     async function start() {
-      sleep(randint(300, 1000));
+      await sleep(randint(300, 1000));
       while (info.time && info.timer) {
-        createMole();
+        await createMole();
         await sleep(randint(100, 1000));
       }
     }
@@ -75,7 +73,6 @@ export function initMoleBoard(nsp: Namespace, moleRooms: Map<string, number>) {
       }, 1000);
     }
 
-    // todo thread lock?
     function click(idx: number, x: number, y: number) {
       const me = socket.id === p1.id ? p1 : p2;
       if (board[y][x] === Cell.ACTIVE) {
@@ -90,42 +87,46 @@ export function initMoleBoard(nsp: Namespace, moleRooms: Map<string, number>) {
       nsp.to(p2.id).emit('score', p2.score, p1.score);
     }
 
-    function createMole() {
+    async function createMole() {
       const idx = info.moleCnt;
       for (let t = 0; t < 5; t++) {  // 5회까지 실패 시 패스
         const w = randint(5, 15);
         const x = randint(0, 100 - w);
         const y = randint(0, 100 - w);
-        if (!checkConflict(x, y, w)) {
-          fillSquare(x, y, w, Cell.ACTIVE);
-          nsp.to(room).emit('birth', idx, x, y, w);
+        const isConflict = await checkConflict(x, y, w);
+        if (!isConflict) {
+          await fillSquare(x, y, w, Cell.ACTIVE);
           info.moles.push({ x, y, w });
+          info.moleCnt += 1;
+          nsp.to(room).emit('birth', idx, x, y, w);
           info.timeouts.push(setTimeout(() => {
             deleteMole(idx);
           }, 1000));
-          info.moleCnt += 1;
           break;
         }
       }
     }
 
-    function deleteMole(idx: number) {
+    async function deleteMole(idx: number) {
       const { x, y, w } = info.moles[idx];
-      fillSquare(x, y, w, Cell.DEAD);
       nsp.to(room).emit('death', idx);
+      await fillSquare(x, y, w, Cell.DEAD);
       info.timeouts[idx] = setTimeout(() => {
         fillSquare(x, y, w, Cell.NONE);
       }, randint(500, 2000));
     }
 
-    function checkConflict(x: number, y: number, w: number) {
+    async function checkConflict(x: number, y: number, w: number) {
+      const release = await info.mutex.acquire();
       for (let i = y; i <= y + w; i++) {
         for (let j = x; j <= x + w; j++) {
           if (board[i][j] !== Cell.NONE) {
+            release();
             return true;
           }
         }
       }
+      release();
       return false;
     }
 
@@ -149,12 +150,14 @@ export function initMoleBoard(nsp: Namespace, moleRooms: Map<string, number>) {
       return -1;  // todo except
     }
 
-    function fillSquare(x: number, y: number, w: number, value: Cell) {
+    async function fillSquare(x: number, y: number, w: number, value: Cell) {
+      const release = await info.mutex.acquire();
       for (let i = y; i <= y + w; i++) {
         for (let j = x; j <= x + w; j++) {
           board[i][j] = value;
         }
       }
+      release();
     }
 
     function gameEnd() {
@@ -166,10 +169,9 @@ export function initMoleBoard(nsp: Namespace, moleRooms: Map<string, number>) {
     }
 
     function closeRoom() {
-      if (info.time) {
-        clearInterval(info.timer);
-        info.timer = null;
-      }
+      info.isEnd = true;
+      clearInterval(info.timer);
+      info.timer = null;
       info.timeouts.forEach(x => clearTimeout(x));
       moleRooms.delete(room);
       rooms.delete(room);
@@ -190,9 +192,11 @@ export function initMoleBoard(nsp: Namespace, moleRooms: Map<string, number>) {
       info: {
         moles: [],
         moleCnt: 0,
+        isEnd: false,
         time: playTime,
         timer: null,
         timeouts: [],
+        mutex: new Mutex(),
       },
       board: [...Array(height + 1)].map(_ => Array(width + 1).fill(0)),
     };
