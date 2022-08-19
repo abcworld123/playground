@@ -6,6 +6,7 @@ import type { GameInfo, PlayBoard, PlayerInfo } from 'types/games/mole';
 
 export function initMoleBoard(nsp: Namespace, moleRooms: Map<string, number>) {
   const rooms = new Map<string, PlayBoard>();
+  const moleTypes = [1, 1, 1, 1, 1, 1, 1, 2, 2, 3];
   const width = 100;
   const height = 100;
   const playTime = 50;
@@ -98,7 +99,7 @@ export function initMoleBoard(nsp: Namespace, moleRooms: Map<string, number>) {
           await fillSquare(x, y, w, Cell.ACTIVE);
           info.moles.push({ x, y, w });
           info.moleCnt += 1;
-          nsp.to(room).emit('birth', idx, x, y, w);
+          nsp.to(room).emit('birth', idx, x, y, w, moleTypes[randint(0, 9)]);
           info.timeouts.push(setTimeout(() => {
             deleteMole(idx);
           }, 1000));
