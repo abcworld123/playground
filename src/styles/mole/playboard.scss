@@ -1,11 +1,109 @@
-.test1{
-  width: 100px;
-  height: 100px;
-  background-color: red;
+html,.mole_main{height: 100%}
+
+body{
+  margin: 0;
+  overflow: hidden;
+  background: url("images/games/mole/mole_background.jpg");
+  background-size: 100vw 100vh;
+  background-repeat: no-repeat;
+  height: 100%;
 }
 
-.test2{
+.score_area{
+  display: flex;
+  align-items: center;
+  margin-top: 1vh;
+  padding: 0 15px;
+}
+
+.my_score_progress_bar {
+  background: linear-gradient(-45deg, #0820bb, #2f42ec, #4d5ec4, #737aa8);
+  background-size: 400% 400%;
+  animation: my_score_gradient 15s ease infinite;
+  width: 100%;
+  height: 2.5vh;
+  border-radius: 20px 0 0 20px;
+}
+
+.enemy_score_progress_bar {
+  background: linear-gradient(45deg, #ee7752, #ec2f68, #c44d77, #aa738c);
+  background-size: 400% 400%;
+  animation: enemy_score_gradient 15s ease infinite;
+  width: 100%;
+  height: 2.5vh;
+  border-radius: 0 20px 20px 0;
+}
+
+.my_score{
+  font-size: 6vh;
+  font-weight: bold;
+  color: #a4aee8;
+  margin-right: 16px;
+  width: 20vh;
+  text-align: center;
+}
+
+.enemy_score{
+  font-size: 6vh;
+  font-weight: bold;
+  color: #e8a4c0;
+  margin-left: 16px;
+  width: 20vh;
+  text-align: center;
+}
+
+.mole_playboard{
+  height: 100%;
+}
+
+.jb-box{
   width: 100px;
   height: 100px;
+  margin: 50px auto;
+  padding: 20px;
+  background-color: orange;
+  transition: all 0.5s linear;
+}
+
+.aa {
+  transform: scale( 1.5 )
+}
+
+@keyframes my_score_gradient {
+  0% {
+    background-position: 0 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0 50%;
+  }
+}
+
+@keyframes enemy_score_gradient {
+  0% {
+    background-position: 100% 50%;
+  }
+  50% {
+    background-position: 0 50%;
+  }
+  100% {
+    background-position: 100% 50%;
+  }
+}
+
+.aaa {
+  background-color: red;
+  position: absolute;
+}
+
+.bbb {
   background-color: blue;
+  position: absolute;
+}
+
+.ccc {
+  background-color: yellow;
+  position: absolute;
 }
