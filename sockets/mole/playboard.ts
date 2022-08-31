@@ -1,15 +1,19 @@
 import { Mutex } from 'async-mutex';
-import { Cell } from 'types/games/mole';
+import { Cell, Mole } from 'types/games/mole';
 import { randint, sleep } from 'utils/tools';
 import type { Namespace } from 'socket.io';
 import type { GameInfo, PlayBoard, PlayerInfo } from 'types/games/mole';
 
 export function initMoleBoard(nsp: Namespace, moleRooms: Map<string, number>) {
   const rooms = new Map<string, PlayBoard>();
-  const moleTypes = [1, 1, 1, 1, 1, 1, 1, 2, 2, 3];
   const width = 100;
   const height = 100;
   const playTime = 50;
+  const moleTypes = [
+    ...Array(7).fill(Mole.NORMAL),
+    ...Array(2).fill(Mole.TRAP),
+    ...Array(1).fill(Mole.BLIND),
+  ];
 
   nsp.on('connection', (socket) => {
     const room = socket.handshake.query.roomNum as string;
@@ -96,10 +100,11 @@ export function initMoleBoard(nsp: Namespace, moleRooms: Map<string, number>) {
         const y = randint(0, 100 - w);
         const isConflict = await checkConflict(x, y, w);
         if (!isConflict) {
+          const type = moleTypes[randint(0, moleTypes.length - 1)];
           await fillSquare(x, y, w, Cell.ACTIVE);
           info.moles.push({ x, y, w });
           info.moleCnt += 1;
-          nsp.to(room).emit('birth', idx, x, y, w, moleTypes[randint(0, 9)]);
+          nsp.to(room).emit('birth', idx, x, y, w, type);
           info.timeouts.push(setTimeout(() => {
             deleteMole(idx);
           }, 1000));

@@ -39,3 +39,9 @@ export enum Cell {
   ACTIVE = 1,
   DEAD = 2,
 }
+
+export enum Mole {
+  NORMAL = 1,
+  TRAP = 2,
+  BLIND = 3,
+}
