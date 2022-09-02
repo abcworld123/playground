@@ -78,12 +78,12 @@ export function initMoleBoard(nsp: Namespace, moleRooms: Map<string, number>) {
       }, 1000);
     }
 
-    function click(idx: number, x: number, y: number) {
+    function click(x: number, y: number) {
       const me = socket.id === p1.id ? p1 : p2;
       if (board[y][x] === Cell.ACTIVE) {
         me.score += 1;
         socket.emit('click', 1);
-        deleteMole(getIdx(idx, x, y));
+        deleteMole(getIdx(x, y));
       } else {
         me.score -= 1;
         socket.emit('click', -1);
@@ -136,14 +136,7 @@ export function initMoleBoard(nsp: Namespace, moleRooms: Map<string, number>) {
       return false;
     }
 
-    function getIdx(idx: number, x: number, y: number) {
-      const mole = info.moles[idx];
-      if (
-        mole.x <= x && x <= mole.x + mole.w &&
-        mole.y <= y && y <= mole.y + mole.w
-      ) {
-        return idx;
-      }
+    function getIdx(x: number, y: number) {
       for (let idx = info.moleCnt; idx < info.moles.length; idx++) {
         const mole = info.moles[idx];
         if (
