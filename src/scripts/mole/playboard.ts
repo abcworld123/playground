@@ -29,9 +29,8 @@ socket.on('countdown', (i: number) => {
 });
 
 socket.on('score', (p1: number, p2: number) => {
-  console.log(p1);
-  console.log(p2);
-
+  document.getElementsByClassName('my_score')[0].innerHTML = String(p1);
+  document.getElementsByClassName('enemy_score')[0].innerHTML = String(p2);
 });
 
 document.getElementsByClassName('mole_playboard')[0].addEventListener('click', async function (event: any) {
@@ -42,7 +41,7 @@ document.getElementsByClassName('mole_playboard')[0].addEventListener('click', a
   const totalHeight = event.target.offsetHeight * 0.009;
   const heightPercentage = Math.ceil(event.offsetY / totalHeight);
 
-  socket.emit('click', target, widthPercentage, heightPercentage);
+  socket.emit('click', widthPercentage, heightPercentage);
 });
 
 socket.connect();
