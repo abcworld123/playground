@@ -117,6 +117,7 @@ export function initMoleBoard(nsp: Namespace, moleRooms: Map<string, number>) {
       const { x, y, w } = info.moles[idx];
       nsp.to(room).emit('death', idx);
       await fillSquare(x, y, w, Cell.DEAD);
+      info.deleteCnt += 1;
       info.timeouts[idx] = setTimeout(() => {
         fillSquare(x, y, w, Cell.NONE);
       }, randint(500, 2000));
@@ -137,7 +138,7 @@ export function initMoleBoard(nsp: Namespace, moleRooms: Map<string, number>) {
     }
 
     function getIdx(x: number, y: number) {
-      for (let idx = info.moleCnt; idx < info.moles.length; idx++) {
+      for (let idx = info.deleteCnt; idx < info.moles.length; idx++) {
         const mole = info.moles[idx];
         if (
           mole.x <= x && x <= mole.x + mole.w &&
@@ -191,6 +192,7 @@ export function initMoleBoard(nsp: Namespace, moleRooms: Map<string, number>) {
       info: {
         moles: [],
         moleCnt: 0,
+        deleteCnt: 0,
         isEnd: false,
         time: playTime,
         timer: null,

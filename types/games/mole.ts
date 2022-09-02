@@ -20,6 +20,7 @@ export interface MoleInfo {
 export interface GameInfo {
   moles: MoleInfo[];
   moleCnt: number;
+  deleteCnt: number;
   isEnd: boolean;
   time: number;
   timer: NodeJS.Timer;
