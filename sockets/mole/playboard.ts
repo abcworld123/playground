@@ -80,6 +80,28 @@ export function initMoleBoard(nsp: Namespace, moleRooms: Map<string, number>) {
 
     function click(x: number, y: number) {
       const me = socket.id === p1.id ? p1 : p2;
+      // debug
+      console.log('\n'.repeat(30));
+      const out = [];
+      for (let i = 0; i < 100; i++) {
+        for (let j = 0; j < 100; j++) {
+          const cell = board[i][j];
+          if (i === y && j === x) {
+            out.push(' \x1B[35m■\x1B[0m');
+          } else if (cell === Cell.NONE || cell === Cell.DEAD) {
+            out.push('  ');
+          } else if (board[i][j] === Cell.MOLE_PLUS) {
+            out.push(' \x1B[31m■\x1B[0m');
+          } else if (board[i][j] === Cell.MOLE_MINUS) {
+            out.push(' \x1B[36m■\x1B[0m');
+          } else if (board[i][j] === Cell.MOLE_BLIND) {
+            out.push(' \x1B[33m■\x1B[0m');
+          }
+        }
+        out.push('\n');
+      }
+      console.log(out.join(''));
+      // debug end
       const cell = board[y][x];
       if (cell === Cell.MOLE_PLUS || cell === Cell.MOLE_MINUS || cell === Cell.MOLE_BLIND) {
         const idx = getIdx(x, y);
