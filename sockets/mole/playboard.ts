@@ -151,8 +151,8 @@ export function initMoleBoard(nsp: Namespace, moleRooms: Map<string, number>) {
 
     async function checkConflict(x: number, y: number, w: number) {
       const release = await info.mutex.acquire();
-      for (let i = y; i <= y + w; i++) {
-        for (let j = x; j <= x + w; j++) {
+      for (let i = Math.max(0, y - 1); i < Math.min(100, y + w + 1); i++) {
+        for (let j = Math.max(0, x - 1); j < Math.min(100, x + w + 1); j++) {
           if (board[i][j] !== Cell.NONE) {
             release();
             return true;
@@ -179,8 +179,8 @@ export function initMoleBoard(nsp: Namespace, moleRooms: Map<string, number>) {
 
     async function fillSquare(x: number, y: number, w: number, value: Cell) {
       const release = await info.mutex.acquire();
-      for (let i = y; i <= y + w; i++) {
-        for (let j = x; j <= x + w; j++) {
+      for (let i = y; i < y + w; i++) {
+        for (let j = x; j < x + w; j++) {
           board[i][j] = value;
         }
       }
