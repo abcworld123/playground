@@ -18,7 +18,7 @@ export interface MoleInfo {
 }
 
 export interface GameInfo {
-  moles: MoleInfo[];
+  moles: Map<number, MoleInfo>;
   moleCnt: number;
   deleteCnt: number;
   isEnd: boolean;
@@ -37,12 +37,8 @@ export interface PlayBoard {
 
 export enum Cell {
   NONE = 0,
-  ACTIVE = 1,
-  DEAD = 2,
-}
-
-export enum Mole {
-  NORMAL = 1,
-  TRAP = 2,
-  BLIND = 3,
+  MOLE_PLUS = 1,
+  MOLE_MINUS = 2,
+  MOLE_BLIND = 3,
+  DEAD = -1,
 }

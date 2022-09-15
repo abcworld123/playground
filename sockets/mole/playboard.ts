@@ -1,5 +1,5 @@
 import { Mutex } from 'async-mutex';
-import { Cell, Mole } from 'types/games/mole';
+import { Cell } from 'types/games/mole';
 import { randint, sleep } from 'utils/tools';
 import type { Namespace } from 'socket.io';
 import type { GameInfo, PlayBoard, PlayerInfo } from 'types/games/mole';
@@ -10,9 +10,9 @@ export function initMoleBoard(nsp: Namespace, moleRooms: Map<string, number>) {
   const height = 100;
   const playTime = 50;
   const moleTypes = [
-    ...Array(7).fill(Mole.NORMAL),
-    ...Array(2).fill(Mole.TRAP),
-    ...Array(1).fill(Mole.BLIND),
+    ...Array(7).fill(Cell.MOLE_PLUS),
+    ...Array(2).fill(Cell.MOLE_MINUS),
+    ...Array(1).fill(Cell.MOLE_BLIND),
   ];
 
   nsp.on('connection', (socket) => {
@@ -80,10 +80,13 @@ export function initMoleBoard(nsp: Namespace, moleRooms: Map<string, number>) {
 
     function click(x: number, y: number) {
       const me = socket.id === p1.id ? p1 : p2;
-      if (board[y][x] === Cell.ACTIVE) {
+      const cell = board[y][x];
+      if (cell === Cell.MOLE_PLUS || cell === Cell.MOLE_MINUS || cell === Cell.MOLE_BLIND) {
+        const idx = getIdx(x, y);
+        clearTimeout(info.timeouts[idx]);
+        deleteMole(idx);
         me.score += 1;
         socket.emit('click', 1);
-        deleteMole(getIdx(x, y));
       } else {
         me.score -= 1;
         socket.emit('click', -1);
@@ -101,8 +104,8 @@ export function initMoleBoard(nsp: Namespace, moleRooms: Map<string, number>) {
         const isConflict = await checkConflict(x, y, w);
         if (!isConflict) {
           const type = moleTypes[randint(0, moleTypes.length - 1)];
-          await fillSquare(x, y, w, Cell.ACTIVE);
-          info.moles.push({ x, y, w });
+          await fillSquare(x, y, w, type);
+          info.moles.set(idx, { x, y, w });
           info.moleCnt += 1;
           nsp.to(room).emit('birth', idx, x, y, w, type);
           info.timeouts.push(setTimeout(() => {
@@ -114,12 +117,13 @@ export function initMoleBoard(nsp: Namespace, moleRooms: Map<string, number>) {
     }
 
     async function deleteMole(idx: number) {
-      const { x, y, w } = info.moles[idx];
+      const { x, y, w } = info.moles.get(idx);
       nsp.to(room).emit('death', idx);
       await fillSquare(x, y, w, Cell.DEAD);
       info.deleteCnt += 1;
       info.timeouts[idx] = setTimeout(() => {
         fillSquare(x, y, w, Cell.NONE);
+        info.moles.delete(idx);
       }, randint(500, 2000));
     }
 
@@ -138,16 +142,17 @@ export function initMoleBoard(nsp: Namespace, moleRooms: Map<string, number>) {
     }
 
     function getIdx(x: number, y: number) {
-      for (let idx = info.deleteCnt; idx < info.moles.length; idx++) {
-        const mole = info.moles[idx];
+      let idx = -1;
+      for (const [k, mole] of info.moles) {
         if (
-          mole.x <= x && x <= mole.x + mole.w &&
-          mole.y <= y && y <= mole.y + mole.w
+          mole.x <= x && x < mole.x + mole.w &&
+          mole.y <= y && y < mole.y + mole.w
         ) {
-          return idx;
+          idx = k;
+          break;
         }
       }
-      return -1;  // todo except
+      return idx;  // todo except -1
     }
 
     async function fillSquare(x: number, y: number, w: number, value: Cell) {
@@ -190,7 +195,7 @@ export function initMoleBoard(nsp: Namespace, moleRooms: Map<string, number>) {
         score: 0,
       },
       info: {
-        moles: [],
+        moles: new Map(),
         moleCnt: 0,
         deleteCnt: 0,
         isEnd: false,
