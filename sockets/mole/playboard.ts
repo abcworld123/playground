@@ -103,15 +103,22 @@ export function initMoleBoard(nsp: Namespace, moleRooms: Map<string, number>) {
       console.log(out.join(''));
       // debug end
       const cell = board[y][x];
-      if (cell === Cell.MOLE_PLUS || cell === Cell.MOLE_MINUS || cell === Cell.MOLE_BLIND) {
+      if (cell === Cell.NONE) {
+        me.score -= 1;
+        socket.emit('click', -1);
+      } else if (cell !== Cell.DEAD) {
         const idx = getIdx(x, y);
         clearTimeout(info.timeouts[idx]);
         deleteMole(idx);
-        me.score += 1;
-        socket.emit('click', 1);
-      } else {
-        me.score -= 1;
-        socket.emit('click', -1);
+        if (cell === Cell.MOLE_PLUS) {
+          me.score += 1;
+          socket.emit('click', 1);
+        } else if (cell === Cell.MOLE_MINUS) {
+          me.score -= 1;
+          socket.emit('click', -1);
+        } else if (cell === Cell.MOLE_BLIND) {
+          // todo blind
+        }
       }
       nsp.to(p1.id).emit('score', p1.score, p2.score);
       nsp.to(p2.id).emit('score', p2.score, p1.score);
