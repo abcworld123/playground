@@ -117,7 +117,7 @@ export function initMoleBoard(nsp: Namespace, moleRooms: Map<string, number>) {
           me.score -= 1;
           socket.emit('click', -1);
         } else if (cell === Cell.MOLE_BLIND) {
-          // todo blind
+          socket.broadcast.emit('blind');
         }
       }
       nsp.to(p1.id).emit('score', p1.score, p2.score);
