@@ -1,6 +1,7 @@
 import type { Config } from '@jest/types';
 
 const config: Config.InitialOptions = {
+  preset: 'ts-jest',
   moduleFileExtensions: [
     'js',
     'json',
@@ -11,7 +12,6 @@ const config: Config.InitialOptions = {
   collectCoverageFrom: [
     '**/*.(t|j)s',
   ],
-  coverageDirectory: '../coverage',
   testEnvironment: 'node',
 };
 
