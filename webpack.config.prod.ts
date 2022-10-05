@@ -3,7 +3,7 @@ import ForkTsCheckerWebpackPlugin from 'fork-ts-checker-webpack-plugin';
 import glob from 'glob';
 import HtmlWebpackPlugin from 'html-webpack-plugin';
 import MiniCssExtractPlugin from 'mini-css-extract-plugin';
-import PurgecssPlugin from 'purgecss-webpack-plugin';
+import { PurgeCSSPlugin } from 'purgecss-webpack-plugin';
 import TsconfigPathsPlugin from 'tsconfig-paths-webpack-plugin';
 import type { Configuration } from 'webpack';
 
@@ -91,11 +91,12 @@ const config: Configuration = {
     new MiniCssExtractPlugin({
       filename: 'stylesheets/[name].css',
     }),
-    new PurgecssPlugin({
+    new PurgeCSSPlugin({
       paths: glob.sync(`${srcPath}/**/*`, { nodir: true }),
       safelist: {
         greedy: purgeExcludes,
       },
+      blocklist: [],
       keyframes: true,
     }),
     new CopyPlugin({
