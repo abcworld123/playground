@@ -101,6 +101,12 @@ body {
   pointer-events: none;
 }
 
+.preload,
+.preload * {
+  height: 0;
+  width: 0;
+}
+
 @media (max-width: 1670px) {
   #settings {
     display: none;
