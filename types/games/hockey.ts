@@ -26,7 +26,7 @@ export interface BallInfo {
 export interface GameInfo {
   time: number;
   left_time: number;
-  interval: NodeJS.Timer;
+  interval: NodeJS.Timeout;
   timeout: NodeJS.Timeout;
 }
 

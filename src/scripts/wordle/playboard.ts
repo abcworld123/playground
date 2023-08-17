@@ -7,7 +7,7 @@ import { io } from 'utils/socket';
 
 let myTurn: boolean;
 let myAnswer: string;
-let timer: NodeJS.Timer;
+let timer: NodeJS.Timeout;
 let [timelimit, numlen, cursor]: number[] = [];
 let [myContainer, rivalContainer, resultText]: div[] = [];
 let tiles: div[];
