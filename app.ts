@@ -39,6 +39,6 @@ server.on('error', (err) => {
   console.error(`\x1B[31mERROR\x1B[0m | ${err.stack}`);
 });
 
-server.listen(3000, () => {
+server.listen(3100, () => {
   console.info('\x1B[36mconnected!!\x1B[0m');
 });
