@@ -84,7 +84,7 @@ function jebiOpen(jebi: img) {
     openedAilen++;
     jebi.src = imgAilen;
     if (openedAilen === ailen) btnShowAilen.disabled = true;
-    if (ailen === 1) toastShow();
+    // if (ailen === 1) toastShow();
   } else {
     openedDog++;
     jebi.src = imgHaHa;

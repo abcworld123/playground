@@ -1,7 +1,7 @@
 import http from 'http';
 import compression from 'compression';
 import express from 'express';
-import { dbConnect, liveServer, socket } from 'libs';
+import { liveServer, socket } from 'libs';
 import router from 'routes';
 
 const app = express();
@@ -14,7 +14,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.locals = { templates: process.cwd() + '/views/templates/' };
 
-dbConnect();
+// dbConnect();
 socket(server);
 liveServer(app);
 
