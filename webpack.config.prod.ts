@@ -1,6 +1,6 @@
 import CopyPlugin from 'copy-webpack-plugin';
 import ForkTsCheckerWebpackPlugin from 'fork-ts-checker-webpack-plugin';
-import glob from 'glob';
+import { globSync } from 'glob';
 import HtmlWebpackPlugin from 'html-webpack-plugin';
 import MiniCssExtractPlugin from 'mini-css-extract-plugin';
 import { PurgeCSSPlugin } from 'purgecss-webpack-plugin';
@@ -14,11 +14,11 @@ const viewsPath = `${projectPath}/views`;
 const scriptsPath = `${srcPath}/scripts`;
 const pagesPath = `${srcPath}/pages`;
 
-const entries = glob.sync(`${scriptsPath}/**/*.ts`)
+const entries = globSync(`${scriptsPath}/**/*.ts`)
   .filter(name => !/\.d\.ts$/.test(name))
   .map(name => name.slice(scriptsPath.length + 1, -3));
 
-const pages = glob.sync(`${pagesPath}/**/*.ejs`)
+const pages = globSync(`${pagesPath}/**/*.ejs`)
   .map(name => name.slice(pagesPath.length + 1, -4));
 
 const htmls = pages.map(name => (
@@ -46,15 +46,18 @@ const config: Configuration = {
     [name, [`${scriptsPath}/${name}.ts`]]
   ))),
   output: {
-    filename: 'javascripts/[name].js',
+    filename: 'javascripts/[name].[contenthash].js',
     path: distPath,
     clean: true,
   },
   optimization: {
     splitChunks: {
       chunks: 'all',
-      maxSize: 25000,
+      maxSize: 200000,
     },
+  },
+  performance: {
+    assetFilter: (filename) => /\.(js|css)$/.test(filename),
   },
   module: {
     rules: [
@@ -78,7 +81,7 @@ const config: Configuration = {
         use: [MiniCssExtractPlugin.loader, 'css-loader', 'postcss-loader'],
       },
       {
-        test: /\.(svg|eot|woff|woff2|ttf|jpg|png|gif)$/,
+        test: /\.(svg|eot|woff|woff2|ttf|jpg|png|gif|webp)$/,
         type: 'asset/resource',
         generator: {
           filename: 'assets/[hash][ext][query]',
@@ -89,10 +92,10 @@ const config: Configuration = {
   plugins: [
     ...htmls,
     new MiniCssExtractPlugin({
-      filename: 'stylesheets/[name].css',
+      filename: 'stylesheets/[name].[contenthash].css',
     }),
     new PurgeCSSPlugin({
-      paths: glob.sync(`${srcPath}/**/*`, { nodir: true }),
+      paths: globSync(`${srcPath}/**/*`, { nodir: true }),
       safelist: {
         greedy: purgeExcludes,
       },

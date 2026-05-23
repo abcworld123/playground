@@ -1,7 +1,6 @@
 module.exports = {
   plugins: [
-    'tailwindcss',
-    'autoprefixer',
+    '@tailwindcss/postcss',
     'postcss-fail-on-warn',
   ],
 };

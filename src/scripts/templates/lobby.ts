@@ -147,8 +147,8 @@ async function createRoom() {
 
 // [방장] 유저를 기다리는 중
 async function waitUser() {
-  const cancel = (await alertWaitUser()).isDismissed;
-  if (cancel) socket.emit('remove room');
+  const { dismiss } = await alertWaitUser();
+  if (dismiss === Swal.DismissReason.cancel) socket.emit('remove room');
 }
 
 // [방장] 유저가 입장을 요청
@@ -159,8 +159,8 @@ function joinReceived(user: string) {
 
 // [방장] 입장 요청 처리
 async function handleRequest(user: string) {
-  const accept = (await alertJoinRequest(user)).isConfirmed;
-  if (accept) {
+  const { isConfirmed, isDenied } = await alertJoinRequest(user);
+  if (isConfirmed) {
     const userExist = await new Promise<boolean>(resolve => {
       socket.emit('user exist check', user, (x: boolean) => resolve(x));
     });
@@ -170,7 +170,7 @@ async function handleRequest(user: string) {
       await alertUserNotExist();
       pollQueue(true);
     }
-  } else {
+  } else if (isDenied) {
     socket.emit('join room reject', user);
     pollQueue(true);
   }
@@ -195,12 +195,13 @@ function pollQueue(shift: boolean) {
 
 // [유저] 방에 입장하기
 async function joinRoom(room: string) {
-  if ((await alertJoinConfirm()).isDismissed) return;
+  if (!(await alertJoinConfirm()).isConfirmed) return;
   if (!rooms.has(room)) { alertRoomNotExist(); return; }
   socket.emit('join room request', room);
   requestFor = room;
 
-  if (!(await alertWaitResponse()).isDismissed) return;
+  const { dismiss } = await alertWaitResponse();
+  if (dismiss !== Swal.DismissReason.cancel) return;
   socket.emit('join room cancel', room);
   requestFor = '';
 }
