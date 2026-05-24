@@ -1,5 +1,5 @@
 {
-  "exec": "ts-node -r tsconfig-paths/register app.ts",
+  "exec": "tsx app.ts",
   "ext": "ts json",
   "restartable": "npm run dev",
   "ignore": [

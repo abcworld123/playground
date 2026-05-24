@@ -7,7 +7,7 @@ import { PurgeCSSPlugin } from 'purgecss-webpack-plugin';
 import TsconfigPathsPlugin from 'tsconfig-paths-webpack-plugin';
 import type { Configuration } from 'webpack';
 
-const projectPath = __dirname;
+const projectPath = import.meta.dirname;
 const distPath = `${projectPath}/dist`;
 const srcPath = `${projectPath}/src`;
 const viewsPath = `${projectPath}/views`;
