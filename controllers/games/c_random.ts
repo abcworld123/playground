@@ -1,3 +1,3 @@
-export function render(req: Request, res: Response, next: NextFunction) {
+export function render(req: ExpressRequest, res: ExpressResponse, next: ExpressNextFunction) {
   res.render('random/random');
 }

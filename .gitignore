@@ -3,3 +3,4 @@ dist/
 views/
 .env
 .idea
+build/

@@ -1,22 +1,22 @@
+import { globSync } from 'node:fs';
 import CopyPlugin from 'copy-webpack-plugin';
-import glob from 'glob';
 import HtmlWebpackPlugin from 'html-webpack-plugin';
 import MiniCssExtractPlugin from 'mini-css-extract-plugin';
 import TsconfigPathsPlugin from 'tsconfig-paths-webpack-plugin';
 import type { Configuration } from 'webpack';
 
-const projectPath = __dirname;
+const projectPath = import.meta.dirname;
 const distPath = `${projectPath}/dist`;
 const srcPath = `${projectPath}/src`;
 const viewsPath = `${projectPath}/views`;
 const scriptsPath = `${srcPath}/scripts`;
 const pagesPath = `${srcPath}/pages`;
 
-const entries = glob.sync(`${scriptsPath}/**/*.ts`)
+const entries = globSync(`${scriptsPath}/**/*.ts`)
   .filter(name => !/\.d\.ts$/.test(name))
   .map(name => name.slice(scriptsPath.length + 1, -3));
 
-const pages = glob.sync(`${pagesPath}/**/*.ejs`)
+const pages = globSync(`${pagesPath}/**/*.ejs`)
   .map(name => name.slice(pagesPath.length + 1, -4));
 
 const htmls = pages.map(name => (
@@ -45,7 +45,7 @@ const config: Configuration = {
   optimization: {
     splitChunks: {
       chunks: 'all',
-      maxSize: 25000,
+      maxSize: 200000,
     },
   },
   module: {
@@ -63,14 +63,14 @@ const config: Configuration = {
       },
       {
         test: /\.scss$/,
-        use: [MiniCssExtractPlugin.loader, 'css-loader', 'postcss-loader', 'sass-loader'],
+        use: [MiniCssExtractPlugin.loader, 'css-loader', 'sass-loader'],
       },
       {
         test: /\.css$/,
-        use: [MiniCssExtractPlugin.loader, 'css-loader', 'postcss-loader'],
+        use: [MiniCssExtractPlugin.loader, 'css-loader'],
       },
       {
-        test: /\.(svg|eot|woff|woff2|ttf|jpg|png|gif)$/,
+        test: /\.(svg|eot|woff|woff2|ttf|jpg|png|gif|webp)$/,
         type: 'asset/resource',
         generator: {
           filename: 'assets/[hash][ext][query]',

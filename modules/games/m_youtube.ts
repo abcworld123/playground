@@ -1,8 +1,8 @@
-import { google } from 'googleapis';
+import { youtube } from '@googleapis/youtube';
 import config from 'config';
 import response from 'modules/response';
 
-const service = google.youtube('v3');
+const service = youtube('v3');
 
 export async function getResult(keywords: string[]) {
   try {

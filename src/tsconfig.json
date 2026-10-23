@@ -1,18 +1,16 @@
 {
-  "ts-node": {
-    "transpileOnly": true,
-  },
   "compilerOptions": {
     "target": "esnext",
     "strict": false,
     "moduleResolution": "node",
+    "ignoreDeprecations": "6.0",
     "noEmit": true,
     "skipLibCheck": true,
     "lib": ["esnext", "dom", "dom.iterable"],
+    "types": ["node"],
     "esModuleInterop": true,
-    "downlevelIteration": true,
     "allowSyntheticDefaultImports": true,
-    "importsNotUsedAsValues": "error",
+    "verbatimModuleSyntax": true,
     "isolatedModules": true,
     "baseUrl": ".",
     "paths": {

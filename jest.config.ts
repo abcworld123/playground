@@ -1,7 +1,7 @@
-import type { Config } from '@jest/types';
+import { defineConfig } from 'jest';
 
-const config: Config.InitialOptions = {
-  preset: 'ts-jest',
+export default defineConfig({
+  preset: 'ts-jest/presets/default-esm',
   moduleFileExtensions: [
     'js',
     'json',
@@ -13,6 +13,4 @@ const config: Config.InitialOptions = {
     '**/*.(t|j)s',
   ],
   testEnvironment: 'node',
-};
-
-export default config;
+});
