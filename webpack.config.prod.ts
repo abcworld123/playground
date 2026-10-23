@@ -1,6 +1,6 @@
+import { globSync } from 'node:fs';
 import CopyPlugin from 'copy-webpack-plugin';
 import ForkTsCheckerWebpackPlugin from 'fork-ts-checker-webpack-plugin';
-import { globSync } from 'glob';
 import HtmlWebpackPlugin from 'html-webpack-plugin';
 import MiniCssExtractPlugin from 'mini-css-extract-plugin';
 import { PurgeCSSPlugin } from 'purgecss-webpack-plugin';
@@ -74,11 +74,11 @@ const config: Configuration = {
       },
       {
         test: /\.scss$/,
-        use: [MiniCssExtractPlugin.loader, 'css-loader', 'postcss-loader', 'sass-loader'],
+        use: [MiniCssExtractPlugin.loader, 'css-loader', 'sass-loader'],
       },
       {
         test: /\.css$/,
-        use: [MiniCssExtractPlugin.loader, 'css-loader', 'postcss-loader'],
+        use: [MiniCssExtractPlugin.loader, 'css-loader'],
       },
       {
         test: /\.(svg|eot|woff|woff2|ttf|jpg|png|gif|webp)$/,
@@ -95,7 +95,9 @@ const config: Configuration = {
       filename: 'stylesheets/[name].[contenthash].css',
     }),
     new PurgeCSSPlugin({
-      paths: globSync(`${srcPath}/**/*`, { nodir: true }),
+      paths: globSync(`${srcPath}/**/*`, { withFileTypes: true })
+        .filter(entry => entry.isFile())
+        .map(entry => `${entry.parentPath}/${entry.name}`),
       safelist: {
         greedy: purgeExcludes,
       },

@@ -15,7 +15,6 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.locals = { templates: process.cwd() + '/views/templates/' };
 
-// dbConnect();
 socket(server);
 liveServer(app);
 

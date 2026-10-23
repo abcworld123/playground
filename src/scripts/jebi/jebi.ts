@@ -1,11 +1,8 @@
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'styles/jebi/jebi.scss';
-import Toast from 'bootstrap/js/dist/toast.js';
 import { imgAilen, imgHaHa, imgJebi, imgJebiHover } from 'images/games/jebi';
 import { randSample } from 'utils/tools';
-import type { ResJebiSubmit } from 'types/games/jebi';
 
-const toastText = <span>document.getElementById('toastText');
 const jebiContainer = <div>document.getElementById('jebiContainer');
 const jebiHahaNum = <span>document.getElementById('hahaNum');
 const jebiAilenNum = <span>document.getElementById('ailenNum');
@@ -19,9 +16,8 @@ const btnShowSettings = <img>document.getElementById('showSettings');
 const settings = <div>document.getElementById('settings');
 
 let dog = 4, ailen = 1;
-let openedDog = 0, openedAilen = 0;
+let openedAilen = 0;
 let ailens = randSample(1, dog + ailen, ailen);
-const toast = new Toast(document.getElementById('toast'));
 const jebies = <HTMLCollectionOf<img>>jebiContainer.children;
 
 /* 제비 초기화 */
@@ -32,7 +28,6 @@ function reset() {
   }
   ailens = randSample(1, dog + ailen, ailen);
   btnShowAilen.disabled = false;
-  openedDog = 0;
   openedAilen = 0;
 }
 
@@ -84,33 +79,10 @@ function jebiOpen(jebi: img) {
     openedAilen++;
     jebi.src = imgAilen;
     if (openedAilen === ailen) btnShowAilen.disabled = true;
-    // if (ailen === 1) toastShow();
   } else {
-    openedDog++;
     jebi.src = imgHaHa;
   }
   jebi.removeAttribute('class');
-}
-
-/* 랭킹 보여주기 */
-function toastShow() {
-  fetch('/jebi/submit', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ n: dog + ailen, dog: openedDog }),
-  })
-  .then<ResJebiSubmit>((res) => res.json())
-  .then(({ success, data }) => {
-    if (!success) throw new Error('fetch failed');
-    const { rank, total, top } = data;
-    setTimeout(() => {
-      toastText.innerHTML = `${total}회 중 <b>${rank}</b>위 (상위 <b>${top}%</b>)`;
-    }, 150);
-    toast.show();
-  })
-  .catch((err) => {
-    console.error(err);
-  });
 }
 
 /* 꽝 확인 */

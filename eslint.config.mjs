@@ -16,17 +16,6 @@ export default [
         ecmaVersion: 'latest',
         sourceType: 'module',
       },
-      globals: {
-        // browser
-        window: 'readonly', document: 'readonly', navigator: 'readonly',
-        console: 'readonly', setTimeout: 'readonly', clearTimeout: 'readonly',
-        setInterval: 'readonly', clearInterval: 'readonly', fetch: 'readonly',
-        alert: 'readonly', confirm: 'readonly', HTMLElement: 'readonly',
-        // node
-        process: 'readonly', __dirname: 'readonly', __filename: 'readonly',
-        require: 'readonly', module: 'readonly', exports: 'readonly',
-        Buffer: 'readonly', global: 'readonly',
-      },
     },
     plugins: {
       '@typescript-eslint': tseslint,
