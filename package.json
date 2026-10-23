@@ -4,11 +4,13 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "start": "cross-env NODE_ENV=production tsx --env-file-if-exists=.env app.ts",
+    "start": "node --env-file-if-exists=.env --enable-source-maps build/server.mjs",
     "dev": "cross-env NODE_ENV=development pnpm --reporter=append-only run /^dev:/",
     "dev:server": "tsx watch --clear-screen=false --env-file-if-exists=.env app.ts",
     "dev:webpack": "webpack --config=webpack.config.dev.ts",
-    "build": "webpack --config=webpack.config.prod.ts",
+    "build": "pnpm run /^build:/",
+    "build:client": "webpack --config=webpack.config.prod.ts",
+    "build:server": "tsx esbuild.config.ts",
     "lint": "eslint **/*.ts",
     "test": "jest"
   },
@@ -42,6 +44,7 @@
     "@typescript-eslint/parser": "^8.72.0",
     "copy-webpack-plugin": "^14.0.0",
     "css-loader": "^7.1.5",
+    "esbuild": "^0.28.2",
     "eslint": "^10.13.0",
     "eslint-import-resolver-typescript": "^4.4.5",
     "eslint-plugin-import": "^2.32.0",

@@ -1,5 +1,6 @@
 import http from 'http';
 import compression from 'compression';
+import ejs from 'ejs';
 import express from 'express';
 import { liveServer, socket } from 'libs';
 import router from 'routes';
@@ -8,6 +9,7 @@ import { textCyan, textRed, textYellow } from 'utils/colorprint';
 const app = express();
 const server = http.createServer(app);
 
+app.engine('ejs', ejs.renderFile);
 app.set('view engine', 'ejs');
 app.use(compression());
 app.use(express.static('dist'));
@@ -39,7 +41,9 @@ server.on('error', (err) => {
   console.error(`${textRed('ERROR')} | ${err.stack}`);
 });
 
-const port = process.env.NODE_ENV === 'development' ? 3000 : 3100;
+const port = Number(process.env.PORT);
+if (!port) throw new Error('PORT is not set (add PORT=... to .env)');
+
 server.listen(port, () => {
   console.info(textCyan('connected!!'));
 });
